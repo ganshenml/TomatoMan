@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_marginTop="@dimen/to_item_vertical_margin"
+    android:layout_marginBottom="@dimen/to_item_vertical_margin"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tvRankId"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:text="20" />
+
+    <ImageView
+        android:id="@+id/ivRankUserLogo"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="@dimen/to_leftscreen_horizontal_margin"
+        android:src="@drawable/logo_person" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvRankUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="用户名"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvRankTomatoNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/to_item_vertical_margin"
+            android:drawableLeft="@drawable/tomato_little"
+            android:text="5个，高效时间55分钟" />
+    </LinearLayout>
+</LinearLayout>

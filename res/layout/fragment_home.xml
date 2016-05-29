@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroud_fragment_home"
+    android:gravity="center"
+    tools:context="com.example.ganshenml.tomatoman.fragment.HomeFragment"
+    android:id="@+id/llHomeFragment">
+
+    <com.example.ganshenml.tomatoman.view.ClearEditTextView
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:hint="任务名称..."
+        android:textColorHint="@color/hint_color_homefragment"
+        android:textColor="@color/text_color_homefragment"
+        android:textAlignment="center"
+        android:drawablePadding="7dp"
+        android:textCursorDrawable="@drawable/text_cursor"
+        android:maxLength="15"
+        android:id="@+id/etTaskName"
+        />
+    <com.example.ganshenml.tomatoman.view.StartCountTimeCircleView
+        android:layout_width="280px"
+        android:layout_height="280px"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:id="@+id/startViewId"/>
+</LinearLayout>

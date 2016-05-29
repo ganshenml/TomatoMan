@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home_drawer"
+            android:title="首页" />
+        <item
+            android:id="@+id/nav_myTomato"
+            android:icon="@drawable/tomato_drawer"
+            android:title="我的番茄" />
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/friends_drawer"
+            android:title="好友" />
+        <item
+            android:id="@+id/nav_rank"
+            android:icon="@drawable/rank_drawer"
+            android:title="排行榜" />
+    </group>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/share_drawer"
+                android:title="分享" />
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/setting_drawer"
+                android:title="设置" />
+        </menu>
+    </item>
+
+</menu>

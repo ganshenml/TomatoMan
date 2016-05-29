@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="unselected">#BDBDBD</color>
+    <color name="selected">#FFFFFF</color>
+    <color name="backgroud_fragment_home">#1874CD</color>
+    <color name="hint_color_homefragment">#A4D3EE</color>
+    <color name="text_color_homefragment">#F8F8FF</color>
+    <color name="backgroud_default_color">#FFFFFF</color>
+    <color name="toobar_backgroud_default_color">#1874CD</color>
+    <color name="backgroud_login">#334177</color>
+    <color name="white">#FFFFFF</color>
+    <color name="login_button_pressed_color">#1874CD</color>
+    <color name="login_button_unpressed_color">#0085DD</color>
+    <color name="button_unpressed_color">#0085DD</color>
+    <color name="color_warn">#FF0033</color>
+</resources>

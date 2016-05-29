@@ -1,0 +1,29 @@
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
+
+public class ImageViewUtils {
+
+    //µÃµ½Ô²ÐÎÍ¼Æ¬
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
+    Bitmap output = Bitmap.createBitmap(200,
+            200, Bitmap.Config.ARGB_8888);
+    Canvas canvas = new Canvas(output);
+
+    final Paint paint = new Paint();
+    final RectF rectF = new RectF(0, 0, 2*pixels, 2*pixels);
+
+    paint.setAntiAlias(true);
+    paint.setColor(Color.RED);
+    canvas.drawRoundRect(rectF, pixels, pixels, paint);
+
+    paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+    canvas.drawBitmap(bitmap, null, rectF, paint);
+
+    return output;
+    }
+}

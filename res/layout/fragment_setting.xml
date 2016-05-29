@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:divider="@drawable/divider"
+    android:showDividers="middle">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/llCallback">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/to_item_vertical_margin"
+            android:layout_marginBottom="@dimen/to_item_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_gravity="left|center_vertical"
+            android:textSize="20sp"
+            android:text="反馈" />
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginTop="@dimen/to_item_vertical_margin"
+            android:layout_marginBottom="@dimen/to_item_vertical_margin"
+            android:gravity="center"
+            android:src="@drawable/arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/llTomatoSetting">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/to_item_vertical_margin"
+            android:layout_marginBottom="@dimen/to_item_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_gravity="left|center_vertical"
+            android:textSize="20sp"
+            android:text="番茄时间设置" />
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginTop="@dimen/to_item_vertical_margin"
+            android:layout_marginBottom="@dimen/to_item_vertical_margin"
+            android:gravity="center"
+            android:src="@drawable/arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/llAboutUs">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/to_item_vertical_margin"
+            android:layout_marginBottom="@dimen/to_item_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_gravity="left|center_vertical"
+            android:textSize="20sp"
+            android:text="关于我们" />
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginTop="@dimen/to_item_vertical_margin"
+            android:layout_marginBottom="@dimen/to_item_vertical_margin"
+            android:gravity="center"
+            android:src="@drawable/arrow" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="90dp"
+        android:text="获取最新版"
+        android:id="@+id/btnGetNewestEdition"/>
+</LinearLayout>
