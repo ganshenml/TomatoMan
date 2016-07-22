@@ -66,7 +66,6 @@ public class RankListViewAdapter extends BaseAdapter {
         viewHolder.ivRankUserLogo.setImageResource(user.getImageId());
         viewHolder.tvRankUserName.setText(user.getUserName());
         viewHolder.tvRankTomatoNum.setText(user.getUserTomatoNum() + "个，高效时间55分钟");
-        Log.e("positon", String.valueOf(position));
         return convertView;
     }
 

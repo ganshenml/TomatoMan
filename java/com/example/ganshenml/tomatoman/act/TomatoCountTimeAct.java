@@ -27,7 +27,7 @@ import com.example.ganshenml.tomatoman.util.ShowDialogUtils;
 import com.example.ganshenml.tomatoman.util.ViewUtils;
 import com.example.ganshenml.tomatoman.view.TomatoCountSurfaceView;
 
-public class TomatoCountTimeAct extends AppCompatActivity {
+public class TomatoCountTimeAct extends BaseActivity {
     TomatoCountSurfaceView tomatoCountSurfaceView;
     Intent myIntent;
     private CountTimeNumService countTimeNumService;

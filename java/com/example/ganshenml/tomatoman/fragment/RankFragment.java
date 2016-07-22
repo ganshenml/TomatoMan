@@ -15,6 +15,7 @@ import android.widget.ListView;
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.adapter.RankListViewAdapter;
 import com.example.ganshenml.tomatoman.bean.User;
+import com.example.ganshenml.tomatoman.util.LogTool;
 import com.example.ganshenml.tomatoman.util.ShowDrawerLayout;
 
 import java.util.ArrayList;
@@ -24,11 +25,12 @@ import java.util.List;
  * Created by ganshenml on 2016/4/1.
  */
 public class RankFragment extends Fragment {
-    View view;
-    Toolbar toolbar;
-    Button btnThisWeek, btnTotalRank;
-    ListView listView;
-    List<User> list = new ArrayList<>();
+    private final String TAG = "RankFragment";
+    private View view;
+    private Toolbar toolbar;
+    private Button btnThisWeek, btnTotalRank;
+    private ListView listView;
+    private List<User> list = new ArrayList<>();
 
 
     @Nullable
@@ -63,6 +65,8 @@ public class RankFragment extends Fragment {
         btnTotalRank = (Button) this.toolbar.findViewById(R.id.btnTotalRank);
         btnTotalRank.setSelected(false);
         btnThisWeek.setSelected(true);
+
+        LogTool.log(LogTool.Aaron,TAG+" btn样式初始化设置已完成");
 
         btnTotalRank.setOnClickListener(new View.OnClickListener() {
             @Override

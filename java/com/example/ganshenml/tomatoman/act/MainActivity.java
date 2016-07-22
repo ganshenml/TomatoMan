@@ -26,41 +26,52 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
+import com.example.ganshenml.tomatoman.bean.Extra;
+import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.fragment.HomeFragment;
 import com.example.ganshenml.tomatoman.fragment.MyFriendsFragment;
 import com.example.ganshenml.tomatoman.fragment.MyTomatoFragment;
 import com.example.ganshenml.tomatoman.fragment.RankFragment;
 import com.example.ganshenml.tomatoman.fragment.SettingFragment;
 import com.example.ganshenml.tomatoman.util.ConstantCode;
+import com.example.ganshenml.tomatoman.util.DbTool;
 import com.example.ganshenml.tomatoman.util.ImageViewUtils;
+import com.example.ganshenml.tomatoman.util.LogTool;
+import com.example.ganshenml.tomatoman.util.StringTool;
+import com.example.ganshenml.tomatoman.util.ToActivityPage;
 import com.example.ganshenml.tomatoman.util.ToFragmentPage;
+import com.facebook.drawee.view.SimpleDraweeView;
+
+import java.util.List;
 
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    Toolbar tbHome, tbMyTomato, tbMyFriends, tbRank, tbSetting;
-    NavigationView navigationView;
-    DrawerLayout drawer;
-    ActionBarDrawerToggle toggle;
+    private final String TAG = "MainActivity";
+    private Toolbar tbHome, tbMyTomato, tbMyFriends, tbRank, tbSetting;
+    private NavigationView navigationView;
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle toggle;
     //    MenuItem nav_home,nav_MyTomato,nav_friends,nav_rank,nav_share,nav_setting;
-    NavigationMenuItemView nav_home, nav_MyTomato, nav_friends, nav_rank, nav_share, nav_setting;
-    ImageView ivPersonLogo;
-    Toolbar[] toolbars;//储存所有的toolbar
-    long exitTime = 0;//设定回退事件
-    private TextView tvUserIntroduction;
+    private NavigationMenuItemView nav_home, nav_MyTomato, nav_friends, nav_rank, nav_share, nav_setting;
+    private SimpleDraweeView user_log;
+    private Toolbar[] toolbars;//储存所有的toolbar
+    private long exitTime = 0;//设定回退事件
+    private TextView usernameTv ,tvUserIntroduction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // 初始化 Bmob SDK
-        Bmob.initialize(this, ConstantCode.ApplicationID);
-
         initViews();
-
+        initData();
+        initDataViews();
 //
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -165,6 +176,10 @@ public class MainActivity extends AppCompatActivity
 
     //------------------------------------------以下为自定义方法--------------------------------------------------------
 
+    private void initData(){
+        //请求Extra表数据并保存至本地
+        upDataExtraData();
+    }
 
     //初始化组件
     private void initViews() {
@@ -182,18 +197,13 @@ public class MainActivity extends AppCompatActivity
 
 
         View headView = navigationView.getHeaderView(0);
-        ivPersonLogo = (ImageView) headView.findViewById(R.id.ivPersonLogo);
 
-        //初始化个人简介
+        //初始化个人信息
+        usernameTv = (TextView)headView.findViewById(R.id.usernameTv);
         tvUserIntroduction = (TextView) headView.findViewById(R.id.tvUserIntroduction);
-
-        //显示侧边栏的用户头像(调用自定义工具类将bitmap转换成圆形)
-        Bitmap bitmapPersonLogo = BitmapFactory.decodeResource(getResources(), R.drawable.logo_person);
-        ivPersonLogo.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapPersonLogo, 100));//用户头像尺寸暂定100 pixels
 
         //默认选中当前页面的选项
         navigationView.setNavigationItemSelectedListener(this);
-
 
         //默认显示HomeFragment
         ToFragmentPage.toFragmentPage(this, R.id.rlHome, new HomeFragment(), getSupportFragmentManager(), tbHome, toolbars);
@@ -202,8 +212,11 @@ public class MainActivity extends AppCompatActivity
         //默认选中导航首页项
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
 
+        //头像初始化
+        user_log = (SimpleDraweeView) headView.findViewById(R.id.user_log);
+
         //事件监听
-        ivPersonLogo.setOnClickListener(new View.OnClickListener() {
+        user_log.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, UserHomePageAct.class);//跳转至用户个人主页
@@ -220,5 +233,41 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    private void initDataViews(){
+
+        //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
+        Person person = BmobUser.getCurrentUser(Person.class);
+        if(person == null){
+            finish();
+            ToActivityPage.turnToSimpleAct(MainActivity.this,LoginAct.class);
+            return;
+        }
+        usernameTv.setText(person.getUsername());
+        String picUrlTemp = person.getImageId();
+        if(!StringTool.isEmpty(picUrlTemp)){
+            LogTool.log(LogTool.Aaron,"本地用图片不为空");
+            user_log.setImageURI(picUrlTemp);
+        }
+    }
+
+    /**
+     * 请求Extra数据并保存至本地
+     */
+    private void upDataExtraData(){
+        BmobQuery<Extra> extraBmobQuery = new BmobQuery<>();
+        extraBmobQuery.findObjects(new FindListener<Extra>() {
+            @Override
+            public void done(List<Extra> list, BmobException e) {
+                if(e == null){
+                    if(list.size()>0){
+                        DbTool.saveExtraData(list.get(0));
+                    }
+                }else {
+                    LogTool.log(LogTool.Aaron,TAG+" upDataExtraData 查询Extra数据出错： "+e.toString());
+                }
+            }
+        });
     }
 }

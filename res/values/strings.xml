@@ -81,4 +81,14 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!--user related -->
+    <string name="default_username">这里是用户名</string>
+    <string name="title_edit_intro">编辑简介</string>
+    <string name="default_edit_intro_hint">写点什么...</string>
+
+    <!-- app related -->
+    <string name="app_version">当前程序版本</string>
+    <string name="can_not_find_version_name">未获取到</string>
+    <string name="default_feedback_hint">填写你对该软件的看法...</string>
 </resources>

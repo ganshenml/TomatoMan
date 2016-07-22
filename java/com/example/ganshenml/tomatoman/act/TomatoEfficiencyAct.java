@@ -27,7 +27,7 @@ import com.example.ganshenml.tomatoman.view.TomatoCountSurfaceView;
 /**
  * 用来展示“高效时间领域”的Activity
  */
-public class TomatoEfficiencyAct extends AppCompatActivity {
+public class TomatoEfficiencyAct extends BaseActivity {
 
     TomatoCountSurfaceView tomatoCountSurfaceView;
     Intent myIntent;

@@ -20,7 +20,7 @@ import static android.graphics.Color.BLACK;
 /*
     番茄计时完成的页面，进行各项数据的统计
  */
-public class TomatoCompleteAct extends AppCompatActivity {
+public class TomatoCompleteAct extends BaseActivity {
     Button btnTomatoComplete;
     private static final int RESULTCODE_TO_MAIN = 101;
     private Toolbar tbToolbar_public;//公用toolbar

@@ -19,7 +19,7 @@ import com.example.ganshenml.tomatoman.R;
 /*
 搜索用户的界面
  */
-public class SearchUserAct extends AppCompatActivity {
+public class SearchUserAct extends BaseActivity {
     private RelativeLayout rlSearchUser;
     private SearchView svSearchFriends;
     private Toolbar tbSearchUser;

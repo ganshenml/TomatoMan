@@ -21,7 +21,7 @@ import com.example.ganshenml.tomatoman.view.StartRestCircleView;
 /*
 作为完成一个番茄事件后的临时状态：可以选择“开始休息”、“完成任务”、“进入高效时间领域”
  */
-public class TomatoTemporaryAct extends AppCompatActivity {
+public class TomatoTemporaryAct extends BaseActivity {
     private CompleteTaskCircleView completeTaskCircleViewId;
     private TextView tvEfficiencyZone;
     private StartRestCircleView startRestCircleViewId;

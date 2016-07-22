@@ -16,4 +16,5 @@
     <color name="login_button_unpressed_color">#0085DD</color>
     <color name="button_unpressed_color">#0085DD</color>
     <color name="color_warn">#FF0033</color>
+    <color name="gray">#E6E6FA</color>
 </resources>

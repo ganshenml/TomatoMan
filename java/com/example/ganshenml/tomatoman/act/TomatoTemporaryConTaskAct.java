@@ -19,7 +19,7 @@ import com.example.ganshenml.tomatoman.view.CompleteTaskCircleView;
 import com.example.ganshenml.tomatoman.view.ContinueTaskBigCircleView;
 import com.example.ganshenml.tomatoman.view.StartRestCircleView;
 
-public class TomatoTemporaryConTaskAct extends AppCompatActivity {
+public class TomatoTemporaryConTaskAct extends BaseActivity {
     private CompleteTaskCircleView completeTaskCircleViewId;
     private ContinueTaskBigCircleView continueTaskBigCircleViewId;
     private Toolbar tbToolbar_public;

@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.example.ganshenml.tomatoman.R;
 
-public class MyTomatoAct extends AppCompatActivity {
+public class MyTomatoAct extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

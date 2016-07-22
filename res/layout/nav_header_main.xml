@@ -12,24 +12,33 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:id="@+id/LLNavHeader">
 
-
-    <ImageView
-        android:id="@+id/ivPersonLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-         />
+    <com.facebook.drawee.view.SimpleDraweeView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/user_log"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        fresco:roundedCornerRadius="30dp"
+        fresco:roundingBorderWidth="1dp"
+        fresco:roundingBorderColor="@color/gray"
+        fresco:fadeDuration="300"
+        fresco:actualImageScaleType="centerInside"
+        fresco:placeholderImage="@drawable/user_logo"
+        fresco:placeholderImageScaleType="fitCenter"
+        fresco:failureImage="@drawable/user_logo"
+        fresco:failureImageScaleType="fitCenter"
+        />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_text_spacing"
-        android:text="我其实没有笑"
+        android:text="@string/default_username"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:id="@+id/tvUserIntroduction"/>
+        android:id="@+id/usernameTv"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvUserIntroduction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="工资嘛都好谈，但是不能画大饼！" />

@@ -1,21 +1,40 @@
 package com.example.ganshenml.tomatoman.bean;
 
-import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by ganshenml on 2016-04-30.
  */
-public class Person extends BmobObject {
-    public String name ;
+public class Person extends BmobUser {
+//    public String username;//继承自BmobUser后username和password不能继续定义了
+//    public String password;
     public String address;
     public String introduction;
-    private String password;
     private Integer gender;
     private Integer tomatoNum;
     private String imageId;
     private String tomatoTimeNum;
     private Integer isUsing;
 
+//
+//    @Override
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    @Override
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
+//
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    @Override
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
 
     public String getIntroduction() {
         return introduction;
@@ -23,14 +42,6 @@ public class Person extends BmobObject {
 
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Integer getGender() {
@@ -71,14 +82,6 @@ public class Person extends BmobObject {
 
     public void setIsUsing(Integer isUsing) {
         this.isUsing = isUsing;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAddress() {

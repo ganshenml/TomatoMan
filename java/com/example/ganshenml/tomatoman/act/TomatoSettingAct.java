@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
 
-public class TomatoSettingAct extends AppCompatActivity {
+public class TomatoSettingAct extends BaseActivity {
 
     private TextView tvWorkTime, tvShortRest, tvLongRest;
     private AppCompatSeekBar sbWorkTime, sbShortRest, sbLongRest;

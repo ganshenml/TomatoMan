@@ -106,7 +106,8 @@
             android:clickable="true"
             android:gravity="center"
             android:text="注  册"
-            android:textColor="@drawable/text_selector" />
+            android:textColor="@drawable/text_selector"
+            android:id="@+id/registerTv"/>
 
     </LinearLayout>
 </RelativeLayout>

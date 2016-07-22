@@ -1,11 +1,11 @@
 package com.example.ganshenml.tomatoman.bean;
 
-import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by ganshenml on 2016/4/1.
  */
-public class User extends BmobObject {
+public class User extends BmobUser {
     private Integer userId;
     private String userName;
     private String userIntroduction;
