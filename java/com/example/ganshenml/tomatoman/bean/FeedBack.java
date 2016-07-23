@@ -1,5 +1,7 @@
 package com.example.ganshenml.tomatoman.bean;
 
+import android.provider.ContactsContract;
+
 import cn.bmob.v3.BmobObject;
 
 /**
@@ -7,15 +9,15 @@ import cn.bmob.v3.BmobObject;
  * Created by ganshenml on 2016-07-22.
  */
 public class FeedBack extends BmobObject {
-    private String username;
+    private Person person;
     private String feedbackContent;
 
-    public String getUsername() {
-        return username;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public String getFeedbackContent() {

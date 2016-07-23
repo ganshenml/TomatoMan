@@ -33,7 +33,8 @@ public class ToFragmentPage {
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(rId, myFragment);
 //            ft.addToBackStack(null);
-            ft.commit();
+//            ft.commit();
+            ft.commitAllowingStateLoss();
         } else {
             Log.e("fragment", "ToFragmentPage__toFragmentPage is null");
         }

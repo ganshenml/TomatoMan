@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.act.LoginAct;
 import com.example.ganshenml.tomatoman.bean.Extra;
 import com.example.ganshenml.tomatoman.bean.FeedBack;
+import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
 import com.example.ganshenml.tomatoman.util.CommonUtils;
 import com.example.ganshenml.tomatoman.util.DbTool;
@@ -36,6 +38,7 @@ public class SettingFragment extends Fragment {
     private TextView appVersionTv;
     private EditText feedbackEt;
     private Button feedbackBtn;
+    private ImageView newAppVersionIv;
 
     @Nullable
     @Override
@@ -55,18 +58,26 @@ public class SettingFragment extends Fragment {
     private void initViews() {
         View viewTemp = getView();
         appVersionTv = (TextView) viewTemp.findViewById(R.id.appVersionTv);
+        newAppVersionIv = (ImageView) viewTemp.findViewById(R.id.newAppVersionIv);
         logoutLl = (LinearLayout) viewTemp.findViewById(R.id.logoutLl);
         feedbackEt = (EditText) viewTemp.findViewById(R.id.feedbackEt);
         feedbackBtn = (Button) viewTemp.findViewById(R.id.feedbackBtn);
     }
 
     private void initDataViews() {
+        LogTool.log(LogTool.Aaron, " settingFragment initDataViews 进入了");
+        String appVersionStr = CommonUtils.getCurrentAppVersion(getActivity());
         Extra extraTemp = DbTool.findLocalExtraData();//返回本地存储的Extra数据
         if (extraTemp != null) {
+            LogTool.log(LogTool.Aaron, " settingFragment initDataViews　本地存储的Extra数据不为空");
             feedbackEt.setHint(extraTemp.getFeedbackHint());
-        }
-        appVersionTv.setText(getResources().getText(R.string.app_version) + " " + CommonUtils.getCurrentAppVersion(getActivity()));
 
+            if (extraTemp.getAppVersion().compareToIgnoreCase(appVersionStr) > 0) {
+                newAppVersionIv.setVisibility(View.VISIBLE);
+            }
+        } else {
+            appVersionTv.setText(getResources().getText(R.string.app_version) + " " + appVersionStr);
+        }
 
     }
 
@@ -92,19 +103,20 @@ public class SettingFragment extends Fragment {
         feedbackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LogTool.log(LogTool.Aaron, " settingFragment 点击了提交反馈按钮");
                 String feedbackStrTemp = feedbackEt.getText().toString();
                 if (feedbackStrTemp.length() > 0) {
                     FeedBack feedBack = new FeedBack();
-                    feedBack.setUsername(BmobUser.getCurrentUser().getUsername());
+                    feedBack.setPerson(BmobUser.getCurrentUser(Person.class));
                     feedBack.setFeedbackContent(feedbackStrTemp);
                     feedBack.save(new SaveListener<String>() {
                         @Override
                         public void done(String s, BmobException e) {
-                            if(e==null){
-                                Toast.makeText(getActivity(),"提交成功",Toast.LENGTH_SHORT).show();
-                            }else{
-                                Toast.makeText(getActivity(),"提交失败",Toast.LENGTH_SHORT).show();
-                                LogTool.log(LogTool.Aaron," settingFragment 提交反馈失败： "+e.toString());
+                            if (e == null) {
+                                Toast.makeText(getActivity(), "提交成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
+                                LogTool.log(LogTool.Aaron, " settingFragment 提交反馈失败： " + e.toString());
                             }
                         }
                     });

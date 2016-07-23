@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.Person;
+import com.example.ganshenml.tomatoman.bean.data.StaticData;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
 import com.example.ganshenml.tomatoman.fragment.HomeFragment;
 import com.example.ganshenml.tomatoman.util.ImageViewUtils;
@@ -60,6 +61,8 @@ public class UserHomePageAct extends BaseActivity {
     private ProgressDialog progressDialog;//进度对话框
     private SimpleDraweeView simpleDraweeView_user_log;
 
+    public HttpCallback httpCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +73,9 @@ public class UserHomePageAct extends BaseActivity {
         initListeners();
     }
 
+    public void setHttpCallback(HttpCallback httpCallback){
+        this.httpCallback = httpCallback;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -105,15 +111,6 @@ public class UserHomePageAct extends BaseActivity {
         Toolbar tbRank = (Toolbar) findViewById(R.id.tbRank);
         Toolbar tbSetting = (Toolbar) findViewById(R.id.tbSetting);
         final Toolbar[] toolbars = new Toolbar[]{tbHome, tbMyTomato, tbMyFriends, tbRank, tbSetting, tbSetting};
-
-
-        ivMyTomatoHomepage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                finish();//必须先结束当前Activity，让MainActivity重新得以resume才能进行一下fragment页面的替换
-//                ToFragmentPage.toFragmentPage(UserHomePageAct.this, R.id.rlHome, new HomeFragment(), getSupportFragmentManager(), tbMyTomato, toolbars);
-            }
-        });
 
         tvUserNameHomepage.setText(person.getUsername());
         String userIntroStr = person.getIntroduction();
@@ -158,6 +155,28 @@ public class UserHomePageAct extends BaseActivity {
                 });
             }
         });
+
+        //点击“我的番茄”
+        ivMyTomatoHomepage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        //点击“我的好友”
+        ivMyFriendsHomepage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     /**

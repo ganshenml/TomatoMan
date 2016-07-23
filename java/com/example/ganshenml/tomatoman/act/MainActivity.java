@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +30,8 @@ import android.widget.Toast;
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.Extra;
 import com.example.ganshenml.tomatoman.bean.Person;
+import com.example.ganshenml.tomatoman.bean.data.StaticData;
+import com.example.ganshenml.tomatoman.callback.HttpCallback;
 import com.example.ganshenml.tomatoman.fragment.HomeFragment;
 import com.example.ganshenml.tomatoman.fragment.MyFriendsFragment;
 import com.example.ganshenml.tomatoman.fragment.MyTomatoFragment;
@@ -54,6 +58,8 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private final String TAG = "MainActivity";
+    private Context thisContext = MainActivity.this;
+
     private Toolbar tbHome, tbMyTomato, tbMyFriends, tbRank, tbSetting;
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -63,7 +69,7 @@ public class MainActivity extends BaseActivity
     private SimpleDraweeView user_log;
     private Toolbar[] toolbars;//储存所有的toolbar
     private long exitTime = 0;//设定回退事件
-    private TextView usernameTv ,tvUserIntroduction;
+    private TextView usernameTv, tvUserIntroduction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,7 @@ public class MainActivity extends BaseActivity
         initViews();
         initData();
         initDataViews();
+        initListeners();
 //
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -82,15 +89,8 @@ public class MainActivity extends BaseActivity
 //            }
 //        });
 
-        //显示汉堡菜单及为其设置事件
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(
-                this, drawer, tbHome, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
     }
-
 
     @Override
     public void onBackPressed() {
@@ -101,6 +101,7 @@ public class MainActivity extends BaseActivity
             super.onBackPressed();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -176,13 +177,45 @@ public class MainActivity extends BaseActivity
 
     //------------------------------------------以下为自定义方法--------------------------------------------------------
 
-    private void initData(){
+    private void initData() {
         //请求Extra表数据并保存至本地
         upDataExtraData();
     }
 
     //初始化组件
     private void initViews() {
+
+        //显示汉堡菜单及为其设置事件
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, tbHome, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                LogTool.log(LogTool.Aaron, " onDrawerOpened ");
+                Person person = BmobUser.getCurrentUser(Person.class);
+                if (person == null) {
+                    finish();
+                    ToActivityPage.turnToSimpleAct(MainActivity.this, LoginAct.class);
+                    return;
+                }
+                usernameTv.setText(person.getUsername());
+                String picUrlTemp = person.getImageId();
+                if (!StringTool.isEmpty(picUrlTemp)) {
+                    LogTool.log(LogTool.Aaron, "本地用图片不为空: " + picUrlTemp);
+                    user_log.setImageURI(picUrlTemp);
+                }
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                LogTool.log(LogTool.Aaron, " onDrawerClosed ");
+
+            }
+        };
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
 
         tbHome = (Toolbar) findViewById(R.id.tbHome);
         setSupportActionBar(tbHome);
@@ -199,7 +232,7 @@ public class MainActivity extends BaseActivity
         View headView = navigationView.getHeaderView(0);
 
         //初始化个人信息
-        usernameTv = (TextView)headView.findViewById(R.id.usernameTv);
+        usernameTv = (TextView) headView.findViewById(R.id.usernameTv);
         tvUserIntroduction = (TextView) headView.findViewById(R.id.tvUserIntroduction);
 
         //默认选中当前页面的选项
@@ -215,6 +248,38 @@ public class MainActivity extends BaseActivity
         //头像初始化
         user_log = (SimpleDraweeView) headView.findViewById(R.id.user_log);
 
+
+        //简介事件监听——>先设定为跳入登录页
+        tvUserIntroduction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity.this, LoginAct.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    private void initDataViews() {
+        //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
+        Person person = BmobUser.getCurrentUser(Person.class);
+        if (person == null) {
+            finish();
+            ToActivityPage.turnToSimpleAct(MainActivity.this, LoginAct.class);
+            return;
+        }
+        usernameTv.setText(person.getUsername());
+        String picUrlTemp = person.getImageId();
+        if (!StringTool.isEmpty(picUrlTemp)) {
+            LogTool.log(LogTool.Aaron, "本地用图片不为空");
+            user_log.setImageURI(picUrlTemp);
+        }
+
+    }
+
+    private void initListeners() {
+
         //事件监听
         user_log.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,48 +289,25 @@ public class MainActivity extends BaseActivity
             }
         });
 
-        //简介事件监听——>先设定为跳入登录页
-        tvUserIntroduction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,LoginAct.class);
-                startActivity(intent);
-            }
-        });
 
-    }
-
-    private void initDataViews(){
-
-        //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
-        Person person = BmobUser.getCurrentUser(Person.class);
-        if(person == null){
-            finish();
-            ToActivityPage.turnToSimpleAct(MainActivity.this,LoginAct.class);
-            return;
-        }
-        usernameTv.setText(person.getUsername());
-        String picUrlTemp = person.getImageId();
-        if(!StringTool.isEmpty(picUrlTemp)){
-            LogTool.log(LogTool.Aaron,"本地用图片不为空");
-            user_log.setImageURI(picUrlTemp);
-        }
     }
 
     /**
      * 请求Extra数据并保存至本地
      */
-    private void upDataExtraData(){
+    private void upDataExtraData() {
         BmobQuery<Extra> extraBmobQuery = new BmobQuery<>();
         extraBmobQuery.findObjects(new FindListener<Extra>() {
             @Override
             public void done(List<Extra> list, BmobException e) {
-                if(e == null){
-                    if(list.size()>0){
+                if (e == null) {
+                    if (list.size() > 0) {
                         DbTool.saveExtraData(list.get(0));
+                        LogTool.log(LogTool.Aaron, TAG + " upDataExtraData 查询到了数据并进行本地保存");
+
                     }
-                }else {
-                    LogTool.log(LogTool.Aaron,TAG+" upDataExtraData 查询Extra数据出错： "+e.toString());
+                } else {
+                    LogTool.log(LogTool.Aaron, TAG + " upDataExtraData 查询Extra数据出错： " + e.toString());
                 }
             }
         });

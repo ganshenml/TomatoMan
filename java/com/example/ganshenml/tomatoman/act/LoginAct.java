@@ -84,6 +84,7 @@ public class LoginAct extends BaseActivity {
                             Toast.makeText(LoginAct.this, "登录成功", Toast.LENGTH_SHORT).show();
                             //通过BmobUser user = BmobUser.getCurrentUser()获取登录成功后的本地用户信息
                             //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
+                            finish();
                             ToActivityPage.turnToSimpleAct(LoginAct.this, MainActivity.class);//跳转至MainAct界面
                         } else {
                             Toast.makeText(LoginAct.this, e.toString(), Toast.LENGTH_LONG).show();
