@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/myFriendsTb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetStart="0dp"
+        android:background="@color/backgroud_fragment_home">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/back"
+            android:layout_marginLeft="@dimen/to_leftscreen_horizontal_margin"
+            android:id="@+id/backIv"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:textSize="@dimen/common_text_size"/>
+    </android.support.v7.widget.Toolbar>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@drawable/divider"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <LinearLayout
+            android:id="@+id/llCallback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginBottom="@dimen/to_item_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/to_item_vertical_margin"
+                android:layout_weight="1"
+                android:text="反馈"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginBottom="@dimen/to_item_vertical_margin"
+                android:layout_marginTop="@dimen/to_item_vertical_margin"
+                android:gravity="center"
+                android:src="@drawable/arrow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llTomatoSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/appVersionTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginBottom="@dimen/to_item_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/to_item_vertical_margin"
+                android:layout_weight="1"
+                android:text="@string/app_version"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:orientation="horizontal">
+
+
+                <ImageView
+                    android:id="@+id/newAppVersionIv"
+                    style="@style/system_new_version_style"
+                    android:visibility="gone" />
+
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginBottom="@dimen/to_item_vertical_margin"
+                    android:layout_marginTop="@dimen/to_item_vertical_margin"
+                    android:gravity="center"
+                    android:src="@drawable/arrow" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/logoutLl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginBottom="@dimen/to_item_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/to_item_vertical_margin"
+                android:layout_weight="1"
+                android:text="退出账号"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginBottom="@dimen/to_item_vertical_margin"
+                android:layout_marginTop="@dimen/to_item_vertical_margin"
+                android:gravity="center"
+                android:src="@drawable/arrow" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/feedbackEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@android:drawable/edit_text"
+            android:enabled="true"
+            android:gravity="top"
+            android:hint="@string/default_feedback_hint"
+            android:inputType="textMultiLine"
+            android:maxLines="10"
+            android:minLines="8"
+            android:scrollbars="vertical"
+            android:textColorHint="@color/gray" />
+
+        <Button
+            android:id="@+id/feedbackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:text="提交反馈" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.ganshenml.tomatoman.act.RankAct">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/rankTb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentInsetStart="0dp"
+        android:background="@color/backgroud_fragment_home">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/back"
+            android:layout_marginLeft="@dimen/to_leftscreen_horizontal_margin"
+            android:id="@+id/backIv"
+            />
+
+        <Button
+            android:id="@+id/thisWeekBtn"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/rank_selector"
+            android:gravity="center"
+            android:text="本周"
+            android:textColor="@drawable/button_text_selector" />
+
+        <Button
+            android:id="@+id/totalRankBtn"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/total_rank_selector"
+            android:gravity="center"
+            android:text="总榜"
+            android:textColor="@drawable/button_total_text_selector" />
+    </android.support.v7.widget.Toolbar>
+
+    <ListView
+        android:id="@+id/lvRank"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
+</LinearLayout>

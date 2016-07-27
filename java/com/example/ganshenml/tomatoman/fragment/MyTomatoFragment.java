@@ -64,9 +64,6 @@ public class MyTomatoFragment extends Fragment {
             }
         });
 
-        //为左侧汉堡菜单设置点击监听事件：显示DrawerLayout
-        ShowDrawerLayout.showDrawerLayout(getActivity(), R.id.tbMyTomato, "我的番茄", R.id.drawer_layout);
-
         Log.e("MyTomatoFragment", "onActivityCreated");
     }
 

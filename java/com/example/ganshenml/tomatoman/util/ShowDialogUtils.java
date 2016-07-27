@@ -1,14 +1,14 @@
 package com.example.ganshenml.tomatoman.util;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
@@ -20,7 +20,7 @@ import com.example.ganshenml.tomatoman.callback.HttpCallback;
 public class ShowDialogUtils {
 
     //点击回退键时弹出弹窗（番茄计时相关页面用到）
-    public static void showDialog(final Context packageContext, final Class<?> cls, final Activity activity) {
+    public static void showDialog(final Context packageContext, final Class<?> cls, final AppCompatActivity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(packageContext);
         builder.setTitle("提示").setMessage("确定终止当前任务！").setCancelable(true)
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -107,4 +107,5 @@ public class ShowDialogUtils {
                 .create()
                 .show();
     }
+
 }

@@ -22,7 +22,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.example.ganshenml.tomatoman.base.BaseApp"
+        android:name=".base.BaseApp"
         android:allowBackup="true"
         android:icon="@mipmap/tomato_icon"
         android:label="@string/app_name"
@@ -33,14 +33,17 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".act.TomatoSettingAct"
             android:label="时间设置" />
-        <activity android:name=".act.MyTomatoAct" />
-        <activity android:name=".act.UserHomePageAct" />
+        <activity android:name=".act.MyTomatoAct"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".act.UserHomePageAct"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".act.TomatoCompleteAct"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -74,11 +77,19 @@
 
         <activity
             android:name=".act.LoginAct"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".act.RegisterAct"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".act.BaseActivity" />
+        <activity
+            android:name=".act.MyFriendsAct"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".act.RankAct"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".act.SettingAct"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name=".act.BaseActivity"></activity>
     </application>
 
 </manifest>

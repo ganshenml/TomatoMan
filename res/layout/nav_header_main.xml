@@ -19,7 +19,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         fresco:roundedCornerRadius="30dp"
-        fresco:roundingBorderWidth="1dp"
+        fresco:roundingBorderWidth="60dp"
         fresco:roundingBorderColor="@color/gray"
         fresco:fadeDuration="300"
         fresco:actualImageScaleType="centerCrop"

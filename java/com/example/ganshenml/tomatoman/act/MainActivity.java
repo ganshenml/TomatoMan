@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.internal.NavigationMenuItemView;
+import android.support.design.widget.AppBarLayout;
 import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -13,27 +14,25 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
-import com.example.ganshenml.tomatoman.bean.Extra;
 import com.example.ganshenml.tomatoman.bean.Person;
-import com.example.ganshenml.tomatoman.fragment.HomeFragment;
-import com.example.ganshenml.tomatoman.fragment.MyFriendsFragment;
-import com.example.ganshenml.tomatoman.fragment.MyTomatoFragment;
-import com.example.ganshenml.tomatoman.fragment.RankFragment;
-import com.example.ganshenml.tomatoman.fragment.SettingFragment;
+import com.example.ganshenml.tomatoman.bean.data.StaticData;
+import com.example.ganshenml.tomatoman.util.ConstantCode;
 import com.example.ganshenml.tomatoman.util.DbTool;
 import com.example.ganshenml.tomatoman.util.LogTool;
+import com.example.ganshenml.tomatoman.util.NotificationUtls;
+import com.example.ganshenml.tomatoman.util.StringTool;
 import com.example.ganshenml.tomatoman.util.ToActivityPage;
-import com.example.ganshenml.tomatoman.util.ToFragmentPage;
+import com.example.ganshenml.tomatoman.view.ClearEditTextView;
+import com.example.ganshenml.tomatoman.view.StartCountTimeCircleView;
 import com.facebook.drawee.view.SimpleDraweeView;
-import java.util.List;
-import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -41,16 +40,19 @@ public class MainActivity extends BaseActivity
     private final String TAG = "MainActivity";
     private Context thisContext = MainActivity.this;
 
-    private Toolbar tbHome, tbMyTomato, tbMyFriends, tbRank, tbSetting;
-    private NavigationView navigationView;
+    private StartCountTimeCircleView startCountTimeCircleViewId;
+    private ClearEditTextView etTaskName;
+    private LinearLayout llHomeFragment;
+
     private DrawerLayout drawer;
+    private Toolbar tbHome;
+
     private ActionBarDrawerToggle toggle;
-    //    MenuItem nav_home,nav_MyTomato,nav_friends,nav_rank,nav_share,nav_setting;
     private NavigationMenuItemView nav_home, nav_MyTomato, nav_friends, nav_rank, nav_share, nav_setting;
     private SimpleDraweeView user_log;
-    private Toolbar[] toolbars;//储存所有的toolbar
     private long exitTime = 0;//设定回退事件
     private TextView usernameTv, tvUserIntroduction;
+    private ImageView hamburgerMenuIv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,25 +102,26 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.nav_home) {
             //显示“首页”页面
-            ToFragmentPage.toFragmentPage(this, R.id.rlHome, new HomeFragment(), getSupportFragmentManager(), tbHome, toolbars);
-
         } else if (id == R.id.nav_myTomato) {
             //显示“我的番茄”页面
-            ToFragmentPage.toFragmentPage(this, R.id.rlHome, new MyTomatoFragment(), getSupportFragmentManager(), tbMyTomato, toolbars);
+            Intent intent = new Intent(MainActivity.this, MyTomatoAct.class);
+            startActivityForResult(intent, StaticData.REQUEST_TO_MYTOMATO_ACT);
 
         } else if (id == R.id.nav_friends) {
             //显示“我的好友”页面
-            ToFragmentPage.toFragmentPage(this, R.id.rlHome, new MyFriendsFragment(), getSupportFragmentManager(), tbMyFriends, toolbars);
-
+            Intent intent = new Intent(MainActivity.this, MyFriendsAct.class);
+            startActivityForResult(intent, StaticData.REQUEST_TO_MYFRIENDS_ACT);
         } else if (id == R.id.nav_rank) {
             //显示“排行”页面
-            ToFragmentPage.toFragmentPage(this, R.id.rlHome, new RankFragment(), getSupportFragmentManager(), tbRank, toolbars);
+            Intent intent = new Intent(MainActivity.this, RankAct.class);
+            startActivityForResult(intent, StaticData.REQUEST_TO_RANK_ACT);
 
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_setting) {
             //显示“设置”页面
-            ToFragmentPage.toFragmentPage(this, R.id.rlHome, new SettingFragment(), getSupportFragmentManager(), tbSetting, toolbars);
+            Intent intent = new Intent(MainActivity.this, SettingAct.class);
+            startActivityForResult(intent, StaticData.REQUEST_TO_SETTING_ACT);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -141,12 +144,24 @@ public class MainActivity extends BaseActivity
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            default:
+                drawer.openDrawer(GravityCompat.START);
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);//默认选中导航首页项
+                break;
+        }
+    }
+
 
     //------------------------------------------以下为自定义方法--------------------------------------------------------
 
     private void initData() {
         //请求Extra表数据并保存至本地
-        upDataExtraData();
+        DbTool.upDataExtraData();
     }
 
     //初始化组件
@@ -157,20 +172,13 @@ public class MainActivity extends BaseActivity
         //显示汉堡菜单及为其设置事件
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
-                this, drawer, tbHome, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         //实例化
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);//默认选中当前页面的选项
-
-        tbMyTomato = (Toolbar) findViewById(R.id.tbMyTomato);
-        tbMyFriends = (Toolbar) findViewById(R.id.tbMyFriends);
-        tbRank = (Toolbar) findViewById(R.id.tbRank);
-        tbSetting = (Toolbar) findViewById(R.id.tbSetting);
-
-        toolbars = new Toolbar[]{tbHome, tbMyTomato, tbMyFriends, tbRank, tbSetting, tbSetting};
 
         View headView = navigationView.getHeaderView(0);
 
@@ -180,14 +188,17 @@ public class MainActivity extends BaseActivity
 
         //头像初始化
         user_log = (SimpleDraweeView) headView.findViewById(R.id.user_log);
-        user_log.setImageURI("http://pic3.zhongsou.com/image/380710317cdddeb894b.jpg");
 
-        //默认显示HomeFragment
-        ToFragmentPage.toFragmentPage(this, R.id.rlHome, new HomeFragment(), getSupportFragmentManager(), tbHome, toolbars);
-//        nav_home = (NavigationMenuItemView) navigationView.findViewById(R.id.nav_home);
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);//默认选中导航首页项
 
-       }
+        startCountTimeCircleViewId = (StartCountTimeCircleView) findViewById(R.id.startViewId);
+        etTaskName = (ClearEditTextView) findViewById(R.id.etTaskName);
+        llHomeFragment = (LinearLayout) findViewById(R.id.llHomeFragment);
+
+        hamburgerMenuIv = (ImageView) findViewById(R.id.hamburgerMenuIv);
+
+    }
+
 
     private void initDataViews() {
         //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
@@ -199,10 +210,10 @@ public class MainActivity extends BaseActivity
         }
         usernameTv.setText(person.getUsername());
         String picUrlTemp = person.getImageId();
-//        if (!StringTool.isEmpty(picUrlTemp)) {
-//            LogTool.log(LogTool.Aaron, "本地用图片不为空");
-//            user_log.setImageURI(picUrlTemp);
-//        }
+        if (!StringTool.isEmpty(picUrlTemp)) {
+            LogTool.log(LogTool.Aaron, "本地用图片不为空");
+            user_log.setImageURI(picUrlTemp);
+        }
     }
 
     private void initListeners() {
@@ -216,26 +227,43 @@ public class MainActivity extends BaseActivity
             }
         });
 
-    }
-
-    /**
-     * 请求Extra数据并保存至本地
-     */
-    private void upDataExtraData() {
-        BmobQuery<Extra> extraBmobQuery = new BmobQuery<>();
-        extraBmobQuery.findObjects(new FindListener<Extra>() {
+        startCountTimeCircleViewId.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void done(List<Extra> list, BmobException e) {
-                if (e == null) {
-                    if (list.size() > 0) {
-                        DbTool.saveExtraData(list.get(0));
-                        LogTool.log(LogTool.Aaron, TAG + " upDataExtraData 查询到了数据并进行本地保存");
+            public void onClick(View v) {//1.样式变换；2.notification开启；3.finish当前activity；4.跳转至下一个activity并传递数据
+                //1.样式：设置背景alpha变化以下
+                v.setAlpha(0.5f);
 
-                    }
-                } else {
-                    LogTool.log(LogTool.Aaron, TAG + " upDataExtraData 查询Extra数据出错： " + e.toString());
+                //2.notification开启
+                Intent intent = new Intent(MainActivity.this, TomatoCountTimeAct.class);
+                NotificationUtls.sendNotification(MainActivity.this, ConstantCode.HOMEFRAGMETN_REQUEST_CODE, intent, R.layout.notification_layout);//调用自定义工具类方法发送notification
+
+                //3.finish当前主activity
+                finish();
+
+                //4.逻辑：跳转至下一个Activity
+                startActivity(intent);
+            }
+        });
+
+        //判断软键盘是否打开——>如果打开，则在点击界面后进行隐藏
+        llHomeFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputMethodManager != null) {
+                    inputMethodManager.hideSoftInputFromWindow(llHomeFragment.getWindowToken(), 0);
+                }
+            }
+        });
+
+        hamburgerMenuIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.openDrawer(GravityCompat.START);
                 }
             }
         });
     }
+
 }

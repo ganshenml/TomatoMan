@@ -1,13 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llHomeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".act.MainActivity"
-    tools:showIn="@layout/app_bar_main"
-    android:id="@+id/rlHome">
+    android:background="@color/backgroud_fragment_home"
+    android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tbHome"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/backgroud_fragment_home"
+        android:contentInsetStart="0dp"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
 
-</RelativeLayout>
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/hamburger_menu"
+            android:id="@+id/hamburgerMenuIv"/>
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.example.ganshenml.tomatoman.view.ClearEditTextView
+            android:id="@+id/etTaskName"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:drawablePadding="7dp"
+            android:hint="任务名称..."
+            android:maxLength="15"
+            android:textAlignment="center"
+            android:textColor="@color/text_color_homefragment"
+            android:textColorHint="@color/hint_color_homefragment"
+            android:textCursorDrawable="@drawable/text_cursor" />
+
+        <com.example.ganshenml.tomatoman.view.StartCountTimeCircleView
+            android:id="@+id/startViewId"
+            android:layout_width="280px"
+            android:layout_height="280px"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/activity_vertical_margin" />
+    </LinearLayout>
+</LinearLayout>

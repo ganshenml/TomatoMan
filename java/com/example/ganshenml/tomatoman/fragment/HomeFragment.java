@@ -28,7 +28,7 @@ import com.example.ganshenml.tomatoman.view.StartCountTimeCircleView;
 public class HomeFragment extends Fragment {
 
     View view;
-    StartCountTimeCircleView startCountTimeCircleViewId;
+    private StartCountTimeCircleView startCountTimeCircleViewId;
     private ClearEditTextView etTaskName;
     private LinearLayout llHomeFragment;
     private static final int REQUESTCODE_TO_TOMATOCOMPLETE = 1;

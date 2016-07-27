@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.Person;
+import com.example.ganshenml.tomatoman.bean.User;
 import com.example.ganshenml.tomatoman.bean.data.StaticData;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
 import com.example.ganshenml.tomatoman.fragment.HomeFragment;
@@ -54,28 +55,22 @@ public class UserHomePageAct extends BaseActivity {
 
     public final String TAG = "UserHomePageAct";
 
-    private ImageView ivMyTomatoHomepage, ivMyFriendsHomepage;
+    private ImageView backIv,ivMyTomatoHomepage, ivMyFriendsHomepage;
     private TextView tvUserNameHomepage, tvUserIntroHomepage;
     private Context thisContext = UserHomePageAct.this;
     private Uri imageUri;
     private ProgressDialog progressDialog;//进度对话框
     private SimpleDraweeView simpleDraweeView_user_log;
 
-    public HttpCallback httpCallback;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_person_home_page);
         initViews();
         initData();
         initListeners();
     }
 
-    public void setHttpCallback(HttpCallback httpCallback){
-        this.httpCallback = httpCallback;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -90,8 +85,6 @@ public class UserHomePageAct extends BaseActivity {
     //------------------------------------------以下为自定义方法--------------------------------------------------------
 
     private void initViews() {
-        //设置Activity的Title
-        getSupportActionBar().setTitle("个人主页");
 
         //初始并实例化化控件
         tvUserNameHomepage = (TextView) findViewById(R.id.tvUserNameHomepage);
@@ -103,14 +96,9 @@ public class UserHomePageAct extends BaseActivity {
             simpleDraweeView_user_log.setImageURI(picUrlTemp);
         }
 
+        backIv = (ImageView) findViewById(R.id.backIv);
         ivMyTomatoHomepage = (ImageView) findViewById(R.id.ivMyTomatoHomepage);
         ivMyFriendsHomepage = (ImageView) findViewById(R.id.ivMyFriendsHomepage);
-        Toolbar tbHome = (Toolbar) findViewById(R.id.tbHome);
-        final Toolbar tbMyTomato = (Toolbar) findViewById(R.id.tbMyTomato);
-        Toolbar tbMyFriends = (Toolbar) findViewById(R.id.tbMyFriends);
-        Toolbar tbRank = (Toolbar) findViewById(R.id.tbRank);
-        Toolbar tbSetting = (Toolbar) findViewById(R.id.tbSetting);
-        final Toolbar[] toolbars = new Toolbar[]{tbHome, tbMyTomato, tbMyFriends, tbRank, tbSetting, tbSetting};
 
         tvUserNameHomepage.setText(person.getUsername());
         String userIntroStr = person.getIntroduction();
@@ -125,6 +113,13 @@ public class UserHomePageAct extends BaseActivity {
     }
     private void initListeners() {
 
+        //返回
+        backIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         //点击头像
         simpleDraweeView_user_log.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +155,9 @@ public class UserHomePageAct extends BaseActivity {
         ivMyTomatoHomepage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(UserHomePageAct.this,MyTomatoAct.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -168,7 +165,9 @@ public class UserHomePageAct extends BaseActivity {
         ivMyFriendsHomepage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+            Intent intent = new Intent(UserHomePageAct.this,MyFriendsAct.class);
+                startActivity(intent);
+                finish();
             }
         });
 

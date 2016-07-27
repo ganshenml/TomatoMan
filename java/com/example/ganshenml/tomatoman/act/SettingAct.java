@@ -1,11 +1,7 @@
-package com.example.ganshenml.tomatoman.fragment;
+package com.example.ganshenml.tomatoman.act;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
-import com.example.ganshenml.tomatoman.act.LoginAct;
 import com.example.ganshenml.tomatoman.bean.Extra;
 import com.example.ganshenml.tomatoman.bean.FeedBack;
 import com.example.ganshenml.tomatoman.bean.Person;
@@ -23,50 +18,42 @@ import com.example.ganshenml.tomatoman.util.CommonUtils;
 import com.example.ganshenml.tomatoman.util.DbTool;
 import com.example.ganshenml.tomatoman.util.LogTool;
 import com.example.ganshenml.tomatoman.util.ShowDialogUtils;
-import com.example.ganshenml.tomatoman.util.ShowDrawerLayout;
 import com.example.ganshenml.tomatoman.util.ToActivityPage;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
-/**
- * Created by ganshenml on 2016/3/31.
- */
-public class SettingFragment extends Fragment {
+public class SettingAct extends BaseActivity {
     private LinearLayout logoutLl;
     private TextView appVersionTv;
     private EditText feedbackEt;
     private Button feedbackBtn;
-    private ImageView newAppVersionIv;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_setting, container, false);
-        return view;
-    }
+    private ImageView newAppVersionIv, backIv;
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_setting_act);
         initViews();
         initDataViews();
         initListeners();
+
     }
 
+
     private void initViews() {
-        View viewTemp = getView();
-        appVersionTv = (TextView) viewTemp.findViewById(R.id.appVersionTv);
-        newAppVersionIv = (ImageView) viewTemp.findViewById(R.id.newAppVersionIv);
-        logoutLl = (LinearLayout) viewTemp.findViewById(R.id.logoutLl);
-        feedbackEt = (EditText) viewTemp.findViewById(R.id.feedbackEt);
-        feedbackBtn = (Button) viewTemp.findViewById(R.id.feedbackBtn);
+        appVersionTv = (TextView) findViewById(R.id.appVersionTv);
+        newAppVersionIv = (ImageView) findViewById(R.id.newAppVersionIv);
+        logoutLl = (LinearLayout) findViewById(R.id.logoutLl);
+        feedbackEt = (EditText) findViewById(R.id.feedbackEt);
+        feedbackBtn = (Button) findViewById(R.id.feedbackBtn);
+        backIv = (ImageView) findViewById(R.id.backIv);
     }
 
     private void initDataViews() {
         LogTool.log(LogTool.Aaron, " settingFragment initDataViews 进入了");
-        String appVersionStr = CommonUtils.getCurrentAppVersion(getActivity());
+        String appVersionStr = CommonUtils.getCurrentAppVersion(this);
         Extra extraTemp = DbTool.findLocalExtraData();//返回本地存储的Extra数据
         if (extraTemp != null) {
             LogTool.log(LogTool.Aaron, " settingFragment initDataViews　本地存储的Extra数据不为空");
@@ -82,16 +69,17 @@ public class SettingFragment extends Fragment {
     }
 
     private void initListeners() {
+
         logoutLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //注销账号弹窗
-                ShowDialogUtils.showSimpleHintDialog(getActivity(), "确定退出该账号？", new HttpCallback() {
+                ShowDialogUtils.showSimpleHintDialog(SettingAct.this, "确定退出该账号？", new HttpCallback() {
                     @Override
                     public void onSuccess(Object data) {
                         BmobUser.logOut();
-                        getActivity().finish();
-                        ToActivityPage.turnToSimpleAct(getActivity(), LoginAct.class);
+                        finish();
+                        ToActivityPage.turnToSimpleAct(SettingAct.this, LoginAct.class);
                     }
                 });
             }
@@ -110,9 +98,9 @@ public class SettingFragment extends Fragment {
                         @Override
                         public void done(String s, BmobException e) {
                             if (e == null) {
-                                Toast.makeText(getActivity(), "提交成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplication(), "提交成功", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplication(), "提交失败", Toast.LENGTH_SHORT).show();
                                 LogTool.log(LogTool.Aaron, " settingFragment 提交反馈失败： " + e.toString());
                             }
                         }
@@ -120,6 +108,16 @@ public class SettingFragment extends Fragment {
                 }
             }
         });
+
+        //返回
+        backIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
+
+
 
 }
