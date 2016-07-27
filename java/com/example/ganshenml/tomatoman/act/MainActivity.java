@@ -2,53 +2,34 @@ package com.example.ganshenml.tomatoman.act;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.internal.NavigationMenuItemView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.DragEvent;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.animation.Animation;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.Extra;
 import com.example.ganshenml.tomatoman.bean.Person;
-import com.example.ganshenml.tomatoman.bean.data.StaticData;
-import com.example.ganshenml.tomatoman.callback.HttpCallback;
 import com.example.ganshenml.tomatoman.fragment.HomeFragment;
 import com.example.ganshenml.tomatoman.fragment.MyFriendsFragment;
 import com.example.ganshenml.tomatoman.fragment.MyTomatoFragment;
 import com.example.ganshenml.tomatoman.fragment.RankFragment;
 import com.example.ganshenml.tomatoman.fragment.SettingFragment;
-import com.example.ganshenml.tomatoman.util.ConstantCode;
 import com.example.ganshenml.tomatoman.util.DbTool;
-import com.example.ganshenml.tomatoman.util.ImageViewUtils;
 import com.example.ganshenml.tomatoman.util.LogTool;
-import com.example.ganshenml.tomatoman.util.StringTool;
 import com.example.ganshenml.tomatoman.util.ToActivityPage;
 import com.example.ganshenml.tomatoman.util.ToFragmentPage;
 import com.facebook.drawee.view.SimpleDraweeView;
-
 import java.util.List;
-
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -79,17 +60,6 @@ public class MainActivity extends BaseActivity
         initData();
         initDataViews();
         initListeners();
-//
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
-
     }
 
     @Override
@@ -111,9 +81,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
         //如果点击setting，则跳转至番茄设置的Activity进行设置
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, TomatoSettingAct.class);
@@ -152,7 +120,6 @@ public class MainActivity extends BaseActivity
             //显示“设置”页面
             ToFragmentPage.toFragmentPage(this, R.id.rlHome, new SettingFragment(), getSupportFragmentManager(), tbSetting, toolbars);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -184,50 +151,26 @@ public class MainActivity extends BaseActivity
 
     //初始化组件
     private void initViews() {
+        tbHome = (Toolbar) findViewById(R.id.tbHome);
+        setSupportActionBar(tbHome);
 
         //显示汉堡菜单及为其设置事件
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
-                this, drawer, tbHome, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                LogTool.log(LogTool.Aaron, " onDrawerOpened ");
-                Person person = BmobUser.getCurrentUser(Person.class);
-                if (person == null) {
-                    finish();
-                    ToActivityPage.turnToSimpleAct(MainActivity.this, LoginAct.class);
-                    return;
-                }
-                usernameTv.setText(person.getUsername());
-                String picUrlTemp = person.getImageId();
-                if (!StringTool.isEmpty(picUrlTemp)) {
-                    LogTool.log(LogTool.Aaron, "本地用图片不为空: " + picUrlTemp);
-                    user_log.setImageURI(picUrlTemp);
-                }
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                LogTool.log(LogTool.Aaron, " onDrawerClosed ");
-
-            }
-        };
+                this, drawer, tbHome, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
-        tbHome = (Toolbar) findViewById(R.id.tbHome);
-        setSupportActionBar(tbHome);
-
         //实例化
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);//默认选中当前页面的选项
+
         tbMyTomato = (Toolbar) findViewById(R.id.tbMyTomato);
         tbMyFriends = (Toolbar) findViewById(R.id.tbMyFriends);
         tbRank = (Toolbar) findViewById(R.id.tbRank);
         tbSetting = (Toolbar) findViewById(R.id.tbSetting);
-        toolbars = new Toolbar[]{tbHome, tbMyTomato, tbMyFriends, tbRank, tbSetting, tbSetting};
 
+        toolbars = new Toolbar[]{tbHome, tbMyTomato, tbMyFriends, tbRank, tbSetting, tbSetting};
 
         View headView = navigationView.getHeaderView(0);
 
@@ -235,31 +178,16 @@ public class MainActivity extends BaseActivity
         usernameTv = (TextView) headView.findViewById(R.id.usernameTv);
         tvUserIntroduction = (TextView) headView.findViewById(R.id.tvUserIntroduction);
 
-        //默认选中当前页面的选项
-        navigationView.setNavigationItemSelectedListener(this);
+        //头像初始化
+        user_log = (SimpleDraweeView) headView.findViewById(R.id.user_log);
+        user_log.setImageURI("http://pic3.zhongsou.com/image/380710317cdddeb894b.jpg");
 
         //默认显示HomeFragment
         ToFragmentPage.toFragmentPage(this, R.id.rlHome, new HomeFragment(), getSupportFragmentManager(), tbHome, toolbars);
-        nav_home = (NavigationMenuItemView) navigationView.findViewById(R.id.nav_home);
+//        nav_home = (NavigationMenuItemView) navigationView.findViewById(R.id.nav_home);
+        navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);//默认选中导航首页项
 
-        //默认选中导航首页项
-        navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
-
-        //头像初始化
-        user_log = (SimpleDraweeView) headView.findViewById(R.id.user_log);
-
-
-        //简介事件监听——>先设定为跳入登录页
-        tvUserIntroduction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(MainActivity.this, LoginAct.class);
-                startActivity(intent);
-            }
-        });
-
-    }
+       }
 
     private void initDataViews() {
         //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
@@ -271,11 +199,10 @@ public class MainActivity extends BaseActivity
         }
         usernameTv.setText(person.getUsername());
         String picUrlTemp = person.getImageId();
-        if (!StringTool.isEmpty(picUrlTemp)) {
-            LogTool.log(LogTool.Aaron, "本地用图片不为空");
-            user_log.setImageURI(picUrlTemp);
-        }
-
+//        if (!StringTool.isEmpty(picUrlTemp)) {
+//            LogTool.log(LogTool.Aaron, "本地用图片不为空");
+//            user_log.setImageURI(picUrlTemp);
+//        }
     }
 
     private void initListeners() {
@@ -288,7 +215,6 @@ public class MainActivity extends BaseActivity
                 startActivity(intent);
             }
         });
-
 
     }
 

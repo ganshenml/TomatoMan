@@ -10,8 +10,8 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Fresco.initialize(this);
         super.onCreate(savedInstanceState);
+        Fresco.initialize(this);
         BmobTool.init(getApplication());
 //
 //        initViews();

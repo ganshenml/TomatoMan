@@ -32,11 +32,11 @@
             fresco:roundingBorderWidth="1dp"
             fresco:roundingBorderColor="@color/gray"
             fresco:fadeDuration="300"
-            fresco:actualImageScaleType="centerInside"
+            fresco:actualImageScaleType="centerCrop"
             fresco:placeholderImage="@drawable/user_logo"
-            fresco:placeholderImageScaleType="fitCenter"
+            fresco:placeholderImageScaleType="centerCrop"
             fresco:failureImage="@drawable/user_logo"
-            fresco:failureImageScaleType="fitCenter"
+            fresco:failureImageScaleType="centerCrop"
             />
 
         <TextView
