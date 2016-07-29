@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.ganshenml.tomatoman.R;
+import com.example.ganshenml.tomatoman.callback.HttpCallback;
+import com.example.ganshenml.tomatoman.util.ConstantCode;
+import com.example.ganshenml.tomatoman.util.ShowDialogUtils;
 import com.example.ganshenml.tomatoman.util.ViewUtils;
 
 import static android.graphics.Color.BLACK;
@@ -32,33 +35,28 @@ public class TomatoCompleteAct extends BaseActivity {
         setContentView(R.layout.activity_tomato_complete);
 
         initViews();
-        listenerMethod();
+        initListerners();
     }
 
     //对回退事件做弹窗处理
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){//如果点击了回退
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("提示").setMessage("确定不保存当前数据吗！").setCancelable(true)
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    })
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {//点击确定：不保存当前数据，回到首页
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(TomatoCompleteAct.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+        if (keyCode == KeyEvent.KEYCODE_BACK) {//如果点击了回退
+            if(getIntent().getFlags()== ConstantCode.ACTIVITY_FROM_MYTOMATO_CODE) {//如果是从MyTomatoAct界面跳转过来，则回退时直接退出
+                finish();
+                return true;
+            }
 
-            return  false;
+            ShowDialogUtils.showSimpleHintDialog(TomatoCompleteAct.this, "确定不保存当前数据吗？", new HttpCallback() {
+                @Override
+                public void onSuccess(Object data) {
+                    Intent intent = new Intent(TomatoCompleteAct.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -72,12 +70,12 @@ public class TomatoCompleteAct extends BaseActivity {
         setSupportActionBar(tbToolbar_public);
         getSupportActionBar().setDisplayShowTitleEnabled(false);//不显示默认的标题
 
-        ViewUtils.setToolbar(TomatoCompleteAct.this,tbToolbar_public,tvTitle_public);//使用自定义的工具类方法设置toolbar的样式
+        ViewUtils.setToolbar(TomatoCompleteAct.this, tbToolbar_public, tvTitle_public);//使用自定义的工具类方法设置toolbar的样式
 
     }
 
 
-    private void listenerMethod() {
+    private void initListerners() {
 
         //点击“完成”按钮：1.完成数据保存；2.退出当前Activity；3.回到首页；
         btnTomatoComplete.setOnClickListener(new View.OnClickListener() {

@@ -11,4 +11,5 @@ public class ConstantCode {
 
     public static final String ApplicationID = "2166a0e31737a3d72bbd944142eb9e7b";//该应用程序的编码ID
 
+    public static final int ACTIVITY_FROM_MYTOMATO_CODE = 101;//表示是从MyTomatoAct界面过来的
 }

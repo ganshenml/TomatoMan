@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,16 +11,15 @@
         android:id="@+id/rankTb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentInsetStart="0dp"
-        android:background="@color/backgroud_fragment_home">
+        android:background="@color/backgroud_fragment_home"
+        app:contentInsetStart="0dp">
 
         <ImageView
+            android:id="@+id/backIv"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@mipmap/back"
             android:layout_marginLeft="@dimen/to_leftscreen_horizontal_margin"
-            android:id="@+id/backIv"
-            />
+            android:src="@mipmap/back" />
 
         <Button
             android:id="@+id/thisWeekBtn"
@@ -43,6 +43,8 @@
     </android.support.v7.widget.Toolbar>
 
     <ListView
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:id="@+id/lvRank"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>

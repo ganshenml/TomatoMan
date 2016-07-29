@@ -5,10 +5,13 @@ import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSeekBar;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,14 +25,15 @@ public class TomatoSettingAct extends BaseActivity {
     private CheckBox cbVibrateAlarm, cbRingtoneAlarm;//振动提醒和响铃提醒的设置
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-
+    private Toolbar tomatoSettingTb;
+    private ImageView backIv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_tomato_setting);
 
         initViews();
+        initListeners();
     }
 
     @Override
@@ -59,6 +63,11 @@ public class TomatoSettingAct extends BaseActivity {
     //-------------------------------------------------------------------以下为自定义方法-----------------------------------------------------
     //初始化控件
     private void initViews() {
+        tomatoSettingTb = (Toolbar) findViewById(R.id.tomatoSettingTb);
+        tomatoSettingTb.setTitle("");
+        setSupportActionBar(tomatoSettingTb);
+
+        backIv = (ImageView)findViewById(R.id.backIv);
         tvWorkTime = (TextView) findViewById(R.id.tvWorkTime);
         tvShortRest = (TextView) findViewById(R.id.tvShortRest);
         tvLongRest = (TextView) findViewById(R.id.tvLongRest);
@@ -167,4 +176,12 @@ public class TomatoSettingAct extends BaseActivity {
 
     }
 
+    private void initListeners(){
+        backIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
 }

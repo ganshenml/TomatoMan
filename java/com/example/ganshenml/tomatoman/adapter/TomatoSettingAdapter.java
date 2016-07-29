@@ -14,8 +14,8 @@ import java.util.ArrayList;
  * Created by ganshenml on 2016/3/25.
  */
 public class TomatoSettingAdapter extends BaseAdapter {
-    ArrayList<View> list;
-    Context context;
+    private ArrayList<View> list;
+    private Context context;
 
     public TomatoSettingAdapter(Context context, ArrayList<View> list) {
         this.context = context;

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
 
-    <dbname value="tomaoto_man_db" ></dbname>
+    <dbname value="tomaoto_man_db"></dbname>
 
-    <version value="1" ></version>
+    <version value="1"></version>
 
     <list>
-        <mapping class="com.example.ganshenml.tomatoman.bean.Extra"></mapping>
-        <mapping class="com.example.ganshenml.tomatoman.bean.FeedBack"></mapping>
+        <mapping class="com.example.ganshenml.tomatoman.bean.beant.ExtraT"></mapping>
+        <mapping class="com.example.ganshenml.tomatoman.bean.beant.TomatoRecordT"></mapping>
     </list>
 </litepal>

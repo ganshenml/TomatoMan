@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:layout_marginTop="@dimen/to_item_vertical_margin"
-    android:layout_marginBottom="@dimen/to_item_vertical_margin"
+    android:paddingTop="@dimen/to_item_vertical_margin"
+    android:paddingBottom="@dimen/to_item_vertical_margin"
     android:gravity="center"
     android:orientation="horizontal">
 

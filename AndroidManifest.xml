@@ -39,11 +39,13 @@
         </activity>
         <activity
             android:name=".act.TomatoSettingAct"
-            android:label="时间设置" />
-        <activity android:name=".act.MyTomatoAct"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".act.UserHomePageAct"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".act.MyTomatoAct"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".act.UserHomePageAct"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".act.TomatoCompleteAct"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -88,7 +90,8 @@
         <activity
             android:name=".act.RankAct"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".act.SettingAct"
+        <activity
+            android:name=".act.SettingAct"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 

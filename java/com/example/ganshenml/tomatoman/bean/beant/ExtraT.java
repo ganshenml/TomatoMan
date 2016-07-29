@@ -1,16 +1,22 @@
-package com.example.ganshenml.tomatoman.bean;
+package com.example.ganshenml.tomatoman.bean.beant;
 
-import cn.bmob.v3.BmobObject;
+import com.example.ganshenml.tomatoman.bean.Extra;
+
+import org.litepal.crud.DataSupport;
 
 /**
- * 存放APP一些其他的数据：版本号
- * Created by ganshenml on 2016-07-22.
+ * 与Extra对应的类，用来做LitePal的本地存储
+ * Created by ganshenml on 2016-07-29.
  */
-public class Extra extends BmobObject {
+public class ExtraT extends DataSupport {
 
     private String appVersion;//app版本号
     private String feedbackHint;//反馈提示
 
+    public ExtraT(Extra extra){
+        this.appVersion = extra.getAppVersion();
+        this.feedbackHint = extra.getFeedbackHint();
+    }
 
     public String getFeedbackHint() {
         return feedbackHint;
@@ -27,4 +33,5 @@ public class Extra extends BmobObject {
     public void setAppVersion(String appVersion) {
         this.appVersion = appVersion;
     }
+
 }

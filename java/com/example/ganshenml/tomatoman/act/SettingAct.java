@@ -13,12 +13,15 @@ import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.Extra;
 import com.example.ganshenml.tomatoman.bean.FeedBack;
 import com.example.ganshenml.tomatoman.bean.Person;
+import com.example.ganshenml.tomatoman.bean.beant.ExtraT;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
 import com.example.ganshenml.tomatoman.util.CommonUtils;
 import com.example.ganshenml.tomatoman.util.DbTool;
 import com.example.ganshenml.tomatoman.util.LogTool;
 import com.example.ganshenml.tomatoman.util.ShowDialogUtils;
 import com.example.ganshenml.tomatoman.util.ToActivityPage;
+
+import org.litepal.LitePalApplication;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -54,16 +57,16 @@ public class SettingAct extends BaseActivity {
     private void initDataViews() {
         LogTool.log(LogTool.Aaron, " settingFragment initDataViews 进入了");
         String appVersionStr = CommonUtils.getCurrentAppVersion(this);
-        Extra extraTemp = DbTool.findLocalExtraData();//返回本地存储的Extra数据
-        if (extraTemp != null) {
-            LogTool.log(LogTool.Aaron, " settingFragment initDataViews　本地存储的Extra数据不为空");
-            feedbackEt.setHint(extraTemp.getFeedbackHint());
+        appVersionTv.setText(getResources().getText(R.string.app_version) + " " + appVersionStr);
 
-            if (extraTemp.getAppVersion().compareToIgnoreCase(appVersionStr) > 0) {
+        ExtraT extraTTemp = DbTool.findLocalExtraData();//返回本地存储的Extra数据
+        if (extraTTemp != null) {
+            LogTool.log(LogTool.Aaron, " settingFragment initDataViews　本地存储的Extra数据不为空");
+            feedbackEt.setHint(extraTTemp.getFeedbackHint());
+
+            if (extraTTemp.getAppVersion().compareToIgnoreCase(appVersionStr) > 0) {
                 newAppVersionIv.setVisibility(View.VISIBLE);
             }
-        } else {
-            appVersionTv.setText(getResources().getText(R.string.app_version) + " " + appVersionStr);
         }
 
     }
@@ -78,8 +81,8 @@ public class SettingAct extends BaseActivity {
                     @Override
                     public void onSuccess(Object data) {
                         BmobUser.logOut();
-                        finish();
                         ToActivityPage.turnToSimpleAct(SettingAct.this, LoginAct.class);
+                        finish();
                     }
                 });
             }
@@ -117,7 +120,6 @@ public class SettingAct extends BaseActivity {
             }
         });
     }
-
 
 
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/to_item_vertical_margin_bigger"
+    android:paddingBottom="@dimen/to_item_vertical_margin_bigger"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/tomatoObtainLeverSv"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            fresco:actualImageScaleType="centerCrop"
+            fresco:fadeDuration="300"
+            fresco:failureImage="@mipmap/tomato_default"
+            fresco:failureImageScaleType="centerCrop"
+            fresco:placeholderImage="@mipmap/tomato_default"
+            fresco:placeholderImageScaleType="centerCrop"
+            fresco:roundAsCircle="true" />
+
+        <TextView
+            android:id="@+id/dateTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/to_item_vertical_margin"
+            android:text="未获取日期"
+            android:textSize="@dimen/little_text_size" />
+
+        <TextView
+            android:id="@+id/weekTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/to_item_vertical_margin"
+            android:text="( 未知 )"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/smallest_text_size" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/myTomatoNumTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text="0个"
+        android:textSize="@dimen/common_text_size" />
+</LinearLayout>

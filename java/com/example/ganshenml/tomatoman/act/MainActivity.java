@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.internal.NavigationMenuItemView;
-import android.support.design.widget.AppBarLayout;
 import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -32,6 +31,9 @@ import com.example.ganshenml.tomatoman.util.ToActivityPage;
 import com.example.ganshenml.tomatoman.view.ClearEditTextView;
 import com.example.ganshenml.tomatoman.view.StartCountTimeCircleView;
 import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.litepal.LitePalApplication;
+
 import cn.bmob.v3.BmobUser;
 
 public class MainActivity extends BaseActivity
@@ -52,7 +54,7 @@ public class MainActivity extends BaseActivity
     private SimpleDraweeView user_log;
     private long exitTime = 0;//设定回退事件
     private TextView usernameTv, tvUserIntroduction;
-    private ImageView hamburgerMenuIv;
+    private ImageView hamburgerMenuIv, tomatoSettingIv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,7 +198,7 @@ public class MainActivity extends BaseActivity
         llHomeFragment = (LinearLayout) findViewById(R.id.llHomeFragment);
 
         hamburgerMenuIv = (ImageView) findViewById(R.id.hamburgerMenuIv);
-
+        tomatoSettingIv = (ImageView) findViewById(R.id.tomatoSettingIv);
     }
 
 
@@ -204,8 +206,8 @@ public class MainActivity extends BaseActivity
         //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
         Person person = BmobUser.getCurrentUser(Person.class);
         if (person == null) {
-            finish();
             ToActivityPage.turnToSimpleAct(MainActivity.this, LoginAct.class);
+            finish();
             return;
         }
         usernameTv.setText(person.getUsername());
@@ -262,6 +264,14 @@ public class MainActivity extends BaseActivity
                 if (!drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.openDrawer(GravityCompat.START);
                 }
+            }
+        });
+
+        tomatoSettingIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, TomatoSettingAct.class);
+                startActivity(intent);
             }
         });
     }

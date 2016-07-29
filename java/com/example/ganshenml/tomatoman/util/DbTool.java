@@ -3,6 +3,9 @@ package com.example.ganshenml.tomatoman.util;
 import android.content.ContentValues;
 
 import com.example.ganshenml.tomatoman.bean.Extra;
+import com.example.ganshenml.tomatoman.bean.TomatoRecord;
+import com.example.ganshenml.tomatoman.bean.beant.ExtraT;
+import com.example.ganshenml.tomatoman.bean.beant.TomatoRecordT;
 
 import org.litepal.crud.DataSupport;
 
@@ -29,24 +32,25 @@ public class DbTool {
      * 保存Extra表数据至本地
      */
     public static void saveExtraData(Extra extra) {
-        Extra extraTemp = DataSupport.findFirst(Extra.class);
-        if (extraTemp != null) {
+        ExtraT extraT = new ExtraT(extra);
+        ExtraT extraTTemp = DataSupport.findFirst(ExtraT.class);
+        if (extraTTemp != null) {
             LogTool.log(LogTool.Aaron," saveExtraData extraTemp不为空");
-            DataSupport.deleteAll(Extra.class);
+            DataSupport.deleteAll(ExtraT.class);
         }
-        extra.save();
         LogTool.log(LogTool.Aaron," saveExtraData extra 的值： "+ extra.getFeedbackHint());
+        extraT.save();
     }
 
     /**
      * 返回本地保存的Extra数据
      * @return
      */
-    public static Extra findLocalExtraData(){
-        List<Extra> extraList = DataSupport.findAll(Extra.class);
-        if(StringTool.hasData(extraList)){
-            LogTool.log(LogTool.Aaron," DbTool findLocalExtraData Extra的大小是： "+extraList.size() );
-            return extraList.get(0);
+    public static ExtraT findLocalExtraData(){
+        List<ExtraT> extraTList = DataSupport.findAll(ExtraT.class);
+        if(StringTool.hasData(extraTList)){
+            LogTool.log(LogTool.Aaron," DbTool findLocalExtraData Extra的大小是： "+extraTList.size() );
+            return extraTList.get(0);
         }
         LogTool.log(LogTool.Aaron," DbTool findLocalExtraData Extra的大小是： "+0 );
         return null;
@@ -74,5 +78,59 @@ public class DbTool {
         });
     }
 
+    /**
+     * 判断本地是否存有TomatoRecord数据
+     * @return
+     */
+    public static boolean isHasTomatoRecordData(){
+       TomatoRecordT tomatoRecordT = DataSupport.findFirst(TomatoRecordT.class);
+        if(tomatoRecordT!=null){
+            return true;
+        }
+        return false;
+    }
 
+    /**
+     * 保存TomatoRecord数据至本地数据库
+     */
+    public static void saveTomatoRecordToLocal(List<TomatoRecord> list){
+        List<TomatoRecordT> listTemp = new ArrayList<>() ;
+        int length = list.size();
+        for (int i = 0; i < length; i++) {
+            TomatoRecordT tomatoRecordT = new TomatoRecordT(list.get(i));
+            listTemp.add(tomatoRecordT);
+        }
+
+        DataSupport.saveAll(listTemp);
+    }
+
+    /**
+     * 返回最新的TomatoRecord的单条本地数据
+     * @return
+     */
+    public static TomatoRecordT returnLatestTomatoRecordData(){
+        return DataSupport.findFirst(TomatoRecordT.class);
+    }
+
+    /**
+     * 返回本地保存的所有TomatoRecordT数据
+     * @return
+     */
+    public static List<TomatoRecordT> returnWholeTomatoRecordData(){
+        return DataSupport.findAll(TomatoRecordT.class);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

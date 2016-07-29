@@ -13,9 +13,12 @@
 
     <!--custom item margins ,for item to the item -->
     <dimen name="to_item_vertical_margin">4dp</dimen>
+    <dimen name="to_item_vertical_margin_bigger">6dp</dimen>
 
     <!--custom text size -->
     <dimen name="common_text_size">18sp</dimen>
+    <dimen name="bigger_text_size">24sp</dimen>
     <dimen name="little_text_size">14sp</dimen>
+    <dimen name="smallest_text_size">10sp</dimen>
     <dimen name="super_large_font">48sp</dimen>
 </resources>

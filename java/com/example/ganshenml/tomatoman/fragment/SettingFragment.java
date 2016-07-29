@@ -18,6 +18,7 @@ import com.example.ganshenml.tomatoman.act.LoginAct;
 import com.example.ganshenml.tomatoman.bean.Extra;
 import com.example.ganshenml.tomatoman.bean.FeedBack;
 import com.example.ganshenml.tomatoman.bean.Person;
+import com.example.ganshenml.tomatoman.bean.beant.ExtraT;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
 import com.example.ganshenml.tomatoman.util.CommonUtils;
 import com.example.ganshenml.tomatoman.util.DbTool;
@@ -67,18 +68,17 @@ public class SettingFragment extends Fragment {
     private void initDataViews() {
         LogTool.log(LogTool.Aaron, " settingFragment initDataViews 进入了");
         String appVersionStr = CommonUtils.getCurrentAppVersion(getActivity());
-        Extra extraTemp = DbTool.findLocalExtraData();//返回本地存储的Extra数据
-        if (extraTemp != null) {
-            LogTool.log(LogTool.Aaron, " settingFragment initDataViews　本地存储的Extra数据不为空");
-            feedbackEt.setHint(extraTemp.getFeedbackHint());
+        appVersionTv.setText(getResources().getText(R.string.app_version) + " " + appVersionStr);
 
-            if (extraTemp.getAppVersion().compareToIgnoreCase(appVersionStr) > 0) {
+        ExtraT extraTTemp = DbTool.findLocalExtraData();//返回本地存储的Extra数据
+        if (extraTTemp != null) {
+            LogTool.log(LogTool.Aaron, " settingFragment initDataViews　本地存储的Extra数据不为空");
+            feedbackEt.setHint(extraTTemp.getFeedbackHint());
+
+            if (extraTTemp.getAppVersion().compareToIgnoreCase(appVersionStr) > 0) {
                 newAppVersionIv.setVisibility(View.VISIBLE);
             }
-        } else {
-            appVersionTv.setText(getResources().getText(R.string.app_version) + " " + appVersionStr);
         }
-
     }
 
     private void initListeners() {
