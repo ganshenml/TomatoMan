@@ -95,13 +95,15 @@ public class ShowDialogUtils {
      * @param httpCallback
      */
     public static  void showSimpleHintDialog(Context packageContext , String hintStr, final HttpCallback httpCallback){
+        LogTool.log(LogTool.Aaron,"sdf23234");
         new AlertDialog.Builder(packageContext)
                 .setMessage(hintStr)
                 .setNegativeButton("取消",null)
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        httpCallback.onSuccess(null);
+                        LogTool.log(LogTool.Aaron,"点击了确认");
+                        httpCallback.onComplete(null);
                     }
                 })
                 .create()

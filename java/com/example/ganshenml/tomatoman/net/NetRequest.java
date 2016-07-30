@@ -3,6 +3,7 @@ package com.example.ganshenml.tomatoman.net;
 import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.bean.TomatoRecord;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
+import com.example.ganshenml.tomatoman.util.LogTool;
 import com.example.ganshenml.tomatoman.util.StringTool;
 
 import java.text.ParseException;
@@ -45,7 +46,7 @@ public class NetRequest {
      * 取出相较于本地数据获取最新的TomatoRecord数据（有可能也是超过100条的，暂不做处理）
      * @param httpCallback
      */
-    public static void requestTomatoRecordLatestData(String dateStr ,final HttpCallback<TomatoRecord> httpCallback){
+    public static void requestTomatoRecordLatestData(final String dateStr , final HttpCallback<TomatoRecord> httpCallback){
 
         if(StringTool.isEmpty(dateStr)){
             return;
@@ -80,7 +81,19 @@ public class NetRequest {
         query.findObjects(new FindListener<TomatoRecord>() {
             @Override
             public void done(List<TomatoRecord> list, BmobException e) {
+                if(StringTool.hasData(list)){
+                    if(list.get(0).getCreatedAt().equals(dateStr)){//如果当前日期是相同，则去除该数据（Bmob数据日期存储少一秒的原因导致查询结果会包含一条重复的数据）
+                        list.remove(0);
+                    }
+                    int length = list.size();
+
+                    if(list.get(length-1).getCreatedAt().equals(dateStr)){
+                        list.remove(length-1);
+                    }
+                }
+
                 httpCallback.onSuccess(list);
+
             }
         });
     }

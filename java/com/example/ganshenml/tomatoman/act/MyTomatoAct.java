@@ -53,6 +53,7 @@ public class MyTomatoAct extends BaseActivity {
         initArrayList();
         tomatoRecordAdapter = new TomatoRecordAdapter(this, tomatoRecordArrayList);
         myTomatoRecordLv.setAdapter(tomatoRecordAdapter);
+        tomatoRecordAdapter.notifyDataSetChanged();
 
         //本地是否有TomatoRecord数据：无：从服务器取100条保存；有：取出服务器最新的数据判断是否新于本地——>是，获取所有这部分新的数据，保存在本地
         if (DbTool.isHasTomatoRecordData()) {
@@ -79,6 +80,9 @@ public class MyTomatoAct extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MyTomatoAct.this, TomatoCompleteAct.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("tomatoRecordT",tomatoRecordArrayList.get(position));
+                intent.putExtras(bundle);
                 intent.setFlags(ConstantCode.ACTIVITY_FROM_MYTOMATO_CODE);
                 startActivity(intent);
             }

@@ -109,7 +109,7 @@ public class DbTool {
      * @return
      */
     public static TomatoRecordT returnLatestTomatoRecordData(){
-        return DataSupport.findFirst(TomatoRecordT.class);
+        return DataSupport.findLast(TomatoRecordT.class);
     }
 
     /**

@@ -5,10 +5,12 @@ import com.example.ganshenml.tomatoman.bean.TomatoRecord;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * Created by ganshenml on 2016-07-29.
  */
-public class TomatoRecordT extends DataSupport {
+public class TomatoRecordT extends DataSupport implements Serializable{
 
     private Person person;//用户
     private String taskTime;//任务完成的时间

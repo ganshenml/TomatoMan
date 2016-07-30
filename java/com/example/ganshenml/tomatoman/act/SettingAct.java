@@ -76,10 +76,12 @@ public class SettingAct extends BaseActivity {
         logoutLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LogTool.log(LogTool.Aaron,"23342342");
+
                 //注销账号弹窗
                 ShowDialogUtils.showSimpleHintDialog(SettingAct.this, "确定退出该账号？", new HttpCallback() {
                     @Override
-                    public void onSuccess(Object data) {
+                    public void onComplete(Object data) {
                         BmobUser.logOut();
                         ToActivityPage.turnToSimpleAct(SettingAct.this, LoginAct.class);
                         finish();
@@ -91,7 +93,6 @@ public class SettingAct extends BaseActivity {
         feedbackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogTool.log(LogTool.Aaron, " settingFragment 点击了提交反馈按钮");
                 String feedbackStrTemp = feedbackEt.getText().toString();
                 if (feedbackStrTemp.length() > 0) {
                     FeedBack feedBack = new FeedBack();
@@ -104,7 +105,6 @@ public class SettingAct extends BaseActivity {
                                 Toast.makeText(getApplication(), "提交成功", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(getApplication(), "提交失败", Toast.LENGTH_SHORT).show();
-                                LogTool.log(LogTool.Aaron, " settingFragment 提交反馈失败： " + e.toString());
                             }
                         }
                     });

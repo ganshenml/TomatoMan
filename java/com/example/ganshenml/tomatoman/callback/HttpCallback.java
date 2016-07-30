@@ -25,6 +25,11 @@ public abstract class HttpCallback<T> {
     public void onSuccess(List<T> data){}
 
     /**
+     * 一般处理动作的完成
+     * @param data
+     */
+    public void onComplete(T data){}
+    /**
      * 处理失败,一般是处理服务器的业务逻辑出错
      * @param msg
      */

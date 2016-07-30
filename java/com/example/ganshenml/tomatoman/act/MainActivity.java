@@ -2,6 +2,11 @@ package com.example.ganshenml.tomatoman.act;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.internal.NavigationMenuItemView;
 import android.view.KeyEvent;
@@ -24,6 +29,7 @@ import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.bean.data.StaticData;
 import com.example.ganshenml.tomatoman.util.ConstantCode;
 import com.example.ganshenml.tomatoman.util.DbTool;
+import com.example.ganshenml.tomatoman.util.ImageTool;
 import com.example.ganshenml.tomatoman.util.LogTool;
 import com.example.ganshenml.tomatoman.util.NotificationUtls;
 import com.example.ganshenml.tomatoman.util.StringTool;
@@ -31,6 +37,7 @@ import com.example.ganshenml.tomatoman.util.ToActivityPage;
 import com.example.ganshenml.tomatoman.view.ClearEditTextView;
 import com.example.ganshenml.tomatoman.view.StartCountTimeCircleView;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.cache.BitmapMemoryCacheFactory;
 
 import org.litepal.LitePalApplication;
 
@@ -44,7 +51,7 @@ public class MainActivity extends BaseActivity
 
     private StartCountTimeCircleView startCountTimeCircleViewId;
     private ClearEditTextView etTaskName;
-    private LinearLayout llHomeFragment;
+    private LinearLayout llHomeFragment, LLNavHeader;
 
     private DrawerLayout drawer;
     private Toolbar tbHome;
@@ -199,6 +206,8 @@ public class MainActivity extends BaseActivity
 
         hamburgerMenuIv = (ImageView) findViewById(R.id.hamburgerMenuIv);
         tomatoSettingIv = (ImageView) findViewById(R.id.tomatoSettingIv);
+
+        LLNavHeader = (LinearLayout) headView.findViewById(R.id.LLNavHeader);
     }
 
 
@@ -216,6 +225,13 @@ public class MainActivity extends BaseActivity
             LogTool.log(LogTool.Aaron, "本地用图片不为空");
             user_log.setImageURI(picUrlTemp);
         }
+
+        //初始化背景图片
+//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.background);
+//        Bitmap bitmap1 = ImageTool.doBlur(bitmap, 20, true);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.background);
+        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+        LLNavHeader.setBackground(drawable);
     }
 
     private void initListeners() {

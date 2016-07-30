@@ -36,6 +36,5 @@ public class ViewUtils {
             tvTitle_public.setText("高效工作中");
         }
         tvTitle_public.setTextColor(Color.WHITE);
-        tbToolbar_public.setBackgroundColor(Color.BLACK);
     }
 }
