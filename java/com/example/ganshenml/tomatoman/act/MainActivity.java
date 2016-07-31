@@ -1,5 +1,6 @@
 package com.example.ganshenml.tomatoman.act;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -29,6 +30,7 @@ import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.bean.data.StaticData;
 import com.example.ganshenml.tomatoman.util.ConstantCode;
 import com.example.ganshenml.tomatoman.util.DbTool;
+import com.example.ganshenml.tomatoman.util.GBlurPic;
 import com.example.ganshenml.tomatoman.util.ImageTool;
 import com.example.ganshenml.tomatoman.util.LogTool;
 import com.example.ganshenml.tomatoman.util.NotificationUtls;
@@ -36,10 +38,23 @@ import com.example.ganshenml.tomatoman.util.StringTool;
 import com.example.ganshenml.tomatoman.util.ToActivityPage;
 import com.example.ganshenml.tomatoman.view.ClearEditTextView;
 import com.example.ganshenml.tomatoman.view.StartCountTimeCircleView;
+import com.facebook.binaryresource.BinaryResource;
+import com.facebook.binaryresource.FileBinaryResource;
+import com.facebook.cache.common.CacheKey;
+import com.facebook.cache.common.SimpleCacheKey;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeHierarchy;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.cache.BitmapMemoryCacheFactory;
+import com.facebook.imagepipeline.cache.DefaultCacheKeyFactory;
+import com.facebook.imagepipeline.core.ImagePipelineFactory;
+import com.facebook.imagepipeline.request.ImageRequest;
 
 import org.litepal.LitePalApplication;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import cn.bmob.v3.BmobUser;
 
@@ -62,6 +77,11 @@ public class MainActivity extends BaseActivity
     private long exitTime = 0;//设定回退事件
     private TextView usernameTv, tvUserIntroduction;
     private ImageView hamburgerMenuIv, tomatoSettingIv;
+
+    private GBlurPic mGBlurPic;
+
+    private Bitmap mBitmapIn;
+    private Bitmap mBitmapOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,6 +231,7 @@ public class MainActivity extends BaseActivity
     }
 
 
+    @TargetApi(Build.VERSION_CODES.M)
     private void initDataViews() {
         //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
         Person person = BmobUser.getCurrentUser(Person.class);
@@ -227,10 +248,25 @@ public class MainActivity extends BaseActivity
         }
 
         //初始化背景图片
-//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.background);
-//        Bitmap bitmap1 = ImageTool.doBlur(bitmap, 20, true);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.background);
-        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+//        BinaryResource resource =  Fresco.getImagePipelineFactory().getMainDiskStorageCache().getResource(new SimpleCacheKey(picUrlTemp));
+//        Bitmap bitmap = null;
+//        try {
+//            InputStream inputStream = resource.openStream();
+//            bitmap = BitmapFactory.decodeStream(inputStream);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+
+        mGBlurPic = new GBlurPic(this);
+//        Bitmap bitmap = ImageTool.drawableToBitmap(user_log.getHierarchy().getTopLevelDrawable());
+        mBitmapIn = loadBitmap(R.drawable.background);
+        mBitmapOut = Bitmap.createBitmap(mBitmapIn.getWidth(),
+                mBitmapIn.getHeight(), mBitmapIn.getConfig());
+
+
+        mBitmapOut = mGBlurPic.gBlurBitmap(mBitmapIn, 25);
+        Drawable drawable = new BitmapDrawable(getResources(), mBitmapOut);
         LLNavHeader.setBackground(drawable);
     }
 
@@ -292,4 +328,14 @@ public class MainActivity extends BaseActivity
         });
     }
 
+    /**
+     * 构造Bitmap对象
+     * @param resource
+     * @return
+     */
+    private Bitmap loadBitmap(int resource) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        return BitmapFactory.decodeResource(getResources(), resource, options);
+    }
 }
