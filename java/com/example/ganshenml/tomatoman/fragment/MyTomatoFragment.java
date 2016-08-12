@@ -1,10 +1,8 @@
 package com.example.ganshenml.tomatoman.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -14,10 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
-import com.example.ganshenml.tomatoman.util.ShowDrawerLayout;
 
 
 public class MyTomatoFragment extends Fragment {

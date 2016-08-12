@@ -3,8 +3,7 @@ package com.example.ganshenml.tomatoman.net;
 import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.bean.TomatoRecord;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
-import com.example.ganshenml.tomatoman.util.LogTool;
-import com.example.ganshenml.tomatoman.util.StringTool;
+import com.example.ganshenml.tomatoman.tool.StringTool;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;

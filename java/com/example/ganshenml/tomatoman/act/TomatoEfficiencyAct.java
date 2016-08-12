@@ -1,27 +1,23 @@
 package com.example.ganshenml.tomatoman.act;
 
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.IBinder;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.service.CountTimeNumService;
-import com.example.ganshenml.tomatoman.util.ConstantCode;
-import com.example.ganshenml.tomatoman.util.ContextManager;
-import com.example.ganshenml.tomatoman.util.NotificationUtls;
-import com.example.ganshenml.tomatoman.util.ShowDialogUtils;
-import com.example.ganshenml.tomatoman.util.ViewUtils;
+import com.example.ganshenml.tomatoman.tool.ConstantCode;
+import com.example.ganshenml.tomatoman.tool.ContextManager;
+import com.example.ganshenml.tomatoman.tool.NotificationUtls;
+import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
+import com.example.ganshenml.tomatoman.tool.ViewUtils;
 import com.example.ganshenml.tomatoman.view.TomatoCountSurfaceView;
 
 /**

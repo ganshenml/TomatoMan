@@ -11,9 +11,12 @@ import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.Person;
-import com.example.ganshenml.tomatoman.util.LogTool;
-import com.example.ganshenml.tomatoman.util.ToActivityPage;
+import com.example.ganshenml.tomatoman.net.WifiOperate;
+import com.example.ganshenml.tomatoman.tool.CommonUtils;
+import com.example.ganshenml.tomatoman.tool.LogTool;
+import com.example.ganshenml.tomatoman.tool.ToActivityPage;
 import com.example.ganshenml.tomatoman.view.ClearEditTextView;
+import com.example.ganshenml.tomatoman.view.WebProgress;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
@@ -68,6 +71,10 @@ public class LoginAct extends BaseActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!CommonUtils.judgeNetWork(LoginAct.this)){//如果当前网络不可用
+                    return;
+                }
+
                 Person person = new Person();
                 String userNameStr = ctUsername.getText().toString().trim();
                 String userPassStr = ctPassword.getText().toString().trim();
@@ -76,9 +83,11 @@ public class LoginAct extends BaseActivity {
                 person.setUsername(userNameStr);
                 person.setPassword(userPassStr);
 
+                WebProgress.createDialog(LoginAct.this);
                 person.login(new SaveListener<Person>() {
                     @Override
                     public void done(Person person, BmobException e) {
+                        WebProgress.webDismiss();
                         if (e == null) {
                             LogTool.log(LogTool.Aaron, TAG + " 登录成功");
                             Toast.makeText(LoginAct.this, "登录成功", Toast.LENGTH_SHORT).show();

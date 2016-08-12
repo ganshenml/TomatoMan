@@ -1,4 +1,4 @@
-package com.example.ganshenml.tomatoman.util;
+package com.example.ganshenml.tomatoman.tool;
 
 
 import android.content.Context;
@@ -74,9 +74,9 @@ public class ShowDialogUtils {
      * 显示点击个人主页-用户头像后的单选项：查看大图、拍照、上传图片
      */
     public static void showLogoItem(final Context packageContext, final HttpCallback httpCallback) {
-        String[] itemsStr = new String[]{"查看大图", "从相册选择", "拍照"};
+        String[] itemsStr = new String[]{ "从相册选择", "拍照"};
         new AlertDialog.Builder(packageContext)
-                .setSingleChoiceItems(itemsStr, 0, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(itemsStr, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

@@ -1,11 +1,9 @@
-package com.example.ganshenml.tomatoman.util;
+package com.example.ganshenml.tomatoman.tool;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
-import android.view.WindowManager;
 
 /**
  * Created by ganshenml on 2016-07-30.

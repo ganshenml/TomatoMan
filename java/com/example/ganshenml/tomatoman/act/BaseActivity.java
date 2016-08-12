@@ -3,7 +3,8 @@ package com.example.ganshenml.tomatoman.act;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.example.ganshenml.tomatoman.util.BmobTool;
+import com.example.ganshenml.tomatoman.tool.BmobTool;
+import com.example.ganshenml.tomatoman.tool.SpTool;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
 public class BaseActivity extends AppCompatActivity {
@@ -13,6 +14,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);
         BmobTool.init(getApplication());
+        SpTool.init(getApplication());
 //
 //        initViews();
 //        initData();

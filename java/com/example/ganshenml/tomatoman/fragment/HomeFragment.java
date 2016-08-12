@@ -1,27 +1,19 @@
 package com.example.ganshenml.tomatoman.fragment;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RemoteViews;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.act.TomatoCountTimeAct;
-import com.example.ganshenml.tomatoman.util.ConstantCode;
-import com.example.ganshenml.tomatoman.util.NotificationUtls;
+import com.example.ganshenml.tomatoman.tool.ConstantCode;
+import com.example.ganshenml.tomatoman.tool.NotificationUtls;
 import com.example.ganshenml.tomatoman.view.ClearEditTextView;
 import com.example.ganshenml.tomatoman.view.StartCountTimeCircleView;
 

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tomatoCompleteLl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/tomato_uncompleted_background"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.ganshenml.tomatoman.act.TomatoCompleteAct">
@@ -12,152 +14,179 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></include>
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/tomatoCompleteFl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:orientation="horizontal">
+        android:layout_marginLeft="@dimen/activity_vertical_large_margin"
+        android:layout_marginRight="@dimen/activity_vertical_large_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="完成状态：" />
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/stampLl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/completeStateTv"
-            android:text="完成" />
-    </LinearLayout>
+            android:background="@drawable/tomato_uncompleted_layout_custom"
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tomatoNumTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="半途而废，一个番茄都没有！"
+                android:textColor="@color/light_font_color"
+                android:textSize="@dimen/common_text_size" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="任务日期：" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:gravity="top"
+                android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/taskTimeTv"
-            android:text="2016年4月14日 周四" />
-    </LinearLayout>
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/labour" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tomatoTimeTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/to_item_vertical_margin"
+                    android:text="根本就没有努力好伐！"
+                    android:textColor="@color/light_font_color" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="获得番茄：" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:gravity="top"
+                android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tomatoNumTv"
-            android:text="4个" />
-    </LinearLayout>
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/superman" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/efficientTimeTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/to_item_vertical_margin"
+                    android:maxLines="3"
+                    android:text="妈妈说，不是所有内裤外穿的人都是超人，有可能是变态呀！要变身超人，一定要苦其心志，饿其体肤..."
+                    android:textColor="@color/light_font_color" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="高效时间：" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/efficientTimeTv"
-            android:text="无" />
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="备  忘：" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tomatoNoteTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="刚刚小猪打来一个电话，要我明天去上海一趟。但是我现在抽不开时间，所以等下记得给他回复一下电话！" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="备  忘：" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tomatoNoteTv"
-            android:text="刚刚小猪打来一个电话，要我明天去上海一趟。但是我现在抽不开时间，所以等下记得给他回复一下电话！" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/taskTimeTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="-------  时间都塞进大象的屁眼里了吗？ -------"
+                    android:textColor="@color/light_font_color"
+                    android:textSize="@dimen/little_text_size" />
+            </LinearLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:background="@drawable/divider" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/completeStateIv"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:src="@mipmap/uncompleted" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_vertical_large_margin"
+        android:layout_marginRight="@dimen/activity_vertical_large_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/hintLogoIv"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/logo_circle_style"
+            android:src="@drawable/logo_person" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="个人评分：" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/chat_background"
+            android:maxLines="3"
+            android:text="为了维护世界的美好，历史将不会记住这次完（che）美（dan）的任务"
+            android:textColor="@color/white" />
 
-        <RatingBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:id="@+id/evaluateLeverRb"
-            android:stepSize="1" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RatingBar
+        android:id="@+id/evaluateLeverRb"
+        style="@style/customRatingBar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_gravity="center_horizontal"
+        android:numStars="5"
+        android:stepSize="1" />
 
-        <Button
-            android:id="@+id/btnTomatoComplete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="完   成" />
+    <Button
+        android:id="@+id/btnTomatoComplete"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_bigger_margin"
+        android:background="@drawable/login_button_style"
+        android:text="哦！"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="完成并分享" />
-    </LinearLayout>
 </LinearLayout>

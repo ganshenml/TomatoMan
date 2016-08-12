@@ -89,4 +89,9 @@
     <string name="app_version">当前程序版本</string>
     <string name="can_not_find_version_name">未获取到</string>
     <string name="default_feedback_hint">填写你对该软件的看法...</string>
+
+    <!-- loading related -->
+    <string name="web_progress_dialog_loading">加载中...</string>
+    <string name="web_progress_dialog_cancel">取消</string>
+
 </resources>

@@ -10,18 +10,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
-import com.example.ganshenml.tomatoman.bean.Extra;
 import com.example.ganshenml.tomatoman.bean.FeedBack;
 import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.bean.beant.ExtraT;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
-import com.example.ganshenml.tomatoman.util.CommonUtils;
-import com.example.ganshenml.tomatoman.util.DbTool;
-import com.example.ganshenml.tomatoman.util.LogTool;
-import com.example.ganshenml.tomatoman.util.ShowDialogUtils;
-import com.example.ganshenml.tomatoman.util.ToActivityPage;
-
-import org.litepal.LitePalApplication;
+import com.example.ganshenml.tomatoman.tool.CommonUtils;
+import com.example.ganshenml.tomatoman.tool.DbTool;
+import com.example.ganshenml.tomatoman.tool.LogTool;
+import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
+import com.example.ganshenml.tomatoman.tool.ToActivityPage;
+import com.example.ganshenml.tomatoman.view.WebProgress;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -76,7 +74,6 @@ public class SettingAct extends BaseActivity {
         logoutLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogTool.log(LogTool.Aaron,"23342342");
 
                 //注销账号弹窗
                 ShowDialogUtils.showSimpleHintDialog(SettingAct.this, "确定退出该账号？", new HttpCallback() {
@@ -93,14 +90,20 @@ public class SettingAct extends BaseActivity {
         feedbackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!CommonUtils.judgeNetWork(SettingAct.this)){//如果当前网络不可用
+                    return;
+                }
                 String feedbackStrTemp = feedbackEt.getText().toString();
                 if (feedbackStrTemp.length() > 0) {
+                    WebProgress.createDialog(SettingAct.this);
+
                     FeedBack feedBack = new FeedBack();
                     feedBack.setPerson(BmobUser.getCurrentUser(Person.class));
                     feedBack.setFeedbackContent(feedbackStrTemp);
                     feedBack.save(new SaveListener<String>() {
                         @Override
                         public void done(String s, BmobException e) {
+                            WebProgress.webDismiss();
                             if (e == null) {
                                 Toast.makeText(getApplication(), "提交成功", Toast.LENGTH_SHORT).show();
                             } else {

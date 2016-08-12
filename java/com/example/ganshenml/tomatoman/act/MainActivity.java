@@ -28,33 +28,18 @@ import android.widget.Toast;
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.bean.data.StaticData;
-import com.example.ganshenml.tomatoman.util.ConstantCode;
-import com.example.ganshenml.tomatoman.util.DbTool;
-import com.example.ganshenml.tomatoman.util.GBlurPic;
-import com.example.ganshenml.tomatoman.util.ImageTool;
-import com.example.ganshenml.tomatoman.util.LogTool;
-import com.example.ganshenml.tomatoman.util.NotificationUtls;
-import com.example.ganshenml.tomatoman.util.StringTool;
-import com.example.ganshenml.tomatoman.util.ToActivityPage;
+import com.example.ganshenml.tomatoman.tool.CommonUtils;
+import com.example.ganshenml.tomatoman.tool.ConstantCode;
+import com.example.ganshenml.tomatoman.tool.DbTool;
+import com.example.ganshenml.tomatoman.tool.GBlurPic;
+import com.example.ganshenml.tomatoman.tool.LogTool;
+import com.example.ganshenml.tomatoman.tool.NotificationUtls;
+import com.example.ganshenml.tomatoman.tool.SpTool;
+import com.example.ganshenml.tomatoman.tool.StringTool;
+import com.example.ganshenml.tomatoman.tool.ToActivityPage;
 import com.example.ganshenml.tomatoman.view.ClearEditTextView;
 import com.example.ganshenml.tomatoman.view.StartCountTimeCircleView;
-import com.facebook.binaryresource.BinaryResource;
-import com.facebook.binaryresource.FileBinaryResource;
-import com.facebook.cache.common.CacheKey;
-import com.facebook.cache.common.SimpleCacheKey;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeHierarchy;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.cache.BitmapMemoryCacheFactory;
-import com.facebook.imagepipeline.cache.DefaultCacheKeyFactory;
-import com.facebook.imagepipeline.core.ImagePipelineFactory;
-import com.facebook.imagepipeline.request.ImageRequest;
-
-import org.litepal.LitePalApplication;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 import cn.bmob.v3.BmobUser;
 
@@ -91,6 +76,15 @@ public class MainActivity extends BaseActivity
         initData();
         initDataViews();
         initListeners();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //如果网络顺畅，则将本地未上传的TomatoRecordT数据进行上传，返回成功后并更新本地数据的objectId和createdAt字段
+        if(true){//先假定网络顺畅
+            CommonUtils.uploadRestTomatoRecordTData();
+        }
     }
 
     @Override
@@ -258,16 +252,17 @@ public class MainActivity extends BaseActivity
 //        }
 
 
-        mGBlurPic = new GBlurPic(this);
-//        Bitmap bitmap = ImageTool.drawableToBitmap(user_log.getHierarchy().getTopLevelDrawable());
-        mBitmapIn = loadBitmap(R.drawable.background);
-        mBitmapOut = Bitmap.createBitmap(mBitmapIn.getWidth(),
-                mBitmapIn.getHeight(), mBitmapIn.getConfig());
 
-
-        mBitmapOut = mGBlurPic.gBlurBitmap(mBitmapIn, 25);
-        Drawable drawable = new BitmapDrawable(getResources(), mBitmapOut);
-        LLNavHeader.setBackground(drawable);
+//        mGBlurPic = new GBlurPic(this);
+////        Bitmap bitmap = ImageTool.drawableToBitmap(user_log.getHierarchy().getTopLevelDrawable());
+//        mBitmapIn = loadBitmap(R.drawable.background);
+//        mBitmapOut = Bitmap.createBitmap(mBitmapIn.getWidth(),
+//                mBitmapIn.getHeight(), mBitmapIn.getConfig());
+//
+//
+//        mBitmapOut = mGBlurPic.gBlurBitmap(mBitmapIn, 25);
+//        Drawable drawable = new BitmapDrawable(getResources(), mBitmapOut);
+//        LLNavHeader.setBackground(drawable);
     }
 
     private void initListeners() {
@@ -284,6 +279,9 @@ public class MainActivity extends BaseActivity
         startCountTimeCircleViewId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//1.样式变换；2.notification开启；3.finish当前activity；4.跳转至下一个activity并传递数据
+                //保存任务名称至sp
+                SpTool.putString(StaticData.SPTASKNAME,etTaskName.getText().toString());
+
                 //1.样式：设置背景alpha变化以下
                 v.setAlpha(0.5f);
 

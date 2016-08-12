@@ -13,10 +13,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,17 +22,12 @@ import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.Person;
-import com.example.ganshenml.tomatoman.bean.User;
-import com.example.ganshenml.tomatoman.bean.data.StaticData;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
-import com.example.ganshenml.tomatoman.fragment.HomeFragment;
-import com.example.ganshenml.tomatoman.util.ImageViewUtils;
-import com.example.ganshenml.tomatoman.util.LogTool;
-import com.example.ganshenml.tomatoman.util.ShowDialogUtils;
-import com.example.ganshenml.tomatoman.util.StringTool;
-import com.example.ganshenml.tomatoman.util.ThreadTool;
-import com.example.ganshenml.tomatoman.util.ToActivityPage;
-import com.example.ganshenml.tomatoman.util.ToFragmentPage;
+import com.example.ganshenml.tomatoman.tool.CommonUtils;
+import com.example.ganshenml.tomatoman.tool.LogTool;
+import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
+import com.example.ganshenml.tomatoman.tool.StringTool;
+import com.example.ganshenml.tomatoman.tool.ThreadTool;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.io.File;
@@ -124,6 +116,10 @@ public class UserHomePageAct extends BaseActivity {
         simpleDraweeView_user_log.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!CommonUtils.judgeNetWork(UserHomePageAct.this)){//如果当前网络不可用
+                    return;
+                }
+
                 ShowDialogUtils.showLogoItem(thisContext, new HttpCallback() {
                     @Override
                     public void onSuccess(Object data, String resultStr) {

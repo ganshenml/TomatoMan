@@ -3,7 +3,6 @@ package com.example.ganshenml.tomatoman.act;
  * 休息时间到点后跳转的临时页面：提供终止任务和继续任务入口
  */
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -11,13 +10,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.ganshenml.tomatoman.R;
-import com.example.ganshenml.tomatoman.util.ConstantCode;
-import com.example.ganshenml.tomatoman.util.NotificationUtls;
-import com.example.ganshenml.tomatoman.util.ShowDialogUtils;
-import com.example.ganshenml.tomatoman.util.ViewUtils;
+import com.example.ganshenml.tomatoman.tool.ConstantCode;
+import com.example.ganshenml.tomatoman.tool.NotificationUtls;
+import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
+import com.example.ganshenml.tomatoman.tool.ViewUtils;
 import com.example.ganshenml.tomatoman.view.CompleteTaskCircleView;
 import com.example.ganshenml.tomatoman.view.ContinueTaskBigCircleView;
-import com.example.ganshenml.tomatoman.view.StartRestCircleView;
 
 public class TomatoTemporaryConTaskAct extends BaseActivity {
     private CompleteTaskCircleView completeTaskCircleViewId;

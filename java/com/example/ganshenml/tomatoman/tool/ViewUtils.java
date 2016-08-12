@@ -1,8 +1,9 @@
-package com.example.ganshenml.tomatoman.util;
+package com.example.ganshenml.tomatoman.tool;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.ganshenml.tomatoman.R;
@@ -26,6 +27,9 @@ public class ViewUtils {
 
         if (activity instanceof TomatoCompleteAct) {  //如果是“番茄完成页”
             tvTitle_public.setText("番茄数据");
+            tvTitle_public.setTextSize(24);
+            tbToolbar_public.findViewById(R.id.rightIv).setVisibility(View.VISIBLE);
+            tbToolbar_public.getBackground().setAlpha(0);
         } else if (activity instanceof TomatoCountTimeAct) {//如果是“番茄工作计时页
             tvTitle_public.setText("番茄工作中");
         }else if (activity instanceof TomatoTemporaryAct) {//如果是“番茄临时时页（由一次番茄工作完成转临时）

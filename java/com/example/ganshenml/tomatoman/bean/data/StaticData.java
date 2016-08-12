@@ -17,4 +17,14 @@ public class StaticData {
     public static final int RESULT_FROM_MYFRIENDS_ACT = 1002;//从“我的好友”页面返回的结果码
     public static final int RESULT_FROM_RANK_ACT = 1003;//从“排行榜”页面返回的结果码
     public static final int RESULT_FROM_SETTING_ACT = 1004;//从“设置”页面返回的结果码
+
+    public static final String SPTOMATOCOMPLETENUM = "spTomatoCompletedNum";
+    public static final String SPTOMATOCOMPLETEEFFICIENTTIME = "spTomatoCompletedEfficientTime";
+    public static final String SPWORKTIME = "spWorkTime";
+    public static final String SPSHORTRESTTIME = "spShortRestTime";
+    public static final String SPLONGRESTTIME = "spLongRestTime";
+    public static final String SPVIBRATEALARM = "spVibrateAlarm";
+    public static final String SPRINGTONEALARM = "spRingtoneAlarm";
+
+    public static final String SPTASKNAME = "spTaskName";
 }

@@ -12,6 +12,7 @@ import java.io.Serializable;
  */
 public class TomatoRecordT extends DataSupport implements Serializable{
 
+    private String taskName;//任务名称
     private Person person;//用户
     private String taskTime;//任务完成的时间
     private String week;//任务完成所属星期
@@ -25,6 +26,7 @@ public class TomatoRecordT extends DataSupport implements Serializable{
     private String createdAt;//创建的时间
 
     public TomatoRecordT(TomatoRecord tomatoRecord) {
+        this.taskName = tomatoRecord.getTaskName();
         this.person = tomatoRecord.getPerson();
         this.taskTime = tomatoRecord.getTaskTime();
         this.week = tomatoRecord.getWeek();
@@ -35,6 +37,14 @@ public class TomatoRecordT extends DataSupport implements Serializable{
         this.tomatoNote = tomatoRecord.getTomatoNote();
         this.evaluateLever = tomatoRecord.getEvaluateLever();
         this.createdAt = tomatoRecord.getCreatedAt();
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 
     public String getCreatedAt() {

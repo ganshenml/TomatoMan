@@ -11,8 +11,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.example.ganshenml.tomatoman.R;
-import com.example.ganshenml.tomatoman.bean.data.StaticData;
-import com.example.ganshenml.tomatoman.util.ShowDrawerLayout;
 import com.example.ganshenml.tomatoman.view.SimpleListView;
 
 import java.util.ArrayList;

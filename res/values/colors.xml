@@ -15,7 +15,11 @@
     <color name="login_button_pressed_color">#1874CD</color>
     <color name="login_button_unpressed_color">#0085DD</color>
     <color name="button_unpressed_color">#0085DD</color>
+    <color name="custom_blue">#52A5FF</color>
     <color name="color_warn">#FF0033</color>
     <color name="gray">#E6E6FA</color>
     <color name="light_gray">#FBFBFB</color>
+    <color name="light_font_color">#999999</color>
+    <color name="light_green">#CCFFFF</color>
+    <color name="light_blue">#F7FBFF</color>
 </resources>

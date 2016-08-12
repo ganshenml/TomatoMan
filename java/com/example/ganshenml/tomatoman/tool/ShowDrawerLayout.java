@@ -1,12 +1,10 @@
-package com.example.ganshenml.tomatoman.util;
+package com.example.ganshenml.tomatoman.tool;
 
 import android.app.Activity;
-import android.media.Image;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.example.ganshenml.tomatoman.R;
 

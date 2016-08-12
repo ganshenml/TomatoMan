@@ -78,7 +78,7 @@ public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder
             //计时数字的画笔初始化
             paintText = new Paint(Paint.ANTI_ALIAS_FLAG);
             paintText.setTextSize(128);
-            paintText.setColor(Color.GREEN);
+            paintText.setColor(Color.parseColor("#C6E2FF"));
             paintText.setTextAlign(Paint.Align.CENTER);
         }
 

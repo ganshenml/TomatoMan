@@ -1,6 +1,7 @@
-package com.example.ganshenml.tomatoman.util;
+package com.example.ganshenml.tomatoman.tool;
 
 import android.content.ContentValues;
+import android.util.Log;
 
 import com.example.ganshenml.tomatoman.bean.Extra;
 import com.example.ganshenml.tomatoman.bean.TomatoRecord;
@@ -118,6 +119,36 @@ public class DbTool {
      */
     public static List<TomatoRecordT> returnWholeTomatoRecordData(){
         return DataSupport.findAll(TomatoRecordT.class);
+    }
+
+    /**
+     * 更新TomatoRecordT本地数据中的objectId和createdAt数据
+     * @param tomatoRecord
+     */
+    public static void update_CreatedAt_InLocal(TomatoRecord tomatoRecord){
+        //先找寻本地数据库最新的数据，若taskTime相等，则表示该条数据是要用来更新的数据
+        TomatoRecordT tomatoRecordTTemp = DataSupport.findLast(TomatoRecordT.class);
+        if(tomatoRecordTTemp!=null){
+            if(tomatoRecord.getTaskTime().equals(tomatoRecordTTemp.getTaskTime())){
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("objectId",tomatoRecord.getObjectId());
+                contentValues.put("createdAt",tomatoRecord.getCreatedAt());
+                DataSupport.updateAll(TomatoRecordT.class,contentValues,"taskTime = ? ",tomatoRecord.getTaskTime());
+            }else {
+                LogTool.log(LogTool.Aaron,"DbTool 未找到本地最新的数据，但该条数据时间不对应 " );
+            }
+        }else {
+            LogTool.log(LogTool.Aaron,"DbTool 未找到本地最新的数据 " );
+        }
+    }
+
+    /**
+     * 获取所有本地未上传至服务器的TomatoRecordT数据
+     * @return
+     */
+    public static List<TomatoRecordT> returnAllNotUploadedTomatoRecordTData(){
+        return DataSupport.where("createdAt  =  ?","null").find(TomatoRecordT.class);
+
     }
 }
 

@@ -1,11 +1,14 @@
 package com.example.ganshenml.tomatoman.bean;
 
+import com.example.ganshenml.tomatoman.bean.beant.TomatoRecordT;
+
 import cn.bmob.v3.BmobObject;
 
 /**
  * Created by ganshenml on 2016-07-28.
  */
 public class TomatoRecord extends BmobObject {
+    private String taskName;//任务名称
     private Person person;//用户
     private String taskTime;//任务完成的时间
     private String week;//任务完成所属星期
@@ -17,6 +20,28 @@ public class TomatoRecord extends BmobObject {
     private String tomatoNote;//备注
     private Integer evaluateLever = 0;//评价：1,2,3,4,5分（0分表示未评分，默认）
 
+    public TomatoRecord(TomatoRecordT tomatoRecord) {
+        this.taskName = tomatoRecord.getTaskName();
+        this.person = tomatoRecord.getPerson();
+        this.taskTime = tomatoRecord.getTaskTime();
+        this.week = tomatoRecord.getWeek();
+        this.completeState = tomatoRecord.getCompleteState();
+        this.tomatoNum = tomatoRecord.getTomatoNum();
+        this.tomatoTime = tomatoRecord.getTomatoTime();
+        this.efficientTime = tomatoRecord.getEfficientTime();
+        this.tomatoNote = tomatoRecord.getTomatoNote();
+        this.evaluateLever = tomatoRecord.getEvaluateLever();
+    }
+
+    public TomatoRecord(){}
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
 
     public Integer getTomatoTime() {
         return tomatoTime;

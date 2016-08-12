@@ -1,43 +1,37 @@
 package com.example.ganshenml.tomatoman.act;
 
-import android.app.Dialog;
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.IBinder;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.service.CountTimeNumService;
-import com.example.ganshenml.tomatoman.util.CommonUtils;
-import com.example.ganshenml.tomatoman.util.ConstantCode;
-import com.example.ganshenml.tomatoman.util.ContextManager;
-import com.example.ganshenml.tomatoman.util.NotificationUtls;
-import com.example.ganshenml.tomatoman.util.ShowDialogUtils;
-import com.example.ganshenml.tomatoman.util.ViewUtils;
+import com.example.ganshenml.tomatoman.tool.ConstantCode;
+import com.example.ganshenml.tomatoman.tool.ContextManager;
+import com.example.ganshenml.tomatoman.tool.NotificationUtls;
+import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
+import com.example.ganshenml.tomatoman.tool.SpTool;
+import com.example.ganshenml.tomatoman.tool.ViewUtils;
 import com.example.ganshenml.tomatoman.view.TomatoCountSurfaceView;
 
 public class TomatoCountTimeAct extends BaseActivity {
-    TomatoCountSurfaceView tomatoCountSurfaceView;
-    Intent myIntent;
+    private TomatoCountSurfaceView tomatoCountSurfaceView;
+    private Intent myIntent;
     private CountTimeNumService countTimeNumService;
     private CountTimeNumService.MyBinder myBinder;
-    ServiceConnection serviceConnection;
-    int countTimeNum = 0;
+    private ServiceConnection serviceConnection;
+    private int countTimeNum = 0;
     private Toolbar tbToolbar_public;
     private TextView tvTitle_public;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+//    private SharedPreferences sharedPreferences;
+//    private SharedPreferences.Editor editor;
     private int countTimeGoal = 0;//目标计时时间,从sharedPreference中获取
 
     @Override
@@ -143,9 +137,9 @@ public class TomatoCountTimeAct extends BaseActivity {
     }
 
     private void initData() {
-        sharedPreferences = getSharedPreferences("TomaotSetting", MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        countTimeGoal = sharedPreferences.getInt("workTime", 25);//如果是还未创建sharedPreference，则默认值为25
+//        sharedPreferences = getSharedPreferences("TomaotSetting", MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+        countTimeGoal = SpTool.getInt("workTime", 25);//如果是还未创建sharedPreference，则默认值为25
 
         //为SurfaceView设置每秒画多少度
 //        tomatoCountSurfaceView.setDivisionNum((float) (360 / (countTimeGoal * 60)));

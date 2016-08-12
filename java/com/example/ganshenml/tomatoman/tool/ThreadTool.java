@@ -1,4 +1,4 @@
-package com.example.ganshenml.tomatoman.util;
+package com.example.ganshenml.tomatoman.tool;
 
 /**
  * Created by ganshenml on 2016-07-20.
