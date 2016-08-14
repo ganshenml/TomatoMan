@@ -3,6 +3,7 @@ package com.example.ganshenml.tomatoman.act;
 /**
  * 番茄休息的正在计时页面
  */
+
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -25,12 +26,12 @@ import com.example.ganshenml.tomatoman.tool.ViewUtils;
 import com.example.ganshenml.tomatoman.view.TomatoCountSurfaceView;
 
 public class TomatoRestAct extends BaseActivity {
-    TomatoCountSurfaceView tomatoCountSurfaceView;
-    Intent myIntent;
+    private TomatoCountSurfaceView tomatoCountSurfaceView;
+    private Intent myIntent;
     private CountTimeNumService countTimeNumService;
-    CountTimeNumService.MyBinder myBinder;
-    ServiceConnection serviceConnection;
-    int countTimeNum = 0;//计算时间
+    private CountTimeNumService.MyBinder myBinder;
+    private ServiceConnection serviceConnection;
+    private int countTimeNum = 0;//计算时间
     private Toolbar tbToolbar_public;
     private TextView tvTitle_public;
     private SharedPreferences sharedPreferences;
@@ -54,7 +55,7 @@ public class TomatoRestAct extends BaseActivity {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 myBinder = (CountTimeNumService.MyBinder) service;
                 // myBinder.getService().setCountTimeGoal(countTimeGoal * 60);//将从sharedPreference中获取的设定时间传给service
-                myBinder.getService().setCountTimeGoal((int)(0.1 * 60));//先将数据设定为0.1分钟方便测试
+                myBinder.getService().setCountTimeGoal((int) (0.1 * 60));//先将数据设定为0.1分钟方便测试
             }
 
             @Override
@@ -82,7 +83,7 @@ public class TomatoRestAct extends BaseActivity {
         finish();
 
         //3.跳转至“番茄计时完成页”
-        Intent intent = new Intent(TomatoRestAct.this,TomatoCompleteAct.class);
+        Intent intent = new Intent(TomatoRestAct.this, TomatoCompleteAct.class);
         //传递数据。。。。。。。。。。。。。。。。。。。。。。。。
         startActivity(intent);
     }
@@ -97,7 +98,7 @@ public class TomatoRestAct extends BaseActivity {
         finish();
 
         //3.发送“番茄工作”的通知
-        Intent intent = new Intent(TomatoRestAct.this,TomatoCountTimeAct.class);
+        Intent intent = new Intent(TomatoRestAct.this, TomatoCountTimeAct.class);
         NotificationUtls.sendNotification(this, ConstantCode.HOMEFRAGMETN_REQUEST_CODE, intent, R.layout.notification_layout);//调用自定义工具类方法发送notification
 
         //3.跳转至“番茄计时完成页”
@@ -109,7 +110,7 @@ public class TomatoRestAct extends BaseActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        countTimeNum = (int)myBinder.getService().getCountTimeNum();
+        countTimeNum = (int) myBinder.getService().getCountTimeNum();
         tomatoCountSurfaceView.setEndAngle(countTimeNum);
     }
 
@@ -124,7 +125,7 @@ public class TomatoRestAct extends BaseActivity {
         stopMyService();
 
         //取消掉通知显示
-        NotificationUtls.cancelNotification(this,ConstantCode.TOMATOTEMPORARYACT_REST_REQUEST_CODE);
+        NotificationUtls.cancelNotification(this, ConstantCode.TOMATOTEMPORARYACT_REST_REQUEST_CODE);
 
         //将该activity从ContextManager的List中进行移除
         ContextManager.removeContext(this);
@@ -150,16 +151,19 @@ public class TomatoRestAct extends BaseActivity {
         setSupportActionBar(tbToolbar_public);
         getSupportActionBar().setDisplayShowTitleEnabled(false);//不显示默认的标题
 
-        ViewUtils.setToolbar(TomatoRestAct.this,tbToolbar_public,tvTitle_public);//使用自定义的工具类方法设置toolbar的样式
+        ViewUtils.setToolbar(TomatoRestAct.this, tbToolbar_public, tvTitle_public);//使用自定义的工具类方法设置toolbar的样式
 
         tomatoCountSurfaceView = (TomatoCountSurfaceView) findViewById(R.id.restCircleViewId);
     }
 
     private void initData() {
+
         sharedPreferences = getSharedPreferences("TomaotSetting", MODE_PRIVATE);
         editor = sharedPreferences.edit();
         countTimeGoal = sharedPreferences.getInt("shorRestTime", 5);//如果是还未创建sharedPreference，则默认值为25
 
+        //设置surfaceView的颜色
+        tomatoCountSurfaceView.setColor("#009900","#99FF99","#009900","#99FF99");
         //为SurfaceView设置每秒画多少度
 //        tomatoCountSurfaceView.setDivisionNum((float) (360 / (countTimeGoal * 60)));
         tomatoCountSurfaceView.setDivisionNum((float) (360 / (0.1 * 60)));//测试期间先默认为0.1分钟

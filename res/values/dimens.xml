@@ -8,6 +8,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_vertical_bigger_margin">20dp</dimen>
     <dimen name="activity_vertical_large_margin">32dp</dimen>
+    <dimen name="activity_vertical_largest_margin">48dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <!--custom screen margins ,for text or iamge to  the screen -->
     <dimen name="to_leftscreen_horizontal_margin">8dp</dimen>

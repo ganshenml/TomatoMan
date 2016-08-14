@@ -28,19 +28,38 @@
             android:layout_marginTop="400px"
             android:orientation="horizontal">
 
-            <com.example.ganshenml.tomatoman.view.CompleteTaskCircleView
-                android:id="@+id/completeTaskCircleViewId"
-                android:layout_width="280px"
-                android:layout_height="280px"
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:onClick="completeTask" />
+                android:background="@drawable/blue_stroke_button_style"
+                android:drawableRight="@mipmap/arrow_blue"
+                android:onClick="completeTask"
+                android:paddingRight="10dp"
+                android:text="完成任务"
+                android:textColor="@color/button_unpressed_color"
+                android:textStyle="bold" />
 
-            <com.example.ganshenml.tomatoman.view.ContinueTaskCircleView
-                android:id="@+id/continueTaskCircleViewID"
-                android:layout_width="280px"
-                android:layout_height="280px"
+            <View
+                android:layout_width="1dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:onClick="continueTask" />
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="#FFFFFF" />
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:background="@drawable/blue_stroke_button_style"
+                android:drawableRight="@mipmap/arrow_blue"
+                android:onClick="continueTask"
+                android:paddingRight="10dp"
+                android:text="继续任务"
+                android:textColor="@color/button_unpressed_color"
+                android:textStyle="bold" />
 
         </LinearLayout>
 

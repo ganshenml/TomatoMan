@@ -2,14 +2,15 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="false">
         <shape android:shape="rectangle">
-            <corners android:radius="50dp"/>
-            <solid android:color="@color/login_button_pressed_color"/>
+            <corners android:radius="25dp"/>
+            <stroke android:color="@color/button_unpressed_color" android:width="3px"/>
         </shape>
     </item>
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <corners android:radius="50dp"/>
-            <solid android:color="@color/login_button_unpressed_color"/>
+            <corners android:radius="25dp"/>
+            <solid android:color="@color/button_unpressed_color"/>
+            <stroke android:color="@color/button_unpressed_color" android:width="3px"/>
         </shape>
     </item>
 </selector>

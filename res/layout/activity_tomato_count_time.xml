@@ -29,11 +29,19 @@
             android:layout_marginTop="400px"
             android:orientation="horizontal">
 
-            <com.example.ganshenml.tomatoman.view.StopCountTimeCircleView
-                android:id="@+id/stop"
-                android:layout_width="280px"
-                android:layout_height="280px"
-                android:onClick="stop" />
+            <!--<com.example.ganshenml.tomatoman.view.StopCountTimeCircleView-->
+                <!--android:id="@+id/stop"-->
+                <!--android:layout_width="280px"-->
+                <!--android:layout_height="280px"-->
+                <!--android:onClick="stop" />-->
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:background="@drawable/stroke_button_style"
+                android:textColor="@color/light_red"
+                android:text="终止"
+                android:onClick="stop"/>
 
         </LinearLayout>
 
