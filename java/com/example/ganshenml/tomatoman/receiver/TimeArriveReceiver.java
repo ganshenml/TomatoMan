@@ -13,6 +13,7 @@ import com.example.ganshenml.tomatoman.act.TomatoTemporaryAct;
 import com.example.ganshenml.tomatoman.bean.data.StaticData;
 import com.example.ganshenml.tomatoman.tool.CommonUtils;
 import com.example.ganshenml.tomatoman.tool.ContextManager;
+import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.SpTool;
 
 /**
@@ -28,6 +29,8 @@ public class TimeArriveReceiver extends BroadcastReceiver {
         Context myContext = ContextManager.getCurrentRunningContext();
 
         if (myContext instanceof TomatoCountTimeAct) {//如果是TomatoCountTimeAct
+            LogTool.log(LogTool.Aaron, "TimeArriveReceiver 进入了TomatoCountTimeAct的判断逻辑");
+
             //1.finish当前activity
             ((TomatoCountTimeAct) myContext).finish();
 
@@ -37,21 +40,13 @@ public class TimeArriveReceiver extends BroadcastReceiver {
             context.startActivity(intent1);
 
             //3.写数据
-            int completeTime = intent.getIntExtra("completeTime", 0);
-            if (completeTime > 0) {//以免用户设置工作时间为0带来的不必要的数据写入
-                //开始向文件写数据
-                //更新sp中工作时间
-                int workTimeTemp = SpTool.getInt(StaticData.SPWORKTIME, 0);
-                workTimeTemp = workTimeTemp + completeTime;
-                SpTool.putInt(StaticData.SPWORKTIME, workTimeTemp);
+            //更新sp中番茄数量
+            int tomatoCompletedNumTemp = SpTool.getInt(StaticData.SPTOMATOCOMPLETENUM, 0);
+            tomatoCompletedNumTemp++;
+            SpTool.putInt(StaticData.SPTOMATOCOMPLETENUM, tomatoCompletedNumTemp);
 
-                //更新sp中番茄数量
-                int tomatoCompletedNumTemp = SpTool.getInt(StaticData.SPTOMATOCOMPLETENUM,0);
-                tomatoCompletedNumTemp ++;
-                SpTool.putInt(StaticData.SPTOMATOCOMPLETENUM,tomatoCompletedNumTemp);
-
-            }
         } else if (myContext instanceof TomatoRestAct) {
+            LogTool.log(LogTool.Aaron, "TimeArriveReceiver 进入了TomatoRestAct的判断逻辑");
             //1.finish当前activity
             ((TomatoRestAct) myContext).finish();
 
@@ -67,6 +62,8 @@ public class TimeArriveReceiver extends BroadcastReceiver {
 
             }
         } else if (myContext instanceof TomatoEfficiencyAct) {
+            LogTool.log(LogTool.Aaron, "TimeArriveReceiver 进入了TomatoEfficiencyAct的判断逻辑");
+
             //1.finish当前activity
             ((TomatoEfficiencyAct) myContext).finish();
 
@@ -84,9 +81,7 @@ public class TimeArriveReceiver extends BroadcastReceiver {
         }
 
         //获取振动的参数:如果是振动，则调用振动工具类方法
-        SharedPreferences sharedPreferences = context.getSharedPreferences("TomaotSetting", Context.MODE_PRIVATE);
-        boolean isVibrate = sharedPreferences.getBoolean("vibrateAlarm", true);//如果没有这个值，就默认为true
-        if (isVibrate) {
+        if (SpTool.getBoolean(StaticData.SPVIBRATEALARM, true)) {
             CommonUtils.startVibrate(context);
         }
 

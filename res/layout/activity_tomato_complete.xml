@@ -104,8 +104,7 @@
                 <TextView
                     android:id="@+id/tomatoNoteTv"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="刚刚小猪打来一个电话，要我明天去上海一趟。但是我现在抽不开时间，所以等下记得给他回复一下电话！" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout

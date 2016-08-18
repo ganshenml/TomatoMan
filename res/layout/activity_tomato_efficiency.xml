@@ -11,30 +11,83 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></include>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/efficiency_background">
 
-        <com.example.ganshenml.tomatoman.view.TomatoCountSurfaceView
-            android:id="@+id/efficiencyCircleViewId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="400px"
-            android:orientation="horizontal">
+            <com.example.ganshenml.tomatoman.view.DistractLineView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/customDlv"/>
 
-            <com.example.ganshenml.tomatoman.view.StopCountTimeCircleView
-                android:id="@+id/stopEfficiencyCircleView"
-                android:layout_width="280px"
-                android:layout_height="280px"
-                android:onClick="stop" />
+            <Chronometer
+                android:id="@+id/timer"
+                android:layout_marginTop="90dp"
+                android:layout_width="130dp"
+                android:layout_height="70dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:shadowDy="3"
+                android:shadowDx="3"
+                android:shadowRadius="1.5"
+                android:textSize="45sp"
+                android:shadowColor="@color/white"
+                android:textColor="@color/dark_yellow" />
 
-        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:paddingBottom="60dp"
+                android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_vertical_large_margin"
+                android:layout_marginRight="@dimen/activity_vertical_large_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/hintLogoIv"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/logo_circle_style"
+                    android:src="@drawable/stage_one" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/chat_background"
+                    android:maxLines="3"
+                    android:text="至此，你已进入高效超人阶段（将不会有闹钟提醒打扰）"
+                    android:textColor="@color/white"
+                    android:id="@+id/hintTv"/>
+            </LinearLayout>
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/stroke_button_style"
+                android:textColor="@color/light_red"
+                android:text="停止"
+                android:onClick="stop"/>
+            </LinearLayout>
+        </FrameLayout>
 
 
-    </FrameLayout>
+
+    </LinearLayout>
+
+
 </LinearLayout>

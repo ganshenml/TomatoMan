@@ -163,7 +163,8 @@ public class TomatoRestAct extends BaseActivity {
         countTimeGoal = sharedPreferences.getInt("shorRestTime", 5);//如果是还未创建sharedPreference，则默认值为25
 
         //设置surfaceView的颜色
-        tomatoCountSurfaceView.setColor("#009900","#99FF99","#009900","#99FF99");
+        tomatoCountSurfaceView.setColor("#009900","#99FF99","#E4E4E4","#99FF99");
+
         //为SurfaceView设置每秒画多少度
 //        tomatoCountSurfaceView.setDivisionNum((float) (360 / (countTimeGoal * 60)));
         tomatoCountSurfaceView.setDivisionNum((float) (360 / (0.1 * 60)));//测试期间先默认为0.1分钟

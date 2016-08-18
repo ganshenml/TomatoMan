@@ -1,22 +1,19 @@
 package com.example.ganshenml.tomatoman.act;
 
-import android.content.SharedPreferences;
-import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
+import com.example.ganshenml.tomatoman.bean.data.StaticData;
+import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.SpTool;
 
 public class TomatoSettingAct extends BaseActivity {
@@ -59,12 +56,13 @@ public class TomatoSettingAct extends BaseActivity {
 //        editor.putBoolean("ringtoneAlarm", cbRingtoneAlarm.isChecked());
 //
 //        editor.commit();
-        SpTool.putInt("workTime", sbWorkTime.getProgress());
-        SpTool.putInt("shortRestTime", sbShortRest.getProgress());
-        SpTool.putInt("longRestTime", sbLongRest.getProgress());
+        LogTool.log(LogTool.Aaron,"TomatoSettingAct onStop sbWorkTime的值是： "+sbWorkTime.getProgress());
+        SpTool.putInt(StaticData.SPWORKTIME, sbWorkTime.getProgress());
+        SpTool.putInt(StaticData.SPSHORTRESTTIME, sbShortRest.getProgress());
+        SpTool.putInt(StaticData.SPLONGRESTTIME, sbLongRest.getProgress());
 
-        SpTool.putBoolean("vibrateAlarm", cbVibrateAlarm.isChecked());
-        SpTool.putBoolean("ringtoneAlarm", cbRingtoneAlarm.isChecked());
+        SpTool.putBoolean(StaticData.SPVIBRATEALARM, cbVibrateAlarm.isChecked());
+        SpTool.putBoolean(StaticData.SPRINGTONEALARM, cbRingtoneAlarm.isChecked());
 
     }
 
@@ -111,12 +109,12 @@ public class TomatoSettingAct extends BaseActivity {
             tvLongRest.setText(Html.fromHtml(htmlString3));
 
             //初始化进度条
-            sbWorkTime.setProgress(SpTool.getInt("workTime", 25));
-            sbShortRest.setProgress(SpTool.getInt("shortRestTime", 5));
-            sbLongRest.setProgress(SpTool.getInt("longRestTime", 20));
+            sbWorkTime.setProgress(SpTool.getInt(StaticData.SPWORKTIME, 25));
+            sbShortRest.setProgress(SpTool.getInt(StaticData.SPSHORTRESTTIME, 5));
+            sbLongRest.setProgress(SpTool.getInt(StaticData.SPLONGRESTTIME, 20));
 
-            cbVibrateAlarm.setChecked(SpTool.getBoolean("vibrateAlarm", true));
-            cbRingtoneAlarm.setChecked(SpTool.getBoolean("ringtoneAlarm", true));
+            cbVibrateAlarm.setChecked(SpTool.getBoolean(StaticData.SPVIBRATEALARM, true));
+            cbRingtoneAlarm.setChecked(SpTool.getBoolean(StaticData.SPRINGTONEALARM, true));
         }
 
         sbWorkTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

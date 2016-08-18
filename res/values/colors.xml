@@ -26,4 +26,5 @@
     <color name="lighter_green">#00CC00</color>
     <color name="light_blue">#F7FBFF</color>
     <color name="yellow">#FFCC00</color>
+    <color name="dark_yellow">#FF6600</color>
 </resources>

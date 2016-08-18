@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Vibrator;
+import android.widget.Chronometer;
 import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import cn.bmob.v3.BmobBatch;
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BatchResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListListener;
@@ -46,7 +48,7 @@ public class CommonUtils {
             public void run() {
                 vibrator.vibrate(60);
             }
-        },1100);
+        }, 1100);
     }
 
     /**
@@ -94,26 +96,28 @@ public class CommonUtils {
      */
     public static TomatoRecord constructUploadObject(String tomatoNoteStr, int evaluateLever) {
         String taskNameTemp;//任务名称
-        Person personTemp;//用户
+        BmobUser personTemp;//用户
         String taskTimeTemp;//任务完成的时间
         String weekTemp;//任务完成所属星期
         String completeStateTemp;//完成状态：已完成、未完成
         Integer tomatoNumTemp = 0;//获得的番茄数
         Integer tomatoTimeTemp = 0; //获得的番茄时间
 
-        String efficientTimeTemp;//高效时间：无或者以分钟计算
+        Integer efficientTimeTemp;//高效时间：无或者以分钟计算
         String tomatoNoteTemp;//备注
         Integer evaluateLeverTemp = 0;//评价：1,2,3,4,5分（0分表示未评分，默认）
 
         TomatoRecord tomatoRecordTemp = new TomatoRecord();
         taskNameTemp = SpTool.getString(StaticData.SPTASKNAME, "");
-        personTemp = (Person) Person.getCurrentUser();
+        LogTool.log(LogTool.Aaron, "CommonUtils  constructUploadObject 任务名称是： " + taskNameTemp);
+
+        personTemp = Person.getCurrentUser();
         taskTimeTemp = CommonUtils.getCurrentDataAndTime();
         weekTemp = CommonUtils.getCurrentWeek();
 
         tomatoNumTemp = SpTool.getInt(StaticData.SPTOMATOCOMPLETENUM, 0);
-        tomatoTimeTemp = SpTool.getInt(StaticData.SPWORKTIME, 0);
-        efficientTimeTemp = SpTool.getInt(StaticData.SPTOMATOCOMPLETEEFFICIENTTIME, 0) + "分钟";
+        tomatoTimeTemp = SpTool.getInt(StaticData.SPWORKTIME, 25) * tomatoNumTemp;
+        efficientTimeTemp = SpTool.getInt(StaticData.SPTOMATOCOMPLETEEFFICIENTTIME, 0);
         tomatoNoteTemp = tomatoNoteStr;
         evaluateLeverTemp = evaluateLever;
 
@@ -126,7 +130,7 @@ public class CommonUtils {
         tomatoRecordTemp.setTomatoNum(tomatoNumTemp);
         tomatoRecordTemp.setTomatoTime(tomatoTimeTemp);
         tomatoRecordTemp.setEfficientTime(efficientTimeTemp);
-        tomatoRecordTemp.setTomatoNote(tomatoNoteTemp);
+        tomatoRecordTemp.setTomatoNote(tomatoNoteTemp == null ? "" : tomatoNoteTemp);
         tomatoRecordTemp.setEvaluateLever(evaluateLeverTemp);
 
         return tomatoRecordTemp;
@@ -138,8 +142,8 @@ public class CommonUtils {
      */
     public static void resetSpData() {
         SpTool.putInt(StaticData.SPTOMATOCOMPLETENUM, 0);
-        SpTool.putInt(StaticData.SPWORKTIME, 0);
-        SpTool.putString(StaticData.SPTASKNAME, null);
+        SpTool.putInt(StaticData.SPTOMATOCOMPLETEEFFICIENTTIME, 0);
+        SpTool.putString(StaticData.SPTASKNAME, "");
     }
 
     /**
@@ -164,14 +168,14 @@ public class CommonUtils {
                         BatchResult result = o.get(i);
                         BmobException ex = result.getError();
                         if (ex == null) {
-                            LogTool.log(LogTool.Aaron,"第" + i + "个数据批量添加成功：" + result.getCreatedAt() + "," + result.getObjectId() + "," + result.getUpdatedAt());
-                            DbTool.update_CreatedAt_InLocal((TomatoRecord)tomatoRecordList.get(i));
+                            LogTool.log(LogTool.Aaron, "第" + i + "个数据批量添加成功：" + result.getCreatedAt() + "," + result.getObjectId() + "," + result.getUpdatedAt());
+                            DbTool.update_CreatedAt_InLocal((TomatoRecord) tomatoRecordList.get(i));
                         } else {
-                            LogTool.log(LogTool.Aaron,"第" + i + "个数据批量添加失败：" + ex.getMessage() + "," + ex.getErrorCode());
+                            LogTool.log(LogTool.Aaron, "第" + i + "个数据批量添加失败：" + ex.getMessage() + "," + ex.getErrorCode());
                         }
                     }
                 } else {
-                    LogTool.log(LogTool.Aaron,"失败：" + e.getMessage() + "," + e.getErrorCode());
+                    LogTool.log(LogTool.Aaron, "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
             }
         });
@@ -180,6 +184,7 @@ public class CommonUtils {
 
     /**
      * 判断当前网络是否可用
+     *
      * @param context
      * @return
      */
@@ -190,5 +195,46 @@ public class CommonUtils {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 根据秒数返回 MM:ss样式的字符串
+     *
+     * @param endAngle
+     * @return
+     */
+    public static String returnCountedTimeStr(int endAngle) {
+        String timeStr = "";
+        int minuteInt = endAngle / 60;//分钟数值
+        int secondInt = endAngle % 60;//秒数数值
+        if (minuteInt > 10) {
+            if (secondInt < 10) {
+                timeStr = String.valueOf(minuteInt) + ":0" + String.valueOf(secondInt);
+            } else {
+                timeStr = String.valueOf(minuteInt) + ":" + String.valueOf(secondInt);
+            }
+        } else if (minuteInt >= 0 && minuteInt < 10) {
+            if (secondInt < 10) {
+                timeStr = "0" + String.valueOf(minuteInt) + ":0" + String.valueOf
+                        (secondInt);
+            } else {
+                timeStr = "0" + String.valueOf(minuteInt) + ":" + String.valueOf
+                        (secondInt);
+            }
+        }
+        return timeStr;
+    }
+
+    /**
+     * 将计时器的值转换为秒（int)
+     *
+     * @param chronometer
+     * @return
+     */
+    public static int parseChronometerToSeconds(Chronometer chronometer) {
+        String tempStr = chronometer.getText().toString();
+        int minutes = Integer.parseInt(tempStr.split(":")[0]) * 60;
+        int seconds = Integer.parseInt(tempStr.split(":")[1]);
+        return minutes + seconds;
     }
 }

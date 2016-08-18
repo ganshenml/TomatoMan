@@ -51,9 +51,11 @@ public class TomatoCompleteAct extends BaseActivity {
     private TextView leftTv, tvTitle_public;//公用toolbar标题
     private TextView tomatoTimeTv, taskTimeTv, tomatoNumTv, efficientTimeTv, tomatoNoteTv;
     private RatingBar evaluateLeverRb;
-    private LinearLayout tomatoCompleteLl, toolBarLeftLl,stampLl;
+    private LinearLayout tomatoCompleteLl, toolBarLeftLl, stampLl;
     private FrameLayout tomatoCompleteFl;
     private ImageView rightIv, completeStateIv, hintLogoIv;
+
+    private int tomatoCompleteTime, tomatoCompleteNum, tomatoEfficiencyTime;//完成的总番茄时间，番茄数量，番茄高效时间；
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class TomatoCompleteAct extends BaseActivity {
         initDataViews();
         initListerners();
     }
+
 
     //对回退事件做弹窗处理
     @Override
@@ -152,7 +155,7 @@ public class TomatoCompleteAct extends BaseActivity {
                     Toast.makeText(TomatoCompleteAct.this, "一个番茄时间都木有完成，服务器大大是不会帮你保存的", Toast.LENGTH_LONG).show();
                 } else {
                     TomatoRecord tomatoRecordTemp = saveTomatoRecordToLocal(); //1.保存该条记录至本地
-                    CommonUtils.resetSpData(); //2.重置相关sp数据（番茄数，番茄时间）
+//                    CommonUtils.resetSpData(); //2.重置相关sp数据（番茄数，番茄时间）——>在首页点击的时候重置即可
                     upLoadTomatoRecordToServer(tomatoRecordTemp);//3.上传至服务器该条数据并更新该条记录对应的本地数据（CreatedAt字段）
                 }
                 backToMainPage();//4.返回首页
@@ -181,7 +184,6 @@ public class TomatoCompleteAct extends BaseActivity {
             hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
 
             tomatoNumTv.setText("本次收获了" + tomatoRecordTTemp.getTomatoNum().toString() + "个番茄");
-            tomatoNumTv.setTextColor(Color.parseColor("#52A5FF"));
 
             String htmlString1 = "<font>努力耕耘了 </font><font color=\"#52A5FF\">" + tomatoRecordTTemp.getTomatoTime() + "</font><font> 分钟</font>";
             tomatoTimeTv.setText(Html.fromHtml(htmlString1));
@@ -202,6 +204,35 @@ public class TomatoCompleteAct extends BaseActivity {
             Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.logo_person);
             taskTimeTv.setText("-------  " + CommonUtils.getCurrentDataAndTime() + "  -------");
             hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
+
+            //一个番茄时间的判断样式
+            if (SpTool.getInt(StaticData.SPTOMATOCOMPLETENUM, 0) > 0) {
+                //显示完成的番茄工作时间和番茄数量
+                tomatoCompleteLl.setBackgroundResource(R.drawable.tomato_complete_background);
+                stampLl.setBackgroundResource(R.drawable.tomato_completed_layout_custom);
+                completeStateIv.setImageResource(R.mipmap.completed);
+
+                Bitmap bitmapTemp2 = BitmapFactory.decodeResource(getResources(), R.drawable.hint_logo_completed);
+                hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp2, 150));
+
+                int tomatoNumTemp =SpTool.getInt(StaticData.SPTOMATOCOMPLETENUM,0);
+                tomatoNumTv.setText("本次收获了" + tomatoNumTemp + "个番茄");
+
+
+                int tomatoTotalTimeTemp = SpTool.getInt(StaticData.SPWORKTIME,25) * tomatoNumTemp;
+                LogTool.log(LogTool.Aaron,"TomatoCompleteAct initDataViews  sbWorkTime的值是： "+tomatoTotalTimeTemp);
+
+                String htmlString1 = "<font>努力耕耘了 </font><font color=\"#52A5FF\">" + tomatoTotalTimeTemp+ "</font><font> 分钟</font>";
+                tomatoTimeTv.setText(Html.fromHtml(htmlString1));
+
+                taskTimeTv.setText("-------  " + CommonUtils.getCurrentDataAndTime() + "  -------");
+
+                int tomatoEfficiencyTimeTemp  = SpTool.getInt(StaticData.SPTOMATOCOMPLETEEFFICIENTTIME,0);
+                String htmlString2 = "<font>变身超人时间共 </font><font color=\"#52A5FF\">" + tomatoEfficiencyTimeTemp + "</font><font> 分钟</font>";
+                efficientTimeTv.setText(Html.fromHtml(htmlString2));
+
+            }
+
         }
 
         //印章动画效果+手机振动效果
@@ -211,6 +242,9 @@ public class TomatoCompleteAct extends BaseActivity {
         completeStateIv.startAnimation(scaleAnimation);
 
         CommonUtils.startStampVibrator(TomatoCompleteAct.this);
+
+        tomatoNumTv.setTextColor(Color.parseColor("#52A5FF"));
+
     }
 
     /**

@@ -14,9 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.ganshenml.tomatoman.R;
+import com.example.ganshenml.tomatoman.bean.data.StaticData;
 import com.example.ganshenml.tomatoman.tool.ConstantCode;
 import com.example.ganshenml.tomatoman.tool.NotificationUtls;
 import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
+import com.example.ganshenml.tomatoman.tool.SpTool;
 import com.example.ganshenml.tomatoman.tool.ViewUtils;
 import com.example.ganshenml.tomatoman.view.CompleteTaskCircleView;
 import com.example.ganshenml.tomatoman.view.StartRestCircleView;
@@ -107,7 +109,7 @@ public class TomatoTemporaryAct extends BaseActivity {
      * 显示已经获得的番茄样式（如果有）
      */
     private void showObtainedTomatoViews(){
-        int obtainedTomatoNum = 2;
+        int obtainedTomatoNum = SpTool.getInt(StaticData.SPTOMATOCOMPLETENUM,0);
         if(obtainedTomatoNum>0){
             obtainedTomatoLl.setVisibility(View.VISIBLE);
             for (int i = 0; i < obtainedTomatoNum; i++) {

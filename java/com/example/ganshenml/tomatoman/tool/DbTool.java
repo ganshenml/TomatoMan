@@ -36,24 +36,25 @@ public class DbTool {
         ExtraT extraT = new ExtraT(extra);
         ExtraT extraTTemp = DataSupport.findFirst(ExtraT.class);
         if (extraTTemp != null) {
-            LogTool.log(LogTool.Aaron," saveExtraData extraTemp不为空");
+            LogTool.log(LogTool.Aaron, " saveExtraData extraTemp不为空");
             DataSupport.deleteAll(ExtraT.class);
         }
-        LogTool.log(LogTool.Aaron," saveExtraData extra 的值： "+ extra.getFeedbackHint());
+        LogTool.log(LogTool.Aaron, " saveExtraData extra 的值： " + extra.getFeedbackHint());
         extraT.save();
     }
 
     /**
      * 返回本地保存的Extra数据
+     *
      * @return
      */
-    public static ExtraT findLocalExtraData(){
+    public static ExtraT findLocalExtraData() {
         List<ExtraT> extraTList = DataSupport.findAll(ExtraT.class);
-        if(StringTool.hasData(extraTList)){
-            LogTool.log(LogTool.Aaron," DbTool findLocalExtraData Extra的大小是： "+extraTList.size() );
+        if (StringTool.hasData(extraTList)) {
+            LogTool.log(LogTool.Aaron, " DbTool findLocalExtraData Extra的大小是： " + extraTList.size());
             return extraTList.get(0);
         }
-        LogTool.log(LogTool.Aaron," DbTool findLocalExtraData Extra的大小是： "+0 );
+        LogTool.log(LogTool.Aaron, " DbTool findLocalExtraData Extra的大小是： " + 0);
         return null;
     }
 
@@ -73,7 +74,7 @@ public class DbTool {
 
                     }
                 } else {
-                    LogTool.log(LogTool.Aaron,"DbTool  upDataExtraData 查询Extra数据出错： " + e.toString());
+                    LogTool.log(LogTool.Aaron, "DbTool  upDataExtraData 查询Extra数据出错： " + e.toString());
                 }
             }
         });
@@ -81,11 +82,12 @@ public class DbTool {
 
     /**
      * 判断本地是否存有TomatoRecord数据
+     *
      * @return
      */
-    public static boolean isHasTomatoRecordData(){
-       TomatoRecordT tomatoRecordT = DataSupport.findFirst(TomatoRecordT.class);
-        if(tomatoRecordT!=null){
+    public static boolean isHasTomatoRecordData() {
+        TomatoRecordT tomatoRecordT = DataSupport.findFirst(TomatoRecordT.class);
+        if (tomatoRecordT != null) {
             return true;
         }
         return false;
@@ -94,8 +96,8 @@ public class DbTool {
     /**
      * 保存TomatoRecord数据至本地数据库
      */
-    public static void saveTomatoRecordToLocal(List<TomatoRecord> list){
-        List<TomatoRecordT> listTemp = new ArrayList<>() ;
+    public static void saveTomatoRecordToLocal(List<TomatoRecord> list) {
+        List<TomatoRecordT> listTemp = new ArrayList<>();
         int length = list.size();
         for (int i = 0; i < length; i++) {
             TomatoRecordT tomatoRecordT = new TomatoRecordT(list.get(i));
@@ -107,47 +109,51 @@ public class DbTool {
 
     /**
      * 返回最新的TomatoRecord的单条本地数据
+     *
      * @return
      */
-    public static TomatoRecordT returnLatestTomatoRecordData(){
+    public static TomatoRecordT returnLatestTomatoRecordData() {
         return DataSupport.findLast(TomatoRecordT.class);
     }
 
     /**
      * 返回本地保存的所有TomatoRecordT数据
+     *
      * @return
      */
-    public static List<TomatoRecordT> returnWholeTomatoRecordData(){
+    public static List<TomatoRecordT> returnWholeTomatoRecordData() {
         return DataSupport.findAll(TomatoRecordT.class);
     }
 
     /**
      * 更新TomatoRecordT本地数据中的objectId和createdAt数据
+     *
      * @param tomatoRecord
      */
-    public static void update_CreatedAt_InLocal(TomatoRecord tomatoRecord){
+    public static void update_CreatedAt_InLocal(TomatoRecord tomatoRecord) {
         //先找寻本地数据库最新的数据，若taskTime相等，则表示该条数据是要用来更新的数据
         TomatoRecordT tomatoRecordTTemp = DataSupport.findLast(TomatoRecordT.class);
-        if(tomatoRecordTTemp!=null){
-            if(tomatoRecord.getTaskTime().equals(tomatoRecordTTemp.getTaskTime())){
+        if (tomatoRecordTTemp != null) {
+            if (tomatoRecord.getTaskTime().equals(tomatoRecordTTemp.getTaskTime())) {
                 ContentValues contentValues = new ContentValues();
-                contentValues.put("objectId",tomatoRecord.getObjectId());
-                contentValues.put("createdAt",tomatoRecord.getCreatedAt());
-                DataSupport.updateAll(TomatoRecordT.class,contentValues,"taskTime = ? ",tomatoRecord.getTaskTime());
-            }else {
-                LogTool.log(LogTool.Aaron,"DbTool 未找到本地最新的数据，但该条数据时间不对应 " );
+                contentValues.put("objectId", tomatoRecord.getObjectId());
+                contentValues.put("createdAt", tomatoRecord.getCreatedAt());
+                DataSupport.updateAll(TomatoRecordT.class, contentValues, "taskTime = ? ", tomatoRecord.getTaskTime());
+            } else {
+                LogTool.log(LogTool.Aaron, "DbTool 未找到本地最新的数据，但该条数据时间不对应 ");
             }
-        }else {
-            LogTool.log(LogTool.Aaron,"DbTool 未找到本地最新的数据 " );
+        } else {
+            LogTool.log(LogTool.Aaron, "DbTool 未找到本地最新的数据 ");
         }
     }
 
     /**
      * 获取所有本地未上传至服务器的TomatoRecordT数据
+     *
      * @return
      */
-    public static List<TomatoRecordT> returnAllNotUploadedTomatoRecordTData(){
-        return DataSupport.where("createdAt  =  ?","null").find(TomatoRecordT.class);
+    public static List<TomatoRecordT> returnAllNotUploadedTomatoRecordTData() {
+        return DataSupport.where("createdAt  =  ?", "null").find(TomatoRecordT.class);
 
     }
 }

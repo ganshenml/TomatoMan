@@ -42,6 +42,6 @@
         android:id="@+id/tvUserIntroduction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="工资嘛都好谈，但是不能画大饼！" />
+        android:text="这里显示签名档" />
 
 </LinearLayout>

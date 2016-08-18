@@ -76,6 +76,9 @@ public class MainActivity extends BaseActivity
         initData();
         initDataViews();
         initListeners();
+
+        //重置之前的完成的番茄个数和高效时间
+        CommonUtils.resetSpData();
     }
 
     @Override
@@ -241,28 +244,6 @@ public class MainActivity extends BaseActivity
             user_log.setImageURI(picUrlTemp);
         }
 
-        //初始化背景图片
-//        BinaryResource resource =  Fresco.getImagePipelineFactory().getMainDiskStorageCache().getResource(new SimpleCacheKey(picUrlTemp));
-//        Bitmap bitmap = null;
-//        try {
-//            InputStream inputStream = resource.openStream();
-//            bitmap = BitmapFactory.decodeStream(inputStream);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-
-
-//        mGBlurPic = new GBlurPic(this);
-////        Bitmap bitmap = ImageTool.drawableToBitmap(user_log.getHierarchy().getTopLevelDrawable());
-//        mBitmapIn = loadBitmap(R.drawable.background);
-//        mBitmapOut = Bitmap.createBitmap(mBitmapIn.getWidth(),
-//                mBitmapIn.getHeight(), mBitmapIn.getConfig());
-//
-//
-//        mBitmapOut = mGBlurPic.gBlurBitmap(mBitmapIn, 25);
-//        Drawable drawable = new BitmapDrawable(getResources(), mBitmapOut);
-//        LLNavHeader.setBackground(drawable);
     }
 
     private void initListeners() {
@@ -280,7 +261,9 @@ public class MainActivity extends BaseActivity
             @Override
             public void onClick(View v) {//1.样式变换；2.notification开启；3.finish当前activity；4.跳转至下一个activity并传递数据
                 //保存任务名称至sp
-                SpTool.putString(StaticData.SPTASKNAME,etTaskName.getText().toString());
+                String taskNameStr = etTaskName.getText().toString();
+                LogTool.log(LogTool.Aaron,"MainActivity initListeners 任务名称是： "+taskNameStr);
+                SpTool.putString(StaticData.SPTASKNAME,taskNameStr == null ?"":taskNameStr);
 
                 //1.样式：设置背景alpha变化以下
                 v.setAlpha(0.5f);
@@ -294,6 +277,7 @@ public class MainActivity extends BaseActivity
 
                 //4.逻辑：跳转至下一个Activity
                 startActivity(intent);
+
             }
         });
 

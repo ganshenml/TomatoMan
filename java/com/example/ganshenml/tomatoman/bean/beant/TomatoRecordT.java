@@ -7,20 +7,23 @@ import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
 
+import cn.bmob.v3.BmobUser;
+
 /**
  * Created by ganshenml on 2016-07-29.
  */
 public class TomatoRecordT extends DataSupport implements Serializable{
 
+    private String objectId;
     private String taskName;//任务名称
-    private Person person;//用户
+    private BmobUser person;//用户
     private String taskTime;//任务完成的时间
     private String week;//任务完成所属星期
     private String completeState;//完成状态：已完成、未完成
     private Integer tomatoNum = 0;//获得的番茄数
     private Integer tomatoTime = 0; //获得的番茄时间
 
-    private String efficientTime;//高效时间：无或者以分钟计算
+    private Integer efficientTime;//高效时间：无或者以分钟计算
     private String tomatoNote;//备注
     private Integer evaluateLever = 0;//评价：1,2,3,4,5分（0分表示未评分，默认）
     private String createdAt;//创建的时间
@@ -37,6 +40,15 @@ public class TomatoRecordT extends DataSupport implements Serializable{
         this.tomatoNote = tomatoRecord.getTomatoNote();
         this.evaluateLever = tomatoRecord.getEvaluateLever();
         this.createdAt = tomatoRecord.getCreatedAt();
+    }
+
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
     public String getTaskName() {
@@ -64,11 +76,11 @@ public class TomatoRecordT extends DataSupport implements Serializable{
     }
 
 
-    public Person getPerson() {
+    public BmobUser getPerson() {
         return person;
     }
 
-    public void setPerson(Person person) {
+    public void setPerson(BmobUser person) {
         this.person = person;
     }
 
@@ -104,11 +116,11 @@ public class TomatoRecordT extends DataSupport implements Serializable{
         this.tomatoNum = tomatoNum;
     }
 
-    public String getEfficientTime() {
+    public Integer getEfficientTime() {
         return efficientTime;
     }
 
-    public void setEfficientTime(String efficientTime) {
+    public void setEfficientTime(Integer efficientTime) {
         this.efficientTime = efficientTime;
     }
 

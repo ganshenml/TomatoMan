@@ -41,6 +41,7 @@ public class ViewUtils {
             tbToolbar_public.setBackgroundColor(ContextCompat.getColor(activity,R.color.lighter_green));
         }else if (activity instanceof TomatoEfficiencyAct) {//如果是“番茄高效领域计时页
             tvTitle_public.setText("高效工作中");
+            tbToolbar_public.setBackgroundColor(ContextCompat.getColor(activity,R.color.yellow));
         }
         tvTitle_public.setTextColor(Color.WHITE);
     }

@@ -1,21 +1,23 @@
 package com.example.ganshenml.tomatoman.view;
 
+/**
+ * Created by ganshenml on 2016-08-17.
+ */
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.ganshenml.tomatoman.tool.LogTool;
-
 /**
  * Created by ganshenml on 2016/4/12.
  */
-public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+public class EfficiencySurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     SurfaceHolder surfaceHolder;
     public CountThread countThread;
     private float endAngle = 0;//计算一次要画的角度大小
@@ -26,14 +28,14 @@ public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder
 //    private boolean isFirstShown = false;//作为一开始计时时快速走过一圈的动画（仅一次展示）
 
 
-    public TomatoCountSurfaceView(Context context) {
+    public EfficiencySurfaceView(Context context) {
         super(context);
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         countThread = new CountThread(surfaceHolder);
     }
 
-    public TomatoCountSurfaceView(Context context, AttributeSet attributeSet) {
+    public EfficiencySurfaceView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);

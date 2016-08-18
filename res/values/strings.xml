@@ -94,4 +94,11 @@
     <string name="web_progress_dialog_loading">加载中...</string>
     <string name="web_progress_dialog_cancel">取消</string>
 
+    <!--efficiency work hint -->
+    <string name="stage_one">至此，你已进入高效超人阶段（将不会有闹钟提醒打扰）</string>
+    <string name="stage_two">现进入第二阶段，你已获得必杀技口遁—“我都佩服我自己了”</string>
+    <string name="stage_three">第三阶段的你已经让小伙伴们滑跪到天荒地老、海枯石烂了</string>
+    <string name="stage_four">“一当凌绝顶，一览纵山小”，说得就是你</string>
+    <string name="stage_five">“我反穿了内裤，任凭时间的雨打风吹，只留下天边的一抹红，进化吧，皮卡丘。哦不，番茄超人！！！”</string>
+
 </resources>

@@ -97,6 +97,9 @@ public class TomatoCountTimeAct extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (tomatoCountSurfaceView.countThread != null) {//赋值线程为null，等待gc回收
+            if(tomatoCountSurfaceView.countThread!=null){
+                tomatoCountSurfaceView.countThread.isStop = true;
+            }
             tomatoCountSurfaceView.countThread = null;
         }
 

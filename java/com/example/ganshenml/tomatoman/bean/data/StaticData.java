@@ -1,5 +1,7 @@
 package com.example.ganshenml.tomatoman.bean.data;
 
+import com.example.ganshenml.tomatoman.tool.SpTool;
+
 /**
  * 存放静态数据
  * Created by ganshenml on 2016-07-23.
@@ -18,13 +20,14 @@ public class StaticData {
     public static final int RESULT_FROM_RANK_ACT = 1003;//从“排行榜”页面返回的结果码
     public static final int RESULT_FROM_SETTING_ACT = 1004;//从“设置”页面返回的结果码
 
-    public static final String SPTOMATOCOMPLETENUM = "spTomatoCompletedNum";
-    public static final String SPTOMATOCOMPLETEEFFICIENTTIME = "spTomatoCompletedEfficientTime";
-    public static final String SPWORKTIME = "spWorkTime";
+    public static final String SPTOMATOCOMPLETENUM = "spTomatoCompletedNum";//当前完成的番茄数量
+    public static final String SPTOMATOCOMPLETEEFFICIENTTIME = "spTomatoCompletedEfficientTime";//当前完成的“高效时间”
+    public static final String SPWORKTIME = "spWorkTime";//当前设置的每个番茄的时长
     public static final String SPSHORTRESTTIME = "spShortRestTime";
     public static final String SPLONGRESTTIME = "spLongRestTime";
     public static final String SPVIBRATEALARM = "spVibrateAlarm";
     public static final String SPRINGTONEALARM = "spRingtoneAlarm";
 
-    public static final String SPTASKNAME = "spTaskName";
+    public static final String SPTASKNAME = "spTaskName";//任务名称
+
 }
