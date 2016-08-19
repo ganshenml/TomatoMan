@@ -19,6 +19,7 @@ import com.example.ganshenml.tomatoman.tool.ThreadTool;
 import com.example.ganshenml.tomatoman.tool.ToActivityPage;
 import com.example.ganshenml.tomatoman.tool.VerifyUtils;
 import com.example.ganshenml.tomatoman.view.ClearEditTextView;
+import com.example.ganshenml.tomatoman.view.WebProgress;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
@@ -75,9 +76,11 @@ public class RegisterAct extends BaseActivity {
                 person1.setUsername(usernameTemp);
                 person1.setPassword(passwordTemp);
 
+                WebProgress.createDialog(RegisterAct.this);
                 person1.signUp(new SaveListener<Person>() {
                     @Override
                     public void done(Person person, BmobException e) {
+                        WebProgress.webDismiss();
                         if (e == null) {
                             Toast.makeText(RegisterAct.this, "注册成功", Toast.LENGTH_LONG).show();
 

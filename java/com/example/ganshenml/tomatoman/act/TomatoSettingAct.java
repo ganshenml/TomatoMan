@@ -89,23 +89,23 @@ public class TomatoSettingAct extends BaseActivity {
 //        editor = sharedPreferences.edit();
         int tempInt = SpTool.getInt("workTime", 0);
         if (tempInt == 0) {//表明是第一次生成这个sharedPreference，则调用默认配置显示（这里就是只对栏目名做显示处理）
-            String htmlString = "<font>工作时间：</font><font color=\"#1E90FF\">" + "25" + "</font><font>分钟</font>";
+            String htmlString = "<font>工作时间：</font><font color=\"#1E90FF\">" + "25" + "</font><font> 分钟</font>";
             tvWorkTime.setText(Html.fromHtml(htmlString));
 
-            String htmlString2 = "<font>短休息：</font><font color=\"#1E90FF\">" + "5" + "</font><font>分钟</font>";
+            String htmlString2 = "<font>短休息：</font><font color=\"#1E90FF\">" + "5" + "</font><font> 分钟</font>";
             tvShortRest.setText(Html.fromHtml(htmlString2));
 
-            String htmlString3 = "<font>长休息：</font><font color=\"#1E90FF\">" + "20" + "</font><font>分钟</font>";
+            String htmlString3 = "<font>长休息：</font><font color=\"#1E90FF\">" + "20" + "</font><font> 分钟</font>";
             tvLongRest.setText(Html.fromHtml(htmlString3));
         } else {//如果sharedPreference已经有值，则使用里面的值进行初始化的显示
             //初始化标题栏
-            String htmlString = "<font>工作时间：</font><font color=\"#1E90FF\">" +String.valueOf(SpTool.getInt("workTime", 25)) + "</font><font>分钟</font>";
+            String htmlString = "<font>工作时间：</font><font color=\"#1E90FF\">" +String.valueOf(SpTool.getInt("workTime", 25)) + "</font><font> 分钟</font>";
             tvWorkTime.setText(Html.fromHtml(htmlString));
 
-            String htmlString2 = "<font>短休息：</font><font color=\"#1E90FF\">" + String.valueOf(SpTool.getInt("shortRestTime", 5)) + "</font><font>分钟</font>";
+            String htmlString2 = "<font>短休息：</font><font color=\"#1E90FF\">" + String.valueOf(SpTool.getInt("shortRestTime", 5)) + "</font><font> 分钟</font>";
             tvShortRest.setText(Html.fromHtml(htmlString2));
 
-            String htmlString3 = "<font>长休息：</font><font color=\"#1E90FF\">" + String.valueOf(SpTool.getInt("longRestTime", 20)) + "</font><font>分钟</font>";
+            String htmlString3 = "<font>长休息：</font><font color=\"#1E90FF\">" + String.valueOf(SpTool.getInt("longRestTime", 20)) + "</font><font> 分钟</font>";
             tvLongRest.setText(Html.fromHtml(htmlString3));
 
             //初始化进度条

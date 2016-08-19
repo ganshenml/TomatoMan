@@ -26,7 +26,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
 public class SettingAct extends BaseActivity {
-    private LinearLayout logoutLl;
+    private LinearLayout llCallback, logoutLl,tomatoTimerLl;
     private TextView appVersionTv;
     private EditText feedbackEt;
     private Button feedbackBtn;
@@ -46,7 +46,9 @@ public class SettingAct extends BaseActivity {
     private void initViews() {
         appVersionTv = (TextView) findViewById(R.id.appVersionTv);
         newAppVersionIv = (ImageView) findViewById(R.id.newAppVersionIv);
+        llCallback = (LinearLayout) findViewById(R.id.llCallback);
         logoutLl = (LinearLayout) findViewById(R.id.logoutLl);
+        tomatoTimerLl = (LinearLayout) findViewById(R.id.tomatoTimerLl);
         feedbackEt = (EditText) findViewById(R.id.feedbackEt);
         feedbackBtn = (Button) findViewById(R.id.feedbackBtn);
         backIv = (ImageView) findViewById(R.id.backIv);
@@ -71,6 +73,22 @@ public class SettingAct extends BaseActivity {
 
     private void initListeners() {
 
+        llCallback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!CommonUtils.judgeNetWork(SettingAct.this)){//如果当前网络不可用
+                    return;
+                }
+
+                ShowDialogUtils.showInputTextDialog(SettingAct.this, "填写反馈信息", "", new HttpCallback() {
+                    @Override
+                    public void onSuccess(Object data, String resultStr) {
+                        uploadFeedbackData(resultStr);
+                    }
+                });
+            }
+        });
+
         logoutLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +105,13 @@ public class SettingAct extends BaseActivity {
             }
         });
 
+        tomatoTimerLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToActivityPage.turnToSimpleAct(SettingAct.this,TomatoSettingAct.class);
+            }
+        });
+
         feedbackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,24 +119,7 @@ public class SettingAct extends BaseActivity {
                     return;
                 }
                 String feedbackStrTemp = feedbackEt.getText().toString();
-                if (feedbackStrTemp.length() > 0) {
-                    WebProgress.createDialog(SettingAct.this);
-
-                    FeedBack feedBack = new FeedBack();
-                    feedBack.setPerson(BmobUser.getCurrentUser(Person.class));
-                    feedBack.setFeedbackContent(feedbackStrTemp);
-                    feedBack.save(new SaveListener<String>() {
-                        @Override
-                        public void done(String s, BmobException e) {
-                            WebProgress.webDismiss();
-                            if (e == null) {
-                                Toast.makeText(getApplication(), "提交成功", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getApplication(), "提交失败", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
+                uploadFeedbackData(feedbackStrTemp);
             }
         });
 
@@ -124,5 +132,30 @@ public class SettingAct extends BaseActivity {
         });
     }
 
+
+    /**
+     * 提交反馈的信息至服务器端
+     * @param feedbackStrTemp
+     */
+    private void  uploadFeedbackData(String feedbackStrTemp){
+        if (feedbackStrTemp.length() > 0) {
+            WebProgress.createDialog(SettingAct.this);
+
+            FeedBack feedBack = new FeedBack();
+            feedBack.setPerson(BmobUser.getCurrentUser(Person.class));
+            feedBack.setFeedbackContent(feedbackStrTemp);
+            feedBack.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    WebProgress.webDismiss();
+                    if (e == null) {
+                        Toast.makeText(getApplication(), "提交成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplication(), "提交失败", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
 
 }

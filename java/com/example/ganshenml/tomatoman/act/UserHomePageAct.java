@@ -134,7 +134,7 @@ public class UserHomePageAct extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String userIntroStr = tvUserIntroHomepage.getText().toString();
-                ShowDialogUtils.showInputTextDialog(thisContext, userIntroStr, new HttpCallback() {
+                ShowDialogUtils.showInputTextDialog(thisContext, "编辑简介",userIntroStr, new HttpCallback() {
                     @Override
                     public void onSuccess(Object data, String resultStr) {
                         if (!StringTool.isEmpty(resultStr)) {

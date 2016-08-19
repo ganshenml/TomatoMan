@@ -86,7 +86,7 @@
     <string name="default_edit_intro_hint">写点什么...</string>
 
     <!-- app related -->
-    <string name="app_version">当前程序版本</string>
+    <string name="app_version">程序版本</string>
     <string name="can_not_find_version_name">未获取到</string>
     <string name="default_feedback_hint">填写你对该软件的看法...</string>
 

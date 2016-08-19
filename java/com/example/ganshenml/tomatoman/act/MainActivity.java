@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity
 
     private StartCountTimeCircleView startCountTimeCircleViewId;
     private ClearEditTextView etTaskName;
-    private LinearLayout llHomeFragment, LLNavHeader;
+    private LinearLayout llHomeFragment, LLNavHeader,redPointLl;//红点提示（3）
 
     private DrawerLayout drawer;
     private Toolbar tbHome;
@@ -225,11 +225,17 @@ public class MainActivity extends BaseActivity
         tomatoSettingIv = (ImageView) findViewById(R.id.tomatoSettingIv);
 
         LLNavHeader = (LinearLayout) headView.findViewById(R.id.LLNavHeader);
+
+        redPointLl = (LinearLayout) navigationView.getMenu().findItem(R.id.nav_setting).getActionView().findViewById(R.id.redPointLl);
     }
 
 
-    @TargetApi(Build.VERSION_CODES.M)
+//    @TargetApi(Build.VERSION_CODES.M)
     private void initDataViews() {
+        //是否有新版本——>有（红点提示）
+        if(CommonUtils.isHasNewVersion(MainActivity.this)){
+            redPointLl.setVisibility(View.VISIBLE);
+        }
         //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
         Person person = BmobUser.getCurrentUser(Person.class);
         if (person == null) {
@@ -238,6 +244,7 @@ public class MainActivity extends BaseActivity
             return;
         }
         usernameTv.setText(person.getUsername());
+        tvUserIntroduction.setText(person.getIntroduction());
         String picUrlTemp = person.getImageId();
         if (!StringTool.isEmpty(picUrlTemp)) {
             LogTool.log(LogTool.Aaron, "本地用图片不为空");

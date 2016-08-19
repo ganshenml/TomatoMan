@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Vibrator;
+import android.view.View;
 import android.widget.Chronometer;
 import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.bean.TomatoRecord;
+import com.example.ganshenml.tomatoman.bean.beant.ExtraT;
 import com.example.ganshenml.tomatoman.bean.beant.TomatoRecordT;
 import com.example.ganshenml.tomatoman.bean.data.StaticData;
 import com.example.ganshenml.tomatoman.net.WifiOperate;
@@ -96,7 +98,7 @@ public class CommonUtils {
      */
     public static TomatoRecord constructUploadObject(String tomatoNoteStr, int evaluateLever) {
         String taskNameTemp;//任务名称
-        BmobUser personTemp;//用户
+        Person personTemp;//用户
         String taskTimeTemp;//任务完成的时间
         String weekTemp;//任务完成所属星期
         String completeStateTemp;//完成状态：已完成、未完成
@@ -111,7 +113,7 @@ public class CommonUtils {
         taskNameTemp = SpTool.getString(StaticData.SPTASKNAME, "");
         LogTool.log(LogTool.Aaron, "CommonUtils  constructUploadObject 任务名称是： " + taskNameTemp);
 
-        personTemp = Person.getCurrentUser();
+        personTemp = Person.getCurrentUser(Person.class);
         taskTimeTemp = CommonUtils.getCurrentDataAndTime();
         weekTemp = CommonUtils.getCurrentWeek();
 
@@ -236,5 +238,22 @@ public class CommonUtils {
         int minutes = Integer.parseInt(tempStr.split(":")[0]) * 60;
         int seconds = Integer.parseInt(tempStr.split(":")[1]);
         return minutes + seconds;
+    }
+
+    /**
+     * 判断是否有新的app版本
+     *
+     * @return
+     */
+    public static boolean isHasNewVersion(Context context) {
+        String appVersionStr = CommonUtils.getCurrentAppVersion(context);
+
+        ExtraT extraTTemp = DbTool.findLocalExtraData();//返回本地存储的Extra数据
+        if (extraTTemp != null) {
+            if (extraTTemp.getAppVersion().compareToIgnoreCase(appVersionStr) > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }

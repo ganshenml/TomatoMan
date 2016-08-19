@@ -19,7 +19,8 @@
     <color name="color_warn">#FF0033</color>
     <color name="red">#FF0000</color>
     <color name="light_red">#FF6666</color>
-    <color name="gray">#E6E6FA</color>
+    <color name="gray">#F2F2F2</color>
+    <color name="dark_gray">#CCCCCC</color>
     <color name="light_gray">#FBFBFB</color>
     <color name="light_font_color">#999999</color>
     <color name="light_green">#CCFFFF</color>

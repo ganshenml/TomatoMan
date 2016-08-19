@@ -64,7 +64,7 @@ public class TomatoCompleteAct extends BaseActivity {
 
         initViews();
         initDataViews();
-        initListerners();
+        initListeners();
     }
 
 
@@ -120,7 +120,7 @@ public class TomatoCompleteAct extends BaseActivity {
     }
 
 
-    private void initListerners() {
+    private void initListeners() {
         rightIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -231,6 +231,7 @@ public class TomatoCompleteAct extends BaseActivity {
                 String htmlString2 = "<font>变身超人时间共 </font><font color=\"#52A5FF\">" + tomatoEfficiencyTimeTemp + "</font><font> 分钟</font>";
                 efficientTimeTv.setText(Html.fromHtml(htmlString2));
 
+                btnTomatoComplete.setText("载入史册");
             }
 
         }

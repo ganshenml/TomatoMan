@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:checkableBehavior="single">
         <item
@@ -13,11 +14,13 @@
         <item
             android:id="@+id/nav_friends"
             android:icon="@drawable/friends_drawer"
-            android:title="好友" />
+            android:title="好友"
+            android:visible="false"/>
         <item
             android:id="@+id/nav_rank"
             android:icon="@drawable/rank_drawer"
-            android:title="排行榜" />
+            android:title="排行榜"
+            android:visible="false"/>
     </group>
 
     <item android:title="">
@@ -29,6 +32,7 @@
             <item
                 android:id="@+id/nav_setting"
                 android:icon="@drawable/setting_drawer"
+                app:actionLayout="@layout/red_point"
                 android:title="设置" />
         </menu>
     </item>

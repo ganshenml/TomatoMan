@@ -16,7 +16,7 @@ public class TomatoRecordT extends DataSupport implements Serializable{
 
     private String objectId;
     private String taskName;//任务名称
-    private BmobUser person;//用户
+    private Person person;//用户
     private String taskTime;//任务完成的时间
     private String week;//任务完成所属星期
     private String completeState;//完成状态：已完成、未完成
@@ -76,11 +76,11 @@ public class TomatoRecordT extends DataSupport implements Serializable{
     }
 
 
-    public BmobUser getPerson() {
+    public Person getPerson() {
         return person;
     }
 
-    public void setPerson(BmobUser person) {
+    public void setPerson(Person person) {
         this.person = person;
     }
 

@@ -45,7 +45,7 @@ public class ClearEditTextView extends EditText implements View.OnFocusChangeLis
         mClearDrawable = getCompoundDrawables()[2];
         if (mClearDrawable == null) {
             mClearDrawable = getResources().getDrawable(
-                    R.drawable.cross);
+                    R.mipmap.cross);
         }
 
         mClearDrawable.setBounds(0, 0, mClearDrawable.getIntrinsicWidth(),
