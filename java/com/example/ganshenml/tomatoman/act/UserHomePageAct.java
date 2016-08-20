@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -47,6 +48,7 @@ public class UserHomePageAct extends BaseActivity {
 
     public final String TAG = "UserHomePageAct";
 
+    private Toolbar userHomeTb;
     private ImageView backIv,ivMyTomatoHomepage, ivMyFriendsHomepage;
     private TextView tvUserNameHomepage, tvUserIntroHomepage;
     private Context thisContext = UserHomePageAct.this;
@@ -88,6 +90,8 @@ public class UserHomePageAct extends BaseActivity {
             simpleDraweeView_user_log.setImageURI(picUrlTemp);
         }
 
+        userHomeTb = (Toolbar)findViewById(R.id.userHomeTb);
+        userHomeTb.getBackground().setAlpha(0);
         backIv = (ImageView) findViewById(R.id.backIv);
         ivMyTomatoHomepage = (ImageView) findViewById(R.id.ivMyTomatoHomepage);
         ivMyFriendsHomepage = (ImageView) findViewById(R.id.ivMyFriendsHomepage);

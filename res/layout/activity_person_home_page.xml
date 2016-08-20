@@ -6,10 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/user_home_background"
     tools:context=".act.UserHomePageAct">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/myFriendsTb"
+        android:id="@+id/userHomeTb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/backgroud_fragment_home"
@@ -53,9 +54,9 @@
                 android:layout_gravity="center"
                 fresco:actualImageScaleType="centerCrop"
                 fresco:fadeDuration="300"
-                fresco:failureImage="@drawable/user_logo"
+                fresco:failureImage="@drawable/user_logo_large"
                 fresco:failureImageScaleType="centerCrop"
-                fresco:placeholderImage="@drawable/user_logo"
+                fresco:placeholderImage="@drawable/user_logo_large"
                 fresco:placeholderImageScaleType="centerCrop"
                 fresco:roundedCornerRadius="48dp"
                 fresco:roundingBorderColor="@color/gray"
