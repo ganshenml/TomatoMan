@@ -101,7 +101,7 @@ public class TomatoRestAct extends BaseActivity {
         Intent intent = new Intent(TomatoRestAct.this, TomatoCountTimeAct.class);
         NotificationUtls.sendNotification(this, ConstantCode.HOMEFRAGMETN_REQUEST_CODE, intent, R.layout.notification_layout);//调用自定义工具类方法发送notification
 
-        //3.跳转至“番茄计时完成页”
+        //3.跳转至“番茄工作页”
         //传递数据。。。。。。。。。。。。。。。。。。。。。。。。
         startActivity(intent);
     }

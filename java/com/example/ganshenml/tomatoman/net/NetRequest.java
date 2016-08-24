@@ -3,7 +3,12 @@ package com.example.ganshenml.tomatoman.net;
 import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.bean.TomatoRecord;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
+import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.StringTool;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,6 +21,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 
 /**
  * 网络请求的方法类
@@ -93,6 +99,99 @@ public class NetRequest {
                 httpCallback.onSuccess(list);
 
             }
+        });
+    }
+
+    /**
+     * 返回该用户所完成的番茄个数
+     *
+     * @param person
+     * @return
+     */
+    public static void returnTomatoNumData(Person person , final HttpCallback httpCallback) {
+        BmobQuery<TomatoRecord> query = new BmobQuery<TomatoRecord>();
+        query.sum(new String[]{"tomatoNum"});
+        query.findStatistics(TomatoRecord.class, new QueryListener<JSONArray>() {
+
+            @Override
+            public void done(JSONArray ary, BmobException e) {
+                if (e == null) {
+                    if (ary != null) {
+                        try {
+                            JSONObject obj = ary.getJSONObject(0);
+                            int sum = obj.getInt("tomatoNum");//_(关键字)+首字母大写的列名
+                            httpCallback.onSuccess(null,sum+"");
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } else {
+                    LogTool.log(LogTool.Aaron, "returnTomatoNumData 失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+
+        });
+    }
+
+    /**
+     * 返回该用户所完成的番茄总时间
+     *
+     * @param person
+     * @return
+     */
+    public static void returnTomatoTimeData(Person person , final HttpCallback httpCallback) {
+        BmobQuery<TomatoRecord> query = new BmobQuery<TomatoRecord>();
+        query.sum(new String[]{"tomatoTime"});
+        query.findStatistics(TomatoRecord.class, new QueryListener<JSONArray>() {
+
+            @Override
+            public void done(JSONArray ary, BmobException e) {
+                if (e == null) {
+                    if (ary != null) {
+                        try {
+                            JSONObject obj = ary.getJSONObject(0);
+                            int sum = obj.getInt("tomatoTime");//_(关键字)+首字母大写的列名
+                            httpCallback.onSuccess(null,sum+"");
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } else {
+                    LogTool.log(LogTool.Aaron, "returnTomatoTimeData 失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+
+        });
+    }
+
+    /**
+     * 返回该用户所完成的番茄总时间
+     *
+     * @param person
+     * @return
+     */
+    public static void returnefficientTimeData(Person person , final HttpCallback httpCallback) {
+        BmobQuery<TomatoRecord> query = new BmobQuery<TomatoRecord>();
+        query.sum(new String[]{"efficientTime"});
+        query.findStatistics(TomatoRecord.class, new QueryListener<JSONArray>() {
+
+            @Override
+            public void done(JSONArray ary, BmobException e) {
+                if (e == null) {
+                    if (ary != null) {
+                        try {
+                            JSONObject obj = ary.getJSONObject(0);
+                            int sum = obj.getInt("efficientTime");//_(关键字)+首字母大写的列名
+                            httpCallback.onSuccess(null,sum+"");
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } else {
+                    LogTool.log(LogTool.Aaron, "returnefficientTimeData 失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+
         });
     }
 }

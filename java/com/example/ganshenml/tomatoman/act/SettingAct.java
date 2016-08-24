@@ -26,7 +26,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
 public class SettingAct extends BaseActivity {
-    private LinearLayout llCallback, logoutLl,tomatoTimerLl;
+    private LinearLayout llCallback,appVersionLl, logoutLl,tomatoTimerLl;
     private TextView appVersionTv;
     private EditText feedbackEt;
     private Button feedbackBtn;
@@ -47,6 +47,7 @@ public class SettingAct extends BaseActivity {
         appVersionTv = (TextView) findViewById(R.id.appVersionTv);
         newAppVersionIv = (ImageView) findViewById(R.id.newAppVersionIv);
         llCallback = (LinearLayout) findViewById(R.id.llCallback);
+        appVersionLl = (LinearLayout) findViewById(R.id.appVersionLl);
         logoutLl = (LinearLayout) findViewById(R.id.logoutLl);
         tomatoTimerLl = (LinearLayout) findViewById(R.id.tomatoTimerLl);
         feedbackEt = (EditText) findViewById(R.id.feedbackEt);
@@ -84,6 +85,18 @@ public class SettingAct extends BaseActivity {
                     @Override
                     public void onSuccess(Object data, String resultStr) {
                         uploadFeedbackData(resultStr);
+                    }
+                });
+            }
+        });
+
+        appVersionLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowDialogUtils.showSimpleHintDialog(SettingAct.this, "是否下载新版本？", new HttpCallback() {
+                    @Override
+                    public void onComplete(Object data) {
+                        //进行下载操作
                     }
                 });
             }

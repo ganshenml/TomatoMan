@@ -228,6 +228,21 @@ public class CommonUtils {
     }
 
     /**
+     * 根据字符串返回月份和日份格式的字符串
+     * @param timeStr
+     * @return
+     */
+    public static String returnMonthAndDayTimeStr(String timeStr) {
+        if (!StringTool.isEmpty(timeStr)) {
+            String[] tempStr = timeStr.split(" ");
+            if (tempStr[0] != null) {
+                return tempStr[0].substring(5);//从第6位开始截取（格式：2016-08-23）
+            }
+        }
+        return null;
+    }
+
+    /**
      * 将计时器的值转换为秒（int)
      *
      * @param chronometer

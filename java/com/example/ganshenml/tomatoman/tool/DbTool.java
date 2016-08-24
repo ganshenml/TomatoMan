@@ -4,10 +4,14 @@ import android.content.ContentValues;
 import android.util.Log;
 
 import com.example.ganshenml.tomatoman.bean.Extra;
+import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.bean.TomatoRecord;
 import com.example.ganshenml.tomatoman.bean.beant.ExtraT;
 import com.example.ganshenml.tomatoman.bean.beant.TomatoRecordT;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
@@ -16,6 +20,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 
 /**
  * 数据库工具类，这里后期需要加入当用户切换了的时候，那么必须清除数据库中的数据
@@ -71,7 +76,6 @@ public class DbTool {
                     if (list.size() > 0) {
                         DbTool.saveExtraData(list.get(0));
                         LogTool.log(LogTool.Aaron, "DbTool   upDataExtraData 查询到了数据并进行本地保存");
-
                     }
                 } else {
                     LogTool.log(LogTool.Aaron, "DbTool  upDataExtraData 查询Extra数据出错： " + e.toString());
@@ -122,7 +126,7 @@ public class DbTool {
      * @return
      */
     public static List<TomatoRecordT> returnWholeTomatoRecordData() {
-        return DataSupport.findAll(TomatoRecordT.class);
+        return DataSupport.order("createdAt desc").find(TomatoRecordT.class);
     }
 
     /**
@@ -156,6 +160,8 @@ public class DbTool {
         return DataSupport.where("createdAt  =  ?", "null").find(TomatoRecordT.class);
 
     }
+
+
 }
 
 

@@ -1,6 +1,7 @@
 package com.example.ganshenml.tomatoman.adapter;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,11 @@ import android.widget.TextView;
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.TomatoRecord;
 import com.example.ganshenml.tomatoman.bean.beant.TomatoRecordT;
+import com.example.ganshenml.tomatoman.tool.CommonUtils;
+import com.example.ganshenml.tomatoman.tool.StringTool;
 import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +56,7 @@ public class TomatoRecordAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             convertView = layoutInflater.inflate(R.layout.layout_item_mytomato, null);
             viewHolder.tomatoObtainLeverSv = (SimpleDraweeView) convertView.findViewById(R.id.tomatoObtainLeverSv);
+            viewHolder.taskNameTv = (TextView)convertView.findViewById(R.id.taskNameTv);
             viewHolder.dateTv = (TextView) convertView.findViewById(R.id.dateTv);
             viewHolder.weekTv = (TextView) convertView.findViewById(R.id.weekTv);
             viewHolder.myTomatoNumTv = (TextView) convertView.findViewById(R.id.myTomatoNumTv);
@@ -63,13 +69,22 @@ public class TomatoRecordAdapter extends BaseAdapter {
         TomatoRecordT tomatoRecord = tomatoRecordArrayList.get(position);
         int tomatoNumTemp = tomatoRecord.getTomatoNum();
         showTomatoObtainLeverImage(viewHolder, tomatoNumTemp);
-        viewHolder.dateTv.setText(tomatoRecord.getTaskTime());
-        viewHolder.weekTv.setText("( " + tomatoRecord.getWeek() + " )");
-        viewHolder.myTomatoNumTv.setText(tomatoNumTemp + "个");
+        String taskNameTemp = tomatoRecord.getTaskName();
+
+//        if(StringTool.isEmpty(taskNameTemp)){
+//            viewHolder.taskNameTv.setTextColor(context.getResources().getColor(R.color.dark_gray));
+//        }else {
+//        }
+        viewHolder.taskNameTv.setText(tomatoRecord.getTaskName());
+
+        viewHolder.dateTv.setText(CommonUtils.returnMonthAndDayTimeStr(tomatoRecord.getCreatedAt()));
+        viewHolder.weekTv.setText(tomatoRecord.getWeek() );
+        viewHolder.myTomatoNumTv.setText(tomatoNumTemp+"");
         return convertView;
     }
 
     class ViewHolder {
+        TextView taskNameTv;
         SimpleDraweeView tomatoObtainLeverSv;
         TextView dateTv;
         TextView weekTv;

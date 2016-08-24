@@ -22,6 +22,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+
     <application
         android:name=".base.BaseApp"
         android:allowBackup="true"
@@ -94,6 +95,8 @@
         <activity
             android:name=".act.SettingAct"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+
+
     </application>
 
 </manifest>

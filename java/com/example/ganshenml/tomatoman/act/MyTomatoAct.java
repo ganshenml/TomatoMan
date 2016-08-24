@@ -2,13 +2,22 @@ package com.example.ganshenml.tomatoman.act;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.View;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.adapter.TomatoRecordAdapter;
+import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.bean.TomatoRecord;
 import com.example.ganshenml.tomatoman.bean.beant.TomatoRecordT;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
@@ -16,6 +25,8 @@ import com.example.ganshenml.tomatoman.net.NetRequest;
 import com.example.ganshenml.tomatoman.tool.ConstantCode;
 import com.example.ganshenml.tomatoman.tool.DbTool;
 import com.example.ganshenml.tomatoman.tool.LogTool;
+import com.example.ganshenml.tomatoman.tool.SpTool;
+import com.example.ganshenml.tomatoman.tool.ThreadTool;
 import com.example.ganshenml.tomatoman.view.SimpleListView;
 
 import java.util.ArrayList;
@@ -24,10 +35,12 @@ import java.util.List;
 public class MyTomatoAct extends BaseActivity {
     private final String TAG = "MyTomatoAct";
     private Toolbar myTomatoTb;
-    private ImageView backIv;
-    private SimpleListView myTomatoRecordLv;
+    private ImageView backIv, ivMyTomato, ivMyTomato2;
+    private ListView myTomatoRecordLv;
     private TomatoRecordAdapter tomatoRecordAdapter;
     private List<TomatoRecordT> tomatoRecordArrayList;
+    private ScrollView myTomatoSv;
+    private TextView myTomatoNumTv, myTomatoTimeTv,efficiencyStrTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +57,17 @@ public class MyTomatoAct extends BaseActivity {
         myTomatoTb.setTitle("");
         setSupportActionBar(myTomatoTb);
 
+        myTomatoNumTv = (TextView) findViewById(R.id.myTomatoNumTv);
+        myTomatoTimeTv = (TextView) findViewById(R.id.myTomatoTimeTv);
+        efficiencyStrTv = (TextView) findViewById(R.id.efficiencyStrTv);
         backIv = (ImageView) findViewById(R.id.backIv);
+        ivMyTomato = (ImageView) findViewById(R.id.ivMyTomato);
+        ivMyTomato2 = (ImageView) findViewById(R.id.ivMyTomato2);
 
-        myTomatoRecordLv = (SimpleListView) findViewById(R.id.myTomatoRecordLv);
+        myTomatoRecordLv = (ListView) findViewById(R.id.myTomatoRecordLv);
+
+        //展现“超人”动画
+        showAnimations();
     }
 
     private void initDataViews() {
@@ -64,7 +85,49 @@ public class MyTomatoAct extends BaseActivity {
             LogTool.log(LogTool.Aaron, TAG + "initDataViews 判断本地没有数据，开始请求服务端数据");
         }
 
-        //将本地数据分页(20条)倒序显示出来
+        //将本地数据分页(20条)倒序显示出来++++++++++++++++++++++++++++++分页暂时未考虑
+
+
+        /**
+         * 网络请求总番茄数量
+         */
+        NetRequest.returnTomatoNumData(Person.getCurrentUser(Person.class), new HttpCallback() {
+            @Override
+            public void onSuccess(Object data, String resultStr) {
+                LogTool.log(LogTool.Aaron,"MyTomatoAct NetRequest 请求番茄数量返回成功");
+                if (resultStr != null) {
+                    LogTool.log(LogTool.Aaron,"MyTomatoAct NetRequest 请求番茄数量返回字符串为： "+resultStr);
+                    myTomatoNumTv.setText(resultStr);
+                }
+            }
+        });
+
+        /**
+         * 网络请求总番茄时间
+         */
+        NetRequest.returnTomatoTimeData(Person.getCurrentUser(Person.class), new HttpCallback() {
+            @Override
+            public void onSuccess(Object data, String resultStr) {
+                if (resultStr != null) {
+                    myTomatoTimeTv.setText(resultStr);
+                }
+            }
+        });
+
+
+        /**
+         * 网络请求总番茄高效时间
+         */
+        NetRequest.returnefficientTimeData(Person.getCurrentUser(Person.class), new HttpCallback() {
+            @Override
+            public void onSuccess(Object data, String resultStr) {
+                if (resultStr != null) {
+                    String htmlString = "<font>（小时，含 </font><font color=\"#52A5FF\">" + resultStr + "</font><font> 小时高效超人时间）</font>";
+                    efficiencyStrTv.setText(Html.fromHtml(htmlString));
+                }
+            }
+        });
+
 
     }
 
@@ -81,7 +144,7 @@ public class MyTomatoAct extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MyTomatoAct.this, TomatoCompleteAct.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("tomatoRecordT",tomatoRecordArrayList.get(position));
+                bundle.putSerializable("tomatoRecordT", tomatoRecordArrayList.get(position));
                 intent.putExtras(bundle);
                 intent.setFlags(ConstantCode.ACTIVITY_FROM_MYTOMATO_CODE);
                 startActivity(intent);
@@ -121,7 +184,7 @@ public class MyTomatoAct extends BaseActivity {
         if (t != null) {
             latestDateStr = t.getCreatedAt();
         }
-        LogTool.log(LogTool.Aaron, TAG + "requestTomatoRecordLatestDataAndSave 服务端与本地进行的比较日期是： "+ latestDateStr);
+        LogTool.log(LogTool.Aaron, TAG + "requestTomatoRecordLatestDataAndSave 服务端与本地进行的比较日期是： " + latestDateStr);
 
         NetRequest.requestTomatoRecordLatestData(latestDateStr, new HttpCallback<TomatoRecord>() {
             @Override
@@ -150,5 +213,37 @@ public class MyTomatoAct extends BaseActivity {
         if (tomatoRecordAdapter != null) {
             tomatoRecordAdapter.notifyDataSetChanged();
         }
+    }
+
+    /**
+     * 展现“超人”动画
+     */
+    private void showAnimations() {
+
+//        ivMyTomato2.setVisibility(View.VISIBLE);
+//        AnimationSet animationSet = new AnimationSet(true);
+//        ScaleAnimation scaleAnimation = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f);
+//        scaleAnimation.setDuration(1500);
+//        animationSet.addAnimation(scaleAnimation);
+//
+//        TranslateAnimation translateAnimation = new TranslateAnimation(-getResources().getDisplayMetrics().widthPixels, 0, getResources().getDisplayMetrics().heightPixels, 0);
+//        translateAnimation.setDuration(1500);
+//        animationSet.addAnimation(translateAnimation);
+//
+//        ivMyTomato2.setAnimation(animationSet);
+//
+//        ThreadTool.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                ivMyTomato2.setVisibility(View.INVISIBLE);
+//                ivMyTomato.setVisibility(View.VISIBLE);
+//            }
+//        }, 1600);
+
+        TranslateAnimation translateAnimation2 = new TranslateAnimation(0, 0, -300, 0);
+        translateAnimation2.setDuration(1000);
+        ivMyTomato.setAnimation(translateAnimation2);
+        ivMyTomato.setVisibility(View.VISIBLE);
+
     }
 }

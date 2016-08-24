@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v7.widget.Toolbar;
 import android.text.BoringLayout;
 import android.text.Html;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -31,11 +34,14 @@ import com.example.ganshenml.tomatoman.tool.ConstantCode;
 import com.example.ganshenml.tomatoman.tool.DbTool;
 import com.example.ganshenml.tomatoman.tool.ImageViewUtils;
 import com.example.ganshenml.tomatoman.tool.LogTool;
+import com.example.ganshenml.tomatoman.tool.ScreenShotTool;
 import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
 import com.example.ganshenml.tomatoman.tool.SpTool;
 import com.example.ganshenml.tomatoman.tool.ViewUtils;
 
 import org.w3c.dom.Text;
+
+import java.io.File;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
@@ -124,7 +130,7 @@ public class TomatoCompleteAct extends BaseActivity {
         rightIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplication(), "点击了右上角按钮", Toast.LENGTH_LONG).show();
+                toShareScreenShotPic();
             }
         });
 
@@ -291,4 +297,28 @@ public class TomatoCompleteAct extends BaseActivity {
         });
     }
 
+    /**
+     * 分享本页的截图
+     */
+    private void toShareScreenShotPic(){
+
+            // 获取内置SD卡路径
+            String sdCardPath = Environment.getExternalStorageDirectory().getPath();
+            // 图片文件路径
+            String filePath = sdCardPath + File.separator + "tomato_screenshot.png";
+
+            File file = new File(filePath);
+            ScreenShotTool.shoot(TomatoCompleteAct.this,file);
+
+            //由文件得到uri
+            Uri imageUri = Uri.fromFile(new File(filePath));
+            LogTool.log(LogTool.Aaron, " TomatoCompleteAct 分享的uri:" + imageUri);  //输出：file:///storage/emulated/0/test.jpg
+
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+            shareIntent.setType("image/*");
+            startActivity(Intent.createChooser(shareIntent, "分享截图到"));
+
+    }
 }

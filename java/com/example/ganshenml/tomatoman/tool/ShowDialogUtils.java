@@ -103,7 +103,6 @@ public class ShowDialogUtils {
      * @param httpCallback
      */
     public static void showSimpleHintDialog(Context packageContext, String hintStr, final HttpCallback httpCallback) {
-        LogTool.log(LogTool.Aaron, "sdf23234");
         new AlertDialog.Builder(packageContext)
                 .setMessage(hintStr)
                 .setNegativeButton("取消", null)

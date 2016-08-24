@@ -19,6 +19,7 @@ public class BaseActivity extends AppCompatActivity {
 //        initViews();
 //        initData();
 //        initDataViews();
+
     }
 
 //    protected void initViews(){}
@@ -26,4 +27,5 @@ public class BaseActivity extends AppCompatActivity {
 //    protected void initData(){}
 //
 //    protected void initDataViews(){}
+
 }

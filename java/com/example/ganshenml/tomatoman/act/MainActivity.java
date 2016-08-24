@@ -1,13 +1,9 @@
 package com.example.ganshenml.tomatoman.act;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.internal.NavigationMenuItemView;
 import android.view.KeyEvent;
@@ -143,6 +139,7 @@ public class MainActivity extends BaseActivity
             startActivityForResult(intent, StaticData.REQUEST_TO_RANK_ACT);
 
         } else if (id == R.id.nav_share) {
+            toShareApp();
 
         } else if (id == R.id.nav_setting) {
             //显示“设置”页面
@@ -326,5 +323,18 @@ public class MainActivity extends BaseActivity
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         return BitmapFactory.decodeResource(getResources(), resource, options);
+    }
+
+    /**
+     * 分享这款app（网页下载地址）
+     */
+    private void toShareApp(){
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "http://tomatoman.bmob.cn/");
+        shareIntent.setType("text/plain");
+
+        //设置分享列表的标题，并且每次都显示分享列表
+        startActivity(Intent.createChooser(shareIntent, "分享软件下载地址到"));
     }
 }
