@@ -23,7 +23,7 @@ import com.example.ganshenml.tomatoman.tool.SpTool;
 public class TimeArriveReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {//1.将数据（一个工作番茄or一个休息时间or一个高效时间）写入文件；2.finish当前activity，并跳转至下一个activity
-        Log.e("onReceive", "进入了");
+        LogTool.log(LogTool.Aaron, "TimeArriveReceiver onReceive 进入了");
 
         //从ContextManager的工具类中获取当前正在使用的Activity
         Context myContext = ContextManager.getCurrentRunningContext();
@@ -31,13 +31,15 @@ public class TimeArriveReceiver extends BroadcastReceiver {
         if (myContext instanceof TomatoCountTimeAct) {//如果是TomatoCountTimeAct
             LogTool.log(LogTool.Aaron, "TimeArriveReceiver 进入了TomatoCountTimeAct的判断逻辑");
 
-            //1.finish当前activity
-            ((TomatoCountTimeAct) myContext).finish();
-
             //2.进行下一个activity的跳转
             Intent intent1 = new Intent(myContext, TomatoTemporaryAct.class);//跳转至“中间临时页”
             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent1);
+
+            //1.finish当前activity
+            ((TomatoCountTimeAct) myContext).finish();
+            LogTool.log(LogTool.Aaron, "TimeArriveReceiver 进入了TomatoCountTimeAct的判断逻辑——执行了finish");
+
 
             //3.写数据
             //更新sp中番茄数量
@@ -47,13 +49,16 @@ public class TimeArriveReceiver extends BroadcastReceiver {
 
         } else if (myContext instanceof TomatoRestAct) {
             LogTool.log(LogTool.Aaron, "TimeArriveReceiver 进入了TomatoRestAct的判断逻辑");
-            //1.finish当前activity
-            ((TomatoRestAct) myContext).finish();
 
             //2.进行下一个activity的跳转
             Intent intent1 = new Intent(myContext, TomatoTemporaryAct.class);//跳转至“中间临时页”
             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent1.putExtra("isFromTomatoRestAct", true);
             context.startActivity(intent1);
+
+            //1.finish当前activity
+            ((TomatoRestAct) myContext).finish();
+
 
             //3.写数据
             int completeTime = intent.getIntExtra("completeTime", 0);
@@ -64,13 +69,13 @@ public class TimeArriveReceiver extends BroadcastReceiver {
         } else if (myContext instanceof TomatoEfficiencyAct) {
             LogTool.log(LogTool.Aaron, "TimeArriveReceiver 进入了TomatoEfficiencyAct的判断逻辑");
 
-            //1.finish当前activity
-            ((TomatoEfficiencyAct) myContext).finish();
-
             //2.进行下一个activity的跳转
             Intent intent1 = new Intent(myContext, TomatoTemporaryAct.class);//跳转至“中间临时页”
             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent1);
+
+            //1.finish当前activity
+            ((TomatoEfficiencyAct) myContext).finish();
 
             //3.写数据
             int completeTime = intent.getIntExtra("completeTime", 0);
@@ -80,10 +85,6 @@ public class TimeArriveReceiver extends BroadcastReceiver {
             }
         }
 
-        //获取振动的参数:如果是振动，则调用振动工具类方法
-        if (SpTool.getBoolean(StaticData.SPVIBRATEALARM, true)) {
-            CommonUtils.startVibrate(context);
-        }
 
     }
 }

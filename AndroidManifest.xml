@@ -96,7 +96,10 @@
             android:name=".act.SettingAct"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
 
-
+        <activity
+            android:name="cn.bmob.v3.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
     </application>
 
 </manifest>

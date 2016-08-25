@@ -5,7 +5,7 @@ package com.example.ganshenml.tomatoman.tool;
  * 作为一些常量的工具类，记下常量数值所代表的内容
  */
 public class ConstantCode {
-    public static final int HOMEFRAGMETN_REQUEST_CODE = 1;//表示（HomeFragment和TomatoRestAct中）开始任务计时的通知
+    public static final int HOMEFRAGMETN_REQUEST_CODE = 1;//表示（TomatoCountTime和TomatoRestAct中）开始任务计时的通知
     public static final int TOMATOTEMPORARYACT_REST_REQUEST_CODE = 2;//表示TomatoTemporary中开始休息计时的通知
     public static final int TOMATOTEMPORARYACT_EFFICIENCE_REQUEST_CODE = 3;//表示TomatoTemporary中高效领域计时的通知
 

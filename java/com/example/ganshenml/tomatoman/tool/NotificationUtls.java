@@ -9,6 +9,7 @@ import android.support.v7.app.NotificationCompat;
 import android.widget.RemoteViews;
 
 import com.example.ganshenml.tomatoman.R;
+import com.example.ganshenml.tomatoman.callback.HttpCallback;
 
 /**
  * Created by ganshenml on 2016/4/19.
@@ -38,23 +39,32 @@ public class NotificationUtls {
         notificationManager.cancel(REQUEST_CODE);
     }
 
-   static RemoteViews getRemoteViews(Context activity , int layoutId) {
+    /**
+     * 取消所有活动的Notification
+     */
+    public static void cancelAllNotification(Context activity){
+        NotificationManager notificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+    }
+
+   public static RemoteViews getRemoteViews(Context activity , int layoutId) {
         RemoteViews remoteViews = new RemoteViews(activity.getPackageName(),
                 layoutId);
 
        //根据传过来的不同layoutId来加载不同的显示样式
        switch (layoutId){
            case R.layout.notification_layout:
-               remoteViews.setTextViewText(R.id.tvNotiTaskName, "这是工作中的内容");//设置通知中的内容
+               remoteViews.setViewPadding(R.id.notificationLl,0,8,0,8);
                remoteViews.setChronometer(R.id.chronometerCount, SystemClock.elapsedRealtime
                        (), null, true);//设置通知中的默认显示时间
                break;
            case R.layout.notification_rest_layout:
+               remoteViews.setViewPadding(R.id.notificationRestLl,0,8,0,8);
                remoteViews.setChronometer(R.id.chronometerCount_rest, SystemClock.elapsedRealtime
                        (), null, true);//设置通知中的默认显示时间
                break;
            case R.layout.notification_efficiency_layout:
-               remoteViews.setTextViewText(R.id.tvNotiTaskName_efficiency, "这是高效工作中的内容");//设置通知中的内容
+               remoteViews.setViewPadding(R.id.notificationEfficiencyLl,0,8,0,8);
                remoteViews.setChronometer(R.id.chronometerCount_efficiency, SystemClock.elapsedRealtime
                        (), null, true);//设置通知中的默认显示时间
                break;

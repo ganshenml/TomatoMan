@@ -15,6 +15,7 @@ import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.service.CountTimeNumService;
 import com.example.ganshenml.tomatoman.tool.ConstantCode;
 import com.example.ganshenml.tomatoman.tool.ContextManager;
+import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.NotificationUtls;
 import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
 import com.example.ganshenml.tomatoman.tool.SpTool;
@@ -30,13 +31,14 @@ public class TomatoCountTimeAct extends BaseActivity {
     private int countTimeNum = 0;
     private Toolbar tbToolbar_public;
     private TextView tvTitle_public;
-//    private SharedPreferences sharedPreferences;
+    //    private SharedPreferences sharedPreferences;
 //    private SharedPreferences.Editor editor;
     private int countTimeGoal = 0;//目标计时时间,从sharedPreference中获取
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogTool.log(LogTool.Aaron, " TomatoCountTimeAct onCreate方法执行了");
         setContentView(R.layout.activity_tomato_count_time);
 
         initViews();
@@ -44,24 +46,30 @@ public class TomatoCountTimeAct extends BaseActivity {
         //初始化计时的数据(从sharedPreference中获取)
         initData();
 
+        if (serviceConnection != null) {
+            serviceConnection = null;
+        }
         //通过Binder的方式来获得CountTimeNumService的对象(myBinder)
         serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 myBinder = (CountTimeNumService.MyBinder) service;
 //                myBinder.getService().setCountTimeGoal(countTimeGoal * 60);//将从sharedPreference中获取的设定时间传给service
-                myBinder.getService().setCountTimeGoal((int)(0.1 * 60));//先将数据设定为0.1分钟方便测试
+                myBinder.getService().setCountTimeGoal((int) (0.1 * 60));//先将数据设定为0.1分钟方便测试
             }
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
+                LogTool.log(LogTool.Aaron," TomatoCountTimeAct Service 异常停止");
             }
+
         };
 
         //指定service在后台继续计算时间
         myIntent = new Intent(TomatoCountTimeAct.this, CountTimeNumService.class);
         myIntent.putExtra("countTimeGoal", countTimeGoal);
         bindService(myIntent, serviceConnection, BIND_AUTO_CREATE);
+        LogTool.log(LogTool.Aaron," TomatoCountTimeAct bindService 执行了");
 
         //将该activity加入至ContextManager的List中进行管理
         ContextManager.addContext(this);
@@ -95,22 +103,23 @@ public class TomatoCountTimeAct extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        if (tomatoCountSurfaceView.countThread != null) {//赋值线程为null，等待gc回收
-            if(tomatoCountSurfaceView.countThread!=null){
-                tomatoCountSurfaceView.countThread.isStop = true;
-            }
-            tomatoCountSurfaceView.countThread = null;
-        }
+        LogTool.log(LogTool.Aaron,"TomatoCountTimeAct onDestroy 执行了");
 
         //停止Service
         stopMyService();
+
+        if (tomatoCountSurfaceView.countThread != null) {//赋值线程为null，等待gc回收
+            tomatoCountSurfaceView.countThread.isStop = true;
+            tomatoCountSurfaceView.countThread.interrupt();
+            tomatoCountSurfaceView.countThread = null;
+        }
 
         //取消掉notification的显示
         NotificationUtls.cancelNotification(this, ConstantCode.HOMEFRAGMETN_REQUEST_CODE);
 
         //将该activity从ContextManager的List中进行移除
         ContextManager.removeContext(this);
+        super.onDestroy();
     }
 
 
@@ -149,9 +158,9 @@ public class TomatoCountTimeAct extends BaseActivity {
         tomatoCountSurfaceView.setDivisionNum((float) (360 / (0.1 * 60)));//测试期间先默认为0.1分钟
 
         //实例化binder对象
-        countTimeNumService = new CountTimeNumService();
+//        countTimeNumService = new CountTimeNumService();
 //        countTimeNumService.setCountTimeGoal(countTimeGoal * 60);
-        countTimeNumService.setCountTimeGoal((int) (0.1 * 60));//测试期间先默认为0.1分钟
+//        countTimeNumService.setCountTimeGoal((int) (0.1 * 60));//测试期间先默认为0.1分钟
 
     }
 
@@ -160,8 +169,11 @@ public class TomatoCountTimeAct extends BaseActivity {
     private void stopMyService() {
         if (serviceConnection != null) {
             myBinder.getService().setStopFlag(true);
+            myBinder.getService().setCountTimeNumThread(null);
             unbindService(serviceConnection);
             stopService(myIntent);
+            LogTool.log(LogTool.Aaron,"TomatoCountTimeAct service 停止操作执行了");
+
         }
     }
 }

@@ -2,14 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3CB371"
+    android:background="@color/lighter_green"
+    android:id="@+id/notificationRestLl"
     android:orientation="horizontal">
 
     <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="@dimen/to_leftscreen_horizontal_margin"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/tomato" />
+        android:src="@mipmap/rest_icon" />
 
     <LinearLayout
         android:layout_width="0dp"

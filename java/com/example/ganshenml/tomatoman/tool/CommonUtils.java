@@ -1,5 +1,6 @@
 package com.example.ganshenml.tomatoman.tool;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -42,7 +43,6 @@ public class CommonUtils {
         vibrator.vibrate(patterns, -1);//不重复，仅一次
     }
 
-    //计时任务自动完成时的振动方法
     public static void startStampVibrator(Context context) {
         final Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         ThreadTool.runOnNewThread(new Runnable() {
@@ -271,4 +271,33 @@ public class CommonUtils {
         }
         return false;
     }
+
+    /**
+     * 停止服务（如果该服务正在运行）
+     * @param mContext
+     * @param className
+     * @return
+     */
+    public static boolean isServiceRunningAndStop(Context mContext,String className) {
+
+        ActivityManager activityManager = (ActivityManager)
+                mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> serviceList
+                = activityManager.getRunningServices(30);
+
+        if (!(serviceList.size()>0)) {
+            return false;
+        }
+
+        for (int i=0; i<serviceList.size(); i++) {
+            if (serviceList.get(i).service.getClassName().equals(className) == true) {
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
 }

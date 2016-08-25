@@ -17,11 +17,15 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.ganshenml.tomatoman.R;
+import com.example.ganshenml.tomatoman.bean.data.StaticData;
 import com.example.ganshenml.tomatoman.service.CountTimeNumService;
+import com.example.ganshenml.tomatoman.tool.CommonUtils;
 import com.example.ganshenml.tomatoman.tool.ConstantCode;
 import com.example.ganshenml.tomatoman.tool.ContextManager;
+import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.NotificationUtls;
 import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
+import com.example.ganshenml.tomatoman.tool.SpTool;
 import com.example.ganshenml.tomatoman.tool.ViewUtils;
 import com.example.ganshenml.tomatoman.view.TomatoCountSurfaceView;
 
@@ -42,6 +46,7 @@ public class TomatoRestAct extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tomato_rest);
+        LogTool.log(LogTool.Aaron, "TomatoRestAct onCreate方法调用了");
 
         initViews();
 
@@ -49,6 +54,9 @@ public class TomatoRestAct extends BaseActivity {
         initData();
 
 
+        if (serviceConnection != null) {
+            serviceConnection = null;
+        }
         //通过Binder的方式来获得CountTimeNumService的对象(myBinder)
         serviceConnection = new ServiceConnection() {
             @Override
@@ -60,14 +68,16 @@ public class TomatoRestAct extends BaseActivity {
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
-                Log.e("Service", "异常停止");
+                LogTool.log(LogTool.Aaron, "TomatoRestAct Service 异常停止");
             }
         };
 
+        LogTool.log(LogTool.Aaron, "TomatoRestAct 开始初始化计时用的Service");
         //指定service在后台继续计算时间
         myIntent = new Intent(TomatoRestAct.this, CountTimeNumService.class);
         myIntent.putExtra("countTimeGoal", countTimeGoal);
         bindService(myIntent, serviceConnection, BIND_AUTO_CREATE);
+        LogTool.log(LogTool.Aaron, "TomatoRestAct bindService 执行了");
 
         //将该activity加入至ContextManager的List中进行管理
         ContextManager.addContext(this);
@@ -116,19 +126,23 @@ public class TomatoRestAct extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        if (tomatoCountSurfaceView.countThread != null) {//赋值线程为null，等待gc回收
-            tomatoCountSurfaceView.countThread = null;
-        }
-
+        LogTool.log(LogTool.Aaron,"TomatoRestAct onDestroy 执行了");
         //停止Service
         stopMyService();
+
+        if (tomatoCountSurfaceView.countThread != null) {//赋值线程为null，等待gc回收
+            tomatoCountSurfaceView.countThread.isStop = true;
+            tomatoCountSurfaceView.countThread.interrupt();
+            tomatoCountSurfaceView.countThread = null;
+        }
 
         //取消掉通知显示
         NotificationUtls.cancelNotification(this, ConstantCode.TOMATOTEMPORARYACT_REST_REQUEST_CODE);
 
         //将该activity从ContextManager的List中进行移除
         ContextManager.removeContext(this);
+
+        super.onDestroy();
     }
 
 
@@ -163,24 +177,26 @@ public class TomatoRestAct extends BaseActivity {
         countTimeGoal = sharedPreferences.getInt("shorRestTime", 5);//如果是还未创建sharedPreference，则默认值为25
 
         //设置surfaceView的颜色
-        tomatoCountSurfaceView.setColor("#009900","#99FF99","#E4E4E4","#99FF99");
+        tomatoCountSurfaceView.setColor("#009900", "#99FF99", "#E4E4E4", "#99FF99");
 
         //为SurfaceView设置每秒画多少度
 //        tomatoCountSurfaceView.setDivisionNum((float) (360 / (countTimeGoal * 60)));
         tomatoCountSurfaceView.setDivisionNum((float) (360 / (0.1 * 60)));//测试期间先默认为0.1分钟
 
         //实例化binder对象
-        countTimeNumService = new CountTimeNumService();
+//        countTimeNumService = new CountTimeNumService();
 //        countTimeNumService.setCountTimeGoal(countTimeGoal * 60);
-        countTimeNumService.setCountTimeGoal((int) (0.1 * 60));//测试期间先默认为0.1分钟
+//        countTimeNumService.setCountTimeGoal((int) (0.1 * 60));//测试期间先默认为0.1分钟
     }
 
     //停止运行Service
     private void stopMyService() {
         if (serviceConnection != null) {
             myBinder.getService().setStopFlag(true);
+            myBinder.getService().setCountTimeNumThread(null);
             unbindService(serviceConnection);
             stopService(myIntent);
+            LogTool.log(LogTool.Aaron,"TomatoRestAct service 停止操作执行了");
         }
     }
 

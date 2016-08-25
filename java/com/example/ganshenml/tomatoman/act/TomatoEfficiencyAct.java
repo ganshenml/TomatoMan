@@ -101,6 +101,7 @@ public class TomatoEfficiencyAct extends BaseActivity {
 
         //3.跳转至“番茄计时完成页”
         Intent intent = new Intent(TomatoEfficiencyAct.this, TomatoTemporaryAct.class);
+        intent.putExtra("isFromTomatoEfficiencyAct",true);
 
         //保存时间数据并进入下一页面
         int minutesTemp = CommonUtils.parseChronometerToSeconds(timer) / 60;

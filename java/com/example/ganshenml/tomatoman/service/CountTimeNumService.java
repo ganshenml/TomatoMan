@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.ganshenml.tomatoman.receiver.TimeArriveReceiver;
+import com.example.ganshenml.tomatoman.tool.LogTool;
 
 /**
  * Created by ganshenml on 2016/4/13.
@@ -34,11 +35,11 @@ public class CountTimeNumService extends Service {
 
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         countTimeGoal = intent.getIntExtra("countTimeGoal", 0);
         countTimeNumThread = new CountTimeNumThread();
+        LogTool.log(LogTool.Aaron,"计时的服务线程启动了");
         countTimeNumThread.start();
         return myBinder;
     }
@@ -64,7 +65,7 @@ public class CountTimeNumService extends Service {
                     } else {//到达目标计时时间则停止计时，并发送计时完成的广播给broadcastReceiver
                         stopFlag = true;
                         Intent intent = new Intent(CountTimeNumService.this, TimeArriveReceiver.class);
-                        Log.e("计时完成","哈哈");
+                        LogTool.log(LogTool.Aaron,"计时完成了");
                         intent.putExtra("completeTime", countTimeNum);
                         sendBroadcast(intent);
                     }
@@ -99,5 +100,10 @@ public class CountTimeNumService extends Service {
 
     public void setCountTimeGoal(int countTimeGoal) {
         this.countTimeGoal = countTimeGoal;
+    }
+
+
+    public void setCountTimeNumThread(CountTimeNumThread countTimeNumThread) {
+        this.countTimeNumThread = countTimeNumThread;
     }
 }

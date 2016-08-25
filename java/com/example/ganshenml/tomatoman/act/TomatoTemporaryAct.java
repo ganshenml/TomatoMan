@@ -1,7 +1,10 @@
 package com.example.ganshenml.tomatoman.act;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,21 +19,21 @@ import android.widget.TextView;
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.data.StaticData;
 import com.example.ganshenml.tomatoman.tool.ConstantCode;
+import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.NotificationUtls;
 import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
 import com.example.ganshenml.tomatoman.tool.SpTool;
 import com.example.ganshenml.tomatoman.tool.ViewUtils;
-import com.example.ganshenml.tomatoman.view.CompleteTaskCircleView;
-import com.example.ganshenml.tomatoman.view.StartRestCircleView;
 
 /*
 作为完成一个番茄事件后的临时状态：可以选择“开始休息”、“完成任务”、“进入高效时间领域”
  */
 public class TomatoTemporaryAct extends BaseActivity {
-    private Button startRestBtn,completeTaskBtn,efficiencyZoneBtn;
+    private Button startRestBtn, completeTaskBtn, efficiencyZoneBtn;
     private Toolbar tbToolbar_public;
     private TextView tvTitle_public;
     private LinearLayout obtainedTomatoLl;
+    private Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class TomatoTemporaryAct extends BaseActivity {
         setContentView(R.layout.activity_tomato_temporary);
 
         initViews();
+        initDataViews();
         listenerMethod();
     }
 
@@ -61,10 +65,21 @@ public class TomatoTemporaryAct extends BaseActivity {
         startRestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TomatoTemporaryAct.this, TomatoRestAct.class);
-                NotificationUtls.sendNotification(TomatoTemporaryAct.this, ConstantCode.TOMATOTEMPORARYACT_REST_REQUEST_CODE, intent, R.layout.notification_rest_layout);//调用自定义工具类方法发送notification
-                finish();
-                startActivity(intent);
+
+                Intent intent1 = getIntent();
+                if (intent1.getBooleanExtra("isFromTomatoRestAct", false)) {    //如果是从休息页面跳转过来，则页面的样式要变换
+                    LogTool.log(LogTool.Aaron, "TomatoTemporary 从TomatoRestAct页面计时完成跳转而来，点击了——继续工作");
+                    Intent intent = new Intent(TomatoTemporaryAct.this, TomatoCountTimeAct.class);
+                    NotificationUtls.sendNotification(TomatoTemporaryAct.this, ConstantCode.HOMEFRAGMETN_REQUEST_CODE, intent, R.layout.notification_layout);//调用自定义工具类方法发送notification
+                    finish();
+                    startActivity(intent);
+                } else {
+                    LogTool.log(LogTool.Aaron, "TomatoTemporary 从TomatoCountTime页面计时完成跳转而来，点击了——开始休息");
+                    Intent intent = new Intent(TomatoTemporaryAct.this, TomatoRestAct.class);
+                    NotificationUtls.sendNotification(TomatoTemporaryAct.this, ConstantCode.TOMATOTEMPORARYACT_REST_REQUEST_CODE, intent, R.layout.notification_rest_layout);//调用自定义工具类方法发送notification
+                    finish();
+                    startActivity(intent);
+                }
             }
         });
 
@@ -91,7 +106,7 @@ public class TomatoTemporaryAct extends BaseActivity {
     }
 
     private void initViews() {
-        obtainedTomatoLl = (LinearLayout)findViewById(R.id.obtainedTomatoLl);
+        obtainedTomatoLl = (LinearLayout) findViewById(R.id.obtainedTomatoLl);
         startRestBtn = (Button) findViewById(R.id.startRestBtn);
         completeTaskBtn = (Button) findViewById(R.id.completeTaskBtn);
         efficiencyZoneBtn = (Button) findViewById(R.id.efficiencyZoneBtn);
@@ -101,28 +116,63 @@ public class TomatoTemporaryAct extends BaseActivity {
         setSupportActionBar(tbToolbar_public);
         getSupportActionBar().setDisplayShowTitleEnabled(false);//不显示默认的标题
 
-        ViewUtils.setToolbar(TomatoTemporaryAct.this,tbToolbar_public,tvTitle_public);//使用自定义的工具类方法设置toolbar的样式
+        ViewUtils.setToolbar(TomatoTemporaryAct.this, tbToolbar_public, tvTitle_public);//使用自定义的工具类方法设置toolbar的样式
 
+    }
+
+    private void initDataViews() {
+        NotificationUtls.cancelAllNotification(this);//取消所有通知
+
+
+        //获取振动的参数:如果是振动，则调用振动工具类方法
+        if (!getIntent().getBooleanExtra("isFromTomatoEfficiencyAct", false)) {//如果不是从高效页面跳转过来，则需要振动提醒
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (SpTool.getBoolean(StaticData.SPVIBRATEALARM, true)) {
+                long[] patterns = new long[]{0, 1000, 2000, 1000, 2000, 1000};
+                vibrator.vibrate(patterns, -1);//不重复，仅一次
+            }
+        }
+
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra("isFromTomatoRestAct", false)) {    //如果是从休息页面跳转过来，则页面的样式要变换
+            startRestBtn.setText("继续任务");
+            startRestBtn.setTextColor(getResources().getColor(R.color.grass_blue));
+            startRestBtn.setBackgroundResource(R.drawable.grass_blue_stroke_button_style);
+
+            Drawable nav_up = getResources().getDrawable(R.mipmap.arrow_grass_blue);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            startRestBtn.setCompoundDrawables(null, null, nav_up, null);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        //释放vibrator（用户点击按钮进入下一次，若此时仍然引用vibrator，则该activity此时未被完全释放会影响程序逻辑）
+        if (vibrator != null) {
+            vibrator.cancel();
+            vibrator = null;
+        }
+        super.onDestroy();
     }
 
     /**
      * 显示已经获得的番茄样式（如果有）
      */
-    private void showObtainedTomatoViews(){
-        int obtainedTomatoNum = SpTool.getInt(StaticData.SPTOMATOCOMPLETENUM,0);
-        if(obtainedTomatoNum>0){
+    private void showObtainedTomatoViews() {
+        int obtainedTomatoNum = SpTool.getInt(StaticData.SPTOMATOCOMPLETENUM, 0);
+        if (obtainedTomatoNum > 0) {
             obtainedTomatoLl.setVisibility(View.VISIBLE);
             for (int i = 0; i < obtainedTomatoNum; i++) {
                 ImageView imageView = new ImageView(TomatoTemporaryAct.this);
-                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(90,90);
+                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(90, 90);
                 imageView.setLayoutParams(layoutParams);
-                imageView.setPadding(10,10,10,10);
+                imageView.setPadding(10, 10, 10, 10);
                 imageView.setImageResource(R.mipmap.tomato_red);
                 obtainedTomatoLl.addView(imageView);
             }
 
             //透明度变化的动画
-            AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f,1.0f);
+            AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
             alphaAnimation.setDuration(3000);
             alphaAnimation.setRepeatCount(Animation.INFINITE);
             obtainedTomatoLl.startAnimation(alphaAnimation);

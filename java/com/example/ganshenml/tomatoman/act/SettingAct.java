@@ -24,6 +24,7 @@ import com.example.ganshenml.tomatoman.view.WebProgress;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.update.BmobUpdateAgent;
 
 public class SettingAct extends BaseActivity {
     private LinearLayout llCallback,appVersionLl, logoutLl,tomatoTimerLl;
@@ -56,7 +57,9 @@ public class SettingAct extends BaseActivity {
     }
 
     private void initDataViews() {
-        LogTool.log(LogTool.Aaron, " settingFragment initDataViews 进入了");
+//        BmobUpdateAgent.initAppVersion();//初始化appVersion表
+        BmobUpdateAgent.update(this);//自动更新弹窗（WiFi网络下）
+
         String appVersionStr = CommonUtils.getCurrentAppVersion(this);
         appVersionTv.setText(getResources().getText(R.string.app_version) + " " + appVersionStr);
 
@@ -93,12 +96,14 @@ public class SettingAct extends BaseActivity {
         appVersionLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowDialogUtils.showSimpleHintDialog(SettingAct.this, "是否下载新版本？", new HttpCallback() {
-                    @Override
-                    public void onComplete(Object data) {
-                        //进行下载操作
-                    }
-                });
+//                ShowDialogUtils.showSimpleHintDialog(SettingAct.this, "是否下载新版本？", new HttpCallback() {
+//                    @Override
+//                    public void onComplete(Object data) {
+//                        //进行下载操作
+//                    }
+//                });
+
+                BmobUpdateAgent.forceUpdate(SettingAct.this);//检查更新（如果有可以更新，则弹窗提示更新）
             }
         });
 
