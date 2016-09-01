@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
+
 /**
  * Created by cyan on 15/9/21.
  * 线程工具类
@@ -18,12 +19,12 @@ public final class ThreadTool {
     private static BgThread bgThread;
 
     static {
-        bgThread =new BgThread();
+        bgThread = new BgThread();
         bgThread.start();
     }
 
-    public static void runOnBgThread(final Runnable action){
-        Handler handler =new Handler(bgThread.looper){
+    public static void runOnBgThread(final Runnable action) {
+        Handler handler = new Handler(bgThread.looper) {
             @Override
             public void handleMessage(Message msg) {
                 action.run();
@@ -33,10 +34,10 @@ public final class ThreadTool {
     }
 
     public static void runOnUiThread(Runnable action) {
-        if(Thread.currentThread().getId()!=0) {
+        if (Thread.currentThread().getId() != 0) {
             Handler handler = new UiHandler(action);
             handler.sendEmptyMessage(0);
-        }else{
+        } else {
             action.run();
         }
     }
@@ -65,17 +66,19 @@ public final class ThreadTool {
         }).start();
     }
 
-    public static void showCurThreadInfo(){
-        Thread cur= Thread.currentThread();
+    public static void showCurThreadInfo() {
+        Thread cur = Thread.currentThread();
         Log.d("thread", "当前线程,serverId:" + cur.getId() + " name:" + cur.getName());
     }
 
     static class BgThread extends Thread {
 
-        BgThread(){
+        BgThread() {
             super("cyan-bg-thread");
         }
+
         Looper looper;
+
         @Override
         public void run() {
             Looper.prepare();

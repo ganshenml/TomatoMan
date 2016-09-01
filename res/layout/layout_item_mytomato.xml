@@ -73,7 +73,7 @@
             android:id="@+id/myTomatoNumTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/to_item_vertical_margin"
+            android:paddingLeft="@dimen/to_item_vertical_margin"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:text="0"

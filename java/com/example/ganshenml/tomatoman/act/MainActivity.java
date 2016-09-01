@@ -2,8 +2,10 @@ package com.example.ganshenml.tomatoman.act;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.internal.NavigationMenuItemView;
 import android.view.KeyEvent;
@@ -15,6 +17,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.view.animation.AnimationSet;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,20 +30,33 @@ import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.Person;
+import com.example.ganshenml.tomatoman.bean.data.PushMessage;
 import com.example.ganshenml.tomatoman.bean.data.StaticData;
+import com.example.ganshenml.tomatoman.callback.HttpCallback;
+import com.example.ganshenml.tomatoman.net.NetRequest;
+import com.example.ganshenml.tomatoman.receiver.MyPushMessageReceiver;
+import com.example.ganshenml.tomatoman.tool.BmobTool;
 import com.example.ganshenml.tomatoman.tool.CommonUtils;
 import com.example.ganshenml.tomatoman.tool.ConstantCode;
+import com.example.ganshenml.tomatoman.tool.ContextManager;
 import com.example.ganshenml.tomatoman.tool.DbTool;
 import com.example.ganshenml.tomatoman.tool.GBlurPic;
 import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.NotificationUtls;
+import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
 import com.example.ganshenml.tomatoman.tool.SpTool;
 import com.example.ganshenml.tomatoman.tool.StringTool;
+import com.example.ganshenml.tomatoman.tool.ThreadTool;
 import com.example.ganshenml.tomatoman.tool.ToActivityPage;
 import com.example.ganshenml.tomatoman.view.ClearEditTextView;
 import com.example.ganshenml.tomatoman.view.StartCountTimeCircleView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.util.List;
+
+import cn.bmob.push.BmobPush;
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobUser;
 
 public class MainActivity extends BaseActivity
@@ -47,7 +67,7 @@ public class MainActivity extends BaseActivity
 
     private StartCountTimeCircleView startCountTimeCircleViewId;
     private ClearEditTextView etTaskName;
-    private LinearLayout llHomeFragment, LLNavHeader,redPointLl;//红点提示（3）
+    private LinearLayout llHomeFragment, LLNavHeader, redPointLl;//红点提示（3）
 
     private DrawerLayout drawer;
     private Toolbar tbHome;
@@ -64,15 +84,23 @@ public class MainActivity extends BaseActivity
     private Bitmap mBitmapIn;
     private Bitmap mBitmapOut;
 
+    private String latestCreatedAtStr;//最新消息的创建时间
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        BmobInstallation.getCurrentInstallation().save();
+//        // 启动推送服务
+//        BmobPush.startWork(MainActivity.this);
+
         initViews();
         initData();
         initDataViews();
         initListeners();
 
+        ContextManager.addContext(this);
         //重置之前的完成的番茄个数和高效时间
         CommonUtils.resetSpData();
     }
@@ -81,9 +109,40 @@ public class MainActivity extends BaseActivity
     protected void onStart() {
         super.onStart();
         //如果网络顺畅，则将本地未上传的TomatoRecordT数据进行上传，返回成功后并更新本地数据的objectId和createdAt字段
-        if(true){//先假定网络顺畅
-            CommonUtils.uploadRestTomatoRecordTData();
+        if (CommonUtils.judgeNetWork(this)) {//先假定网络顺畅
+            ThreadTool.runOnNewThread(new Runnable() {
+                @Override
+                public void run() {
+                    CommonUtils.uploadRestTomatoRecordTData(null);
+                }
+            });
+
+            //更新通知消息（对比后确定是否显示通知样式）
+            final String timeStr = SpTool.getString(StaticData.SPPUSHMESSAGE, "");
+            NetRequest.returnLatestMessage(new HttpCallback<PushMessage>() {
+                @Override
+                public void onSuccess(List<PushMessage> data) {
+                    super.onSuccess(data);
+                    if (StringTool.hasData(data)) {
+                        PushMessage pushMessageTemp = data.get(0);
+                        LogTool.log(LogTool.Aaron,"请求消息通知结果内容为： "+pushMessageTemp.getContent());
+
+                        latestCreatedAtStr = pushMessageTemp.getCreatedAt();
+                        if (pushMessageTemp.getUsing() && (StringTool.isEmpty(latestCreatedAtStr) ||
+                                (latestCreatedAtStr.compareToIgnoreCase(timeStr) > 0
+                                        && latestCreatedAtStr.compareToIgnoreCase(CommonUtils.getCurrentDataAndTime()) > 0))) {//如果当前消息状态为正常，截止时间为空或者不为空时大于当前时间和本地保存的上一次已查看消息对应的创建时间
+                            if (CommonUtils.getCurrentDataAndTime().compareToIgnoreCase(pushMessageTemp.getPushTime()) >= 0)//如果当前事件等于或超过发布时间
+//                            SpTool.putString(StaticData.SPPUSHMESSAGE,latestCreatedAtStr);
+                                showPutMessage(data.get(0));
+                        }
+                    }else {
+                        LogTool.log(LogTool.Aaron,"请求消息通知结果为空");
+                    }
+                }
+            });
         }
+
+        showPersonInfoView();
     }
 
     @Override
@@ -227,27 +286,15 @@ public class MainActivity extends BaseActivity
     }
 
 
-//    @TargetApi(Build.VERSION_CODES.M)
+    //    @TargetApi(Build.VERSION_CODES.M)
     private void initDataViews() {
+
         //是否有新版本——>有（红点提示）
-        if(CommonUtils.isHasNewVersion(MainActivity.this)){
+        if (CommonUtils.isHasNewVersion(MainActivity.this)) {
             redPointLl.setVisibility(View.VISIBLE);
         }
-        //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
-        Person person = BmobUser.getCurrentUser(Person.class);
-        if (person == null) {
-            ToActivityPage.turnToSimpleAct(MainActivity.this, LoginAct.class);
-            finish();
-            return;
-        }
-        usernameTv.setText(person.getUsername());
-        tvUserIntroduction.setText(person.getIntroduction());
-        String picUrlTemp = person.getImageId();
-        if (!StringTool.isEmpty(picUrlTemp)) {
-            LogTool.log(LogTool.Aaron, "本地用图片不为空");
-            user_log.setImageURI(picUrlTemp);
-        }
 
+        showPersonInfoView();//展示用户头像、名称、简介等信息
     }
 
     private void initListeners() {
@@ -256,6 +303,18 @@ public class MainActivity extends BaseActivity
         user_log.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                if(Person.getCurrentUser() == null){
+//                    ShowDialogUtils.showSimpleHintDialog(MainActivity.this, "登录后才能查看个人主页，去登录？", new HttpCallback() {
+//                        @Override
+//                        public void onComplete(Object data) {
+//                            super.onComplete(data);
+//                            ToActivityPage.turnToSimpleAct(MainActivity.this,LoginAct.class);
+//                            finish();
+//                        }
+//                    });
+//                    return;
+//                }
+
                 Intent intent = new Intent(MainActivity.this, UserHomePageAct.class);//跳转至用户个人主页
                 startActivity(intent);
             }
@@ -266,8 +325,8 @@ public class MainActivity extends BaseActivity
             public void onClick(View v) {//1.样式变换；2.notification开启；3.finish当前activity；4.跳转至下一个activity并传递数据
                 //保存任务名称至sp
                 String taskNameStr = etTaskName.getText().toString();
-                LogTool.log(LogTool.Aaron,"MainActivity initListeners 任务名称是： "+taskNameStr);
-                SpTool.putString(StaticData.SPTASKNAME,taskNameStr == null ?"":taskNameStr);
+                LogTool.log(LogTool.Aaron, "MainActivity initListeners 任务名称是： " + taskNameStr);
+                SpTool.putString(StaticData.SPTASKNAME, taskNameStr == null ? "" : taskNameStr);
 
                 //1.样式：设置背景alpha变化以下
                 v.setAlpha(0.5f);
@@ -316,6 +375,7 @@ public class MainActivity extends BaseActivity
 
     /**
      * 构造Bitmap对象
+     *
      * @param resource
      * @return
      */
@@ -328,7 +388,7 @@ public class MainActivity extends BaseActivity
     /**
      * 分享这款app（网页下载地址）
      */
-    private void toShareApp(){
+    private void toShareApp() {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_TEXT, "http://tomatoman.bmob.cn/");
@@ -336,5 +396,56 @@ public class MainActivity extends BaseActivity
 
         //设置分享列表的标题，并且每次都显示分享列表
         startActivity(Intent.createChooser(shareIntent, "分享软件下载地址到"));
+    }
+
+    /**
+     * 显示推送消息的样式
+     *
+     * @param pushMessage
+     */
+    private void showPutMessage(PushMessage pushMessage) {
+        TextView textView = new TextView(this);
+        textView.setText(pushMessage.getContent());
+        textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        textView.setBackgroundColor(getResources().getColor(R.color.custom_blue));
+        textView.setTextColor(Color.WHITE);
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) textView.getLayoutParams();
+        lp.setMargins(0, 0, 0, 150);
+        textView.setLayoutParams(lp);
+
+        llHomeFragment.addView(textView);
+
+        AnimationSet animationSet = new AnimationSet(true);
+        ScaleAnimation scaleAnimation = new ScaleAnimation(0.6f, 1.0f, 0.6f, 1.0f);
+        scaleAnimation.setDuration(1500);
+        scaleAnimation.setInterpolator(new LinearInterpolator());
+        animationSet.addAnimation(scaleAnimation);
+
+        TranslateAnimation translateAnimation = new TranslateAnimation(0,0,300,0);
+        translateAnimation.setDuration(1500);
+        translateAnimation.setInterpolator(new LinearInterpolator());
+        animationSet.addAnimation(translateAnimation);
+
+        textView.startAnimation(animationSet);
+    }
+
+    /**
+     * 展示用户头像、名称、简介等信息
+     */
+    private void showPersonInfoView(){
+        //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
+        Person person = BmobUser.getCurrentUser(Person.class);
+        if (person == null) {
+            ToActivityPage.turnToSimpleAct(MainActivity.this, LoginAct.class);
+            finish();
+            return;
+        }
+        usernameTv.setText(person.getUsername());
+        tvUserIntroduction.setText(person.getIntroduction());
+        String picUrlTemp = person.getImageId();
+        if (!StringTool.isEmpty(picUrlTemp)) {
+            LogTool.log(LogTool.Aaron, "本地用图片不为空");
+            user_log.setImageURI(picUrlTemp);
+        }
     }
 }

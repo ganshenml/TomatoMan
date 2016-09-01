@@ -7,6 +7,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +28,8 @@ import cn.bmob.v3.listener.SaveListener;
 
 public class RegisterAct extends BaseActivity {
     private final String TAG = "RegisterAct";
-    private RelativeLayout rlLogin;
+    private LinearLayout rlLogin;
+    private ImageView backIv;
     private TextView tvVerifyWarn;
     private ClearEditTextView ctUsername;
     private ClearEditTextView ctPassword;
@@ -45,7 +48,8 @@ public class RegisterAct extends BaseActivity {
 
     //--------------------------------------------------------------以下为自定义方法-----------------------------------------------
     private void initViews() {
-        rlLogin = (RelativeLayout) findViewById(R.id.rlLogin);
+        rlLogin = (LinearLayout) findViewById(R.id.rlLogin);
+        backIv = (ImageView)findViewById(R.id.backIv);
         ctUsername = (ClearEditTextView) findViewById(R.id.ctUsername);
         ctPassword = (ClearEditTextView) findViewById(R.id.ctPassword);
         ctVerifyPassword = (ClearEditTextView) findViewById(R.id.ctVerifyPassword);
@@ -55,6 +59,13 @@ public class RegisterAct extends BaseActivity {
     }
 
     private void listenerMethod() {
+
+        backIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         //注册按钮：注册事件
         btnRegister.setOnClickListener(new View.OnClickListener() {

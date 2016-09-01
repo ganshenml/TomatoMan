@@ -2,6 +2,7 @@ package com.example.ganshenml.tomatoman.tool;
 
 import android.content.Context;
 
+import com.example.ganshenml.tomatoman.act.BaseActivity;
 import com.example.ganshenml.tomatoman.bean.ContextBean;
 
 import java.util.ArrayList;
@@ -21,14 +22,16 @@ public class ContextManager {
         list.add(contextBean);
 
         //2.将list列表中的其他context的标志位（使用状态）设置为没在使用
-        for (int i = 0; i < list.size()-1; i++) {
+        int size = list.size()-1;
+        for (int i = 0; i < size; i++) {
             list.get(i).setUsing(false);
         }
     }
 
     //2.从list中移除该activity
     public static void removeContext(Context context){
-        for (int i = 0; i < list.size(); i++) {
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
             if(list.get(i).getContext() == context){//如果是同一个context，则移除当前
                 list.remove(i);
                 return;
@@ -36,9 +39,18 @@ public class ContextManager {
         }
     }
 
+    public static void finishAndRemoveAllContext(){//仅finish掉所有加入该静态list的context
+        for (int i = 0; i < list.size(); i++) {
+            BaseActivity activity = (BaseActivity)list.get(i).getContext();
+            list.remove(i);
+            activity.finish();
+        }
+    }
+
     //3.得到当前正在前台的activity
     public static Context getCurrentRunningContext(){
-        for (int i = 0; i < list.size(); i++) {
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
             if(list.get(i).isUsing() == true){
                 return list.get(i).getContext();
             }

@@ -11,6 +11,7 @@
     <color name="backgroud_default_color">#FFFFFF</color>
     <color name="toobar_backgroud_default_color">#1874CD</color>
     <color name="backgroud_login">#334177</color>
+    <color name="background_color_login">#32ACC3</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="login_button_pressed_color">#1874CD</color>

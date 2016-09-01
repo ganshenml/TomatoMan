@@ -28,7 +28,7 @@ public class LoginAct extends BaseActivity {
     private RelativeLayout rlLogin;
     private ClearEditTextView ctUsername;
     private ClearEditTextView ctPassword;
-    private TextView registerTv;
+    private TextView forgottenPassTv,registerTv;
     private Button btnLogin;
 
     @Override
@@ -49,6 +49,7 @@ public class LoginAct extends BaseActivity {
         ctUsername = (ClearEditTextView) findViewById(R.id.ctUsername);
         ctPassword = (ClearEditTextView) findViewById(R.id.ctPassword);
         btnLogin = (Button) findViewById(R.id.btnLogin);
+        forgottenPassTv = (TextView) findViewById(R.id.forgottenPassTv);
         registerTv = (TextView) findViewById(R.id.registerTv);
 
         //如果是从注册页面返回过来，则将username一栏填充数据，并调出软键盘
@@ -105,6 +106,15 @@ public class LoginAct extends BaseActivity {
             }
         });
 
+
+        //找回密码
+        forgottenPassTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToActivityPage.turnToSimpleAct(LoginAct.this,PasswordAct.class);
+            }
+        });
+
         //注册
         registerTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +122,8 @@ public class LoginAct extends BaseActivity {
                 ToActivityPage.turnToSimpleAct(LoginAct.this, RegisterAct.class);//跳转至注册界面
             }
         });
+
+
     }
 
 

@@ -31,7 +31,8 @@ public class DbTool {
      * 清除所有数据库中表的数据
      */
     public static void clearDb() {
-        DataSupport.deleteAll(Extra.class);
+        DataSupport.deleteAll(ExtraT.class);
+        DataSupport.deleteAll(TomatoRecordT.class);
     }
 
     /**
@@ -112,12 +113,25 @@ public class DbTool {
     }
 
     /**
-     * 返回最新的TomatoRecord的单条本地数据
+     * 返回某用户最新的TomatoRecordT的一条本地数据
      *
      * @return
      */
     public static TomatoRecordT returnLatestTomatoRecordData() {
         return DataSupport.findLast(TomatoRecordT.class);
+    }
+
+    /**
+     * 返回某用户最新的TomatoRecordT的分页的20条本地数据
+     * @return
+     */
+    public static List<TomatoRecordT> returnLatestTomatoRecordTListDataByPage(Person person,int skipNum){
+        List<TomatoRecordT> tomatoRecordTList = DataSupport
+//                .where("person = ?", person)
+                .order("taskTime desc").limit(20).offset(skipNum)
+                .find(TomatoRecordT.class);
+
+        return tomatoRecordTList;
     }
 
     /**
@@ -157,7 +171,7 @@ public class DbTool {
      * @return
      */
     public static List<TomatoRecordT> returnAllNotUploadedTomatoRecordTData() {
-        return DataSupport.where("createdAt  =  ?", "null").find(TomatoRecordT.class);
+        return DataSupport.order("taskTime asc").where("createdAt  =  ?", "null").find(TomatoRecordT.class);
 
     }
 

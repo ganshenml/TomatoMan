@@ -15,6 +15,7 @@ import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.bean.beant.ExtraT;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
 import com.example.ganshenml.tomatoman.tool.CommonUtils;
+import com.example.ganshenml.tomatoman.tool.ContextManager;
 import com.example.ganshenml.tomatoman.tool.DbTool;
 import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
@@ -73,6 +74,10 @@ public class SettingAct extends BaseActivity {
             }
         }
 
+//        if(Person.getCurrentUser()==null){
+//            logoutLl.setVisibility(View.GONE);
+//        }
+
     }
 
     private void initListeners() {
@@ -116,6 +121,8 @@ public class SettingAct extends BaseActivity {
                     @Override
                     public void onComplete(Object data) {
                         BmobUser.logOut();
+                        DbTool.clearDb();
+                        ContextManager.finishAndRemoveAllContext();
                         ToActivityPage.turnToSimpleAct(SettingAct.this, LoginAct.class);
                         finish();
                     }

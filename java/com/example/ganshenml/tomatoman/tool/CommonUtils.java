@@ -4,6 +4,8 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Vibrator;
 import android.view.View;
 import android.widget.Chronometer;
@@ -17,6 +19,7 @@ import com.example.ganshenml.tomatoman.bean.beant.TomatoRecordT;
 import com.example.ganshenml.tomatoman.bean.data.StaticData;
 import com.example.ganshenml.tomatoman.net.WifiOperate;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -151,9 +154,15 @@ public class CommonUtils {
     /**
      * 将本地未上传的TomatoRecordT数据进行上传，返回成功后并更新本地数据的objectId和createdAt字段
      */
-    public static void uploadRestTomatoRecordTData() {
+    public static void uploadRestTomatoRecordTData(List<TomatoRecordT> tomatoRecordTsData) {
         //构造上传的数据
-        List<TomatoRecordT> tomatoRecordTs = DbTool.returnAllNotUploadedTomatoRecordTData();
+        List<TomatoRecordT> tomatoRecordTs;
+        if (StringTool.hasData(tomatoRecordTsData)) {
+            tomatoRecordTs = tomatoRecordTsData;
+        } else {
+            tomatoRecordTs = DbTool.returnAllNotUploadedTomatoRecordTData();
+        }
+
         final List<BmobObject> tomatoRecordList = new ArrayList<>();
         int sizeTemp = tomatoRecordTs.size();
         for (int i = 0; i < sizeTemp; i++) {
@@ -229,6 +238,7 @@ public class CommonUtils {
 
     /**
      * 根据字符串返回月份和日份格式的字符串
+     *
      * @param timeStr
      * @return
      */
@@ -274,22 +284,23 @@ public class CommonUtils {
 
     /**
      * 停止服务（如果该服务正在运行）
+     *
      * @param mContext
      * @param className
      * @return
      */
-    public static boolean isServiceRunningAndStop(Context mContext,String className) {
+    public static boolean isServiceRunningAndStop(Context mContext, String className) {
 
         ActivityManager activityManager = (ActivityManager)
                 mContext.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningServiceInfo> serviceList
                 = activityManager.getRunningServices(30);
 
-        if (!(serviceList.size()>0)) {
+        if (!(serviceList.size() > 0)) {
             return false;
         }
 
-        for (int i=0; i<serviceList.size(); i++) {
+        for (int i = 0; i < serviceList.size(); i++) {
             if (serviceList.get(i).service.getClassName().equals(className) == true) {
 
                 return true;
@@ -298,6 +309,36 @@ public class CommonUtils {
         return false;
     }
 
+    /**
+     * 获取系统默认铃声的Uri
+     */
+    public static Uri getSystemDefaultRingtoneUri(Context context) {
+        return RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE);
+    }
 
+    /**
+     * 将TomatoRecord的list集合转换为TomatoRecordT的list集合
+     * @param list
+     * @return
+     */
+    public static List<TomatoRecordT> toTomatoRecordTList(List<TomatoRecord> list){
+        List<TomatoRecordT> tomatoRecordTList = new ArrayList<>();
+        int size  = list.size();
+        for (int i = 0; i < size; i++) {
+            TomatoRecordT tomatoRecordTTemp = new TomatoRecordT(list.get(i));
+            tomatoRecordTList.add(tomatoRecordTTemp);
+        }
+        return tomatoRecordTList;
+    }
 
+    /**
+     * 将double类型的数据转换为1位小数的字符串
+     * @param num
+     * @return
+     */
+    public static String toOnePointDecimal(double num){
+        DecimalFormat df = new DecimalFormat("0.0");
+        String result = df.format(num);
+        return result;
+    }
 }

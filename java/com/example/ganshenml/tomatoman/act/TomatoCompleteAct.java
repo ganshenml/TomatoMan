@@ -221,19 +221,19 @@ public class TomatoCompleteAct extends BaseActivity {
                 Bitmap bitmapTemp2 = BitmapFactory.decodeResource(getResources(), R.drawable.hint_logo_completed);
                 hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp2, 150));
 
-                int tomatoNumTemp =SpTool.getInt(StaticData.SPTOMATOCOMPLETENUM,0);
+                int tomatoNumTemp = SpTool.getInt(StaticData.SPTOMATOCOMPLETENUM, 0);
                 tomatoNumTv.setText("本次收获了" + tomatoNumTemp + "个番茄");
 
 
-                int tomatoTotalTimeTemp = SpTool.getInt(StaticData.SPWORKTIME,25) * tomatoNumTemp;
-                LogTool.log(LogTool.Aaron,"TomatoCompleteAct initDataViews  sbWorkTime的值是： "+tomatoTotalTimeTemp);
+                int tomatoTotalTimeTemp = SpTool.getInt(StaticData.SPWORKTIME, 25) * tomatoNumTemp;
+                LogTool.log(LogTool.Aaron, "TomatoCompleteAct initDataViews  sbWorkTime的值是： " + tomatoTotalTimeTemp);
 
-                String htmlString1 = "<font>努力耕耘了 </font><font color=\"#52A5FF\">" + tomatoTotalTimeTemp+ "</font><font> 分钟</font>";
+                String htmlString1 = "<font>努力耕耘了 </font><font color=\"#52A5FF\">" + tomatoTotalTimeTemp + "</font><font> 分钟</font>";
                 tomatoTimeTv.setText(Html.fromHtml(htmlString1));
 
                 taskTimeTv.setText("-------  " + CommonUtils.getCurrentDataAndTime() + "  -------");
 
-                int tomatoEfficiencyTimeTemp  = SpTool.getInt(StaticData.SPTOMATOCOMPLETEEFFICIENTTIME,0);
+                int tomatoEfficiencyTimeTemp = SpTool.getInt(StaticData.SPTOMATOCOMPLETEEFFICIENTTIME, 0);
                 String htmlString2 = "<font>变身超人时间共 </font><font color=\"#52A5FF\">" + tomatoEfficiencyTimeTemp + "</font><font> 分钟</font>";
                 efficientTimeTv.setText(Html.fromHtml(htmlString2));
 
@@ -290,6 +290,9 @@ public class TomatoCompleteAct extends BaseActivity {
             public void done(String s, BmobException e) {
                 if (e == null) {
                     DbTool.update_CreatedAt_InLocal(tomatoRecord);
+                    if (tomatoRecord.getCreatedAt() != null) {
+                        SpTool.putString(StaticData.SPLATESTCREATEDAT, tomatoRecord.getCreatedAt());//更新本地最大的CreatedAt数据
+                    }
                 } else {
                     LogTool.log(LogTool.Aaron, TAG + " upLoadTomatoRecordToServer 异常： " + e.toString());
                 }
@@ -300,25 +303,25 @@ public class TomatoCompleteAct extends BaseActivity {
     /**
      * 分享本页的截图
      */
-    private void toShareScreenShotPic(){
+    private void toShareScreenShotPic() {
 
-            // 获取内置SD卡路径
-            String sdCardPath = Environment.getExternalStorageDirectory().getPath();
-            // 图片文件路径
-            String filePath = sdCardPath + File.separator + "tomato_screenshot.png";
+        // 获取内置SD卡路径
+        String sdCardPath = Environment.getExternalStorageDirectory().getPath();
+        // 图片文件路径
+        String filePath = sdCardPath + File.separator + "tomato_screenshot.png";
 
-            File file = new File(filePath);
-            ScreenShotTool.shoot(TomatoCompleteAct.this,file);
+        File file = new File(filePath);
+        ScreenShotTool.shoot(TomatoCompleteAct.this, file);
 
-            //由文件得到uri
-            Uri imageUri = Uri.fromFile(new File(filePath));
-            LogTool.log(LogTool.Aaron, " TomatoCompleteAct 分享的uri:" + imageUri);  //输出：file:///storage/emulated/0/test.jpg
+        //由文件得到uri
+        Uri imageUri = Uri.fromFile(new File(filePath));
+        LogTool.log(LogTool.Aaron, " TomatoCompleteAct 分享的uri:" + imageUri);  //输出：file:///storage/emulated/0/test.jpg
 
-            Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-            shareIntent.setType("image/*");
-            startActivity(Intent.createChooser(shareIntent, "分享截图到"));
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        shareIntent.setType("image/*");
+        startActivity(Intent.createChooser(shareIntent, "分享截图到"));
 
     }
 }

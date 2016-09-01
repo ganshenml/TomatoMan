@@ -3,6 +3,9 @@ package com.example.ganshenml.tomatoman.act;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.widget.Toolbar;
@@ -15,15 +18,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.data.StaticData;
+import com.example.ganshenml.tomatoman.tool.CommonUtils;
 import com.example.ganshenml.tomatoman.tool.ConstantCode;
 import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.NotificationUtls;
 import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
 import com.example.ganshenml.tomatoman.tool.SpTool;
 import com.example.ganshenml.tomatoman.tool.ViewUtils;
+
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /*
 作为完成一个番茄事件后的临时状态：可以选择“开始休息”、“完成任务”、“进入高效时间领域”
@@ -34,6 +43,8 @@ public class TomatoTemporaryAct extends BaseActivity {
     private TextView tvTitle_public;
     private LinearLayout obtainedTomatoLl;
     private Vibrator vibrator;
+    private MediaPlayer mMediaPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,12 +136,24 @@ public class TomatoTemporaryAct extends BaseActivity {
 
 
         //获取振动的参数:如果是振动，则调用振动工具类方法
-        if (!getIntent().getBooleanExtra("isFromTomatoEfficiencyAct", false)) {//如果不是从高效页面跳转过来，则需要振动提醒
+        if (!getIntent().getBooleanExtra("isFromTomatoEfficiencyAct", false)) {//如果不是从高效页面跳转过来，则需要振动提醒和播放铃声
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             if (SpTool.getBoolean(StaticData.SPVIBRATEALARM, true)) {
                 long[] patterns = new long[]{0, 1000, 2000, 1000, 2000, 1000};
                 vibrator.vibrate(patterns, -1);//不重复，仅一次
             }
+
+            if (SpTool.getBoolean(StaticData.SPRINGTONEALARM, false)) {//如果设置过铃声提醒，则进行播放铃声
+                toPlayVideo();
+            }
+
+            //计时程序，播放4分钟后停止设备播放设置
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    releaseDeviceSetting();
+                }
+            },4*60*1000);
         }
 
         Intent intent = getIntent();
@@ -147,11 +170,7 @@ public class TomatoTemporaryAct extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        //释放vibrator（用户点击按钮进入下一次，若此时仍然引用vibrator，则该activity此时未被完全释放会影响程序逻辑）
-        if (vibrator != null) {
-            vibrator.cancel();
-            vibrator = null;
-        }
+        releaseDeviceSetting();//释放振动、响铃等资源设置
         super.onDestroy();
     }
 
@@ -178,6 +197,57 @@ public class TomatoTemporaryAct extends BaseActivity {
             obtainedTomatoLl.startAnimation(alphaAnimation);
         }
 
+    }
+
+    //播放铃声
+    private void toPlayVideo() {
+        String myUriStr = SpTool.getString(StaticData.SPRINGTONEALARMURI, "");
+        if (!myUriStr.equals("")) {//已经设置过音频
+            mMediaPlayer = MediaPlayer.create(this, Uri.parse(myUriStr));
+
+            if (mMediaPlayer == null) {//如果未自定义铃声，则调用系统默认的铃声
+                Toast.makeText(this, "该铃声不存在，请重新选择", Toast.LENGTH_LONG).show();
+                return;
+            }
+        } else {
+            mMediaPlayer = MediaPlayer.create(this, CommonUtils.getSystemDefaultRingtoneUri(this));
+        }
+        mMediaPlayer.setLooping(true);
+
+        try {
+            mMediaPlayer.prepare();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mMediaPlayer.start();
+            }
+        });
+    }
+
+    /**
+     * 释放振动、响铃等资源设置
+     */
+    private void releaseDeviceSetting() {
+        //释放vibrator（用户点击按钮进入下一次，若此时仍然引用vibrator，则该activity此时未被完全释放会影响程序逻辑）
+        if (vibrator != null) {
+            vibrator.cancel();
+            vibrator = null;
+        }
+
+        if (mMediaPlayer != null) {
+            try {
+                mMediaPlayer.stop();
+                mMediaPlayer.release();
+            }catch (IllegalStateException e){
+                e.printStackTrace();
+            }
+        }
     }
 
 }

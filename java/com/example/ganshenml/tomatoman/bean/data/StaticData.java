@@ -27,7 +27,11 @@ public class StaticData {
     public static final String SPLONGRESTTIME = "spLongRestTime";
     public static final String SPVIBRATEALARM = "spVibrateAlarm";
     public static final String SPRINGTONEALARM = "spRingtoneAlarm";
+    public static final String SPRINGTONEALARMURI = "spRingtoneAlarmURI";//音频字符串
 
     public static final String SPTASKNAME = "spTaskName";//任务名称
 
+    public static final String SPLATESTCREATEDAT = "spLatestCreatedAt";//本地存储的TomatoRecordT数据字段CreatedAt最大的数据（每次完成任务后保存后将该数据上传成功后返回并更新至sp）
+
+    public static final String SPPUSHMESSAGE = "spPushMessage";//push的消息：value存储的是日期，当用户读取了新的消息后更新为新的消息创建的时间
 }

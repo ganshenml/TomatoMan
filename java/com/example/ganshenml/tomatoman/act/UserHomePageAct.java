@@ -29,6 +29,7 @@ import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
 import com.example.ganshenml.tomatoman.tool.StringTool;
 import com.example.ganshenml.tomatoman.tool.ThreadTool;
+import com.example.ganshenml.tomatoman.tool.ToActivityPage;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.io.File;
@@ -50,7 +51,7 @@ public class UserHomePageAct extends BaseActivity {
 
     private Toolbar userHomeTb;
     private ImageView backIv,ivMyTomatoHomepage, ivMyFriendsHomepage;
-    private TextView tvUserNameHomepage, tvUserIntroHomepage;
+    private TextView updatePassTv,tvUserNameHomepage, tvUserIntroHomepage;
     private Context thisContext = UserHomePageAct.this;
     private Uri imageUri;
     private ProgressDialog progressDialog;//进度对话框
@@ -81,6 +82,7 @@ public class UserHomePageAct extends BaseActivity {
     private void initViews() {
 
         //初始并实例化化控件
+        updatePassTv = (TextView) findViewById(R.id.updatePassTv);
         tvUserNameHomepage = (TextView) findViewById(R.id.tvUserNameHomepage);
         tvUserIntroHomepage = (TextView) findViewById(R.id.tvUserIntroHomepage);
         simpleDraweeView_user_log = (SimpleDraweeView) findViewById(R.id.simpleDraweeView_user_log);
@@ -116,6 +118,15 @@ public class UserHomePageAct extends BaseActivity {
                 finish();
             }
         });
+
+        //修改密码
+        updatePassTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToActivityPage.turnToSimpleAct(UserHomePageAct.this,UpdatePassAct.class);
+            }
+        });
+
         //点击头像
         simpleDraweeView_user_log.setOnClickListener(new View.OnClickListener() {
             @Override
