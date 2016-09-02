@@ -22,7 +22,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <!--推送所需的权限-->
+    <!-- 推送所需的权限 -->
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -101,28 +101,31 @@
         <activity
             android:name="cn.bmob.v3.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".act.PasswordAct" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".act.UpdatePassAct" android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-
+        <activity
+            android:name=".act.PasswordAct"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".act.UpdatePassAct"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <service
-            android:label="PushService"
             android:name="cn.bmob.push.lib.service.PushService"
-            android:process=":bmobpush"
-            android:exported="true">
+            android:exported="true"
+            android:label="PushService"
+            android:process=":bmobpush">
             <intent-filter>
-                <action android:name="cn.bmob.push.lib.service.PushService"/>
+                <action android:name="cn.bmob.push.lib.service.PushService" />
             </intent-filter>
         </service>
 
         <!-- 用于进程保活 -->
         <service
             android:name="cn.bmob.push.lib.service.PushNotifyService"
-            android:process=":bmobpush" >
-        </service>
+            android:process=":bmobpush"></service>
 
-        <receiver android:name="cn.bmob.push.PushReceiver" >
+        <receiver android:name="cn.bmob.push.PushReceiver">
             <intent-filter>
+
                 <!-- 系统启动完成后会调用 -->
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <!-- 解锁完成后会调用 -->
@@ -134,16 +137,17 @@
 
         <!-- 第四部中创建的消息接收器，在这里进行注册 -->
         <receiver android:name=".receiver.MyPushMessageReceiver">
-            <intent-filter >
-                <action android:name="cn.bmob.push.action.MESSAGE"/>
+            <intent-filter>
+                <action android:name="cn.bmob.push.action.MESSAGE" />
             </intent-filter>
         </receiver>
 
         <!-- 接收心跳和唤醒的广播，要和PushService运行在同个进程 -->
         <receiver
             android:name="cn.bmob.push.PushNotifyReceiver"
-            android:process=":bmobpush" >
+            android:process=":bmobpush">
             <intent-filter>
+
                 <!-- 接收心跳广播的action -->
                 <action android:name="cn.bmob.push.action.HEARTBEAT" />
                 <!-- 接收唤醒广播的action -->
@@ -151,6 +155,7 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".act.MessageAct" android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

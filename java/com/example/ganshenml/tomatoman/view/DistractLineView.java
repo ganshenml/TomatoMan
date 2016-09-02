@@ -5,7 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PathEffect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
@@ -16,7 +19,7 @@ import com.example.ganshenml.tomatoman.R;
  * Created by ganshenml on 2016-08-17.
  */
 public class DistractLineView extends View {
-    private Paint paintCircle, paintArc, paintLine, paintBitmap;
+    private Paint paintCircle, paintArc, paintLine, paintDottedLine, paintBitmap;
     private int stageNum = 0;
 
     public DistractLineView(Context context, AttributeSet attrs) {
@@ -32,6 +35,14 @@ public class DistractLineView extends View {
         paintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintLine.setStrokeWidth(4);
         paintLine.setColor(Color.parseColor("#FF6600"));
+
+        //虚线
+        paintDottedLine = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paintDottedLine.setStyle(Paint.Style.STROKE);
+        paintDottedLine.setStrokeWidth(4);
+        paintDottedLine.setColor(Color.parseColor("#999999"));
+        PathEffect effects = new DashPathEffect(new float[] { 4, 8}, 0);
+        paintDottedLine.setPathEffect(effects);
 
         paintBitmap = new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -53,14 +64,27 @@ public class DistractLineView extends View {
             canvas.drawRoundRect(rectF, pivotX[i], pivotY[i], paintCircle);
 
             if (i < stageNum - 1) {
-                float[] pts = new float[]{pivotX[i] + 5, pivotY[i] - 5, pivotX[i + 1] - 5, pivotY[i + 1] - 5};
+                float[] pts = new float[]{pivotX[i] + 22, pivotY[i] - 18, pivotX[i + 1] - 18, pivotY[i + 1] + 18};
                 canvas.drawLines(pts, paintLine);
+            } else if (i == stageNum - 1 && stageNum != 5) {//此时画下一个点和虚线
+                RectF rectFArc2 = new RectF(pivotX[i + 1] - 30, pivotY[i + 1] - 30, pivotX[i + 1] + 30, pivotY[i + 1] + 30);
+                canvas.drawArc(rectFArc2, -90, 360, false, paintArc);
+
+                RectF rectF2 = new RectF(pivotX[i + 1] - 20, pivotY[i + 1] - 20, pivotX[i + 1] + 20, pivotY[i + 1] + 20);
+                canvas.drawRoundRect(rectF2, pivotX[i + 1], pivotY[i + 1], paintCircle);
+
+//                canvas.drawLine(pivotX[i] + 22, pivotY[i] - 18, pivotX[i + 1] - 18, pivotY[i + 1] + 18, paintDottedLine);
+
+                Path path = new Path();
+                path.moveTo(pivotX[i] + 22, pivotY[i] - 18);
+                path.lineTo(pivotX[i + 1] - 18, pivotY[i + 1] + 18);
+                canvas.drawPath(path, paintDottedLine);
             }
         }
 
         if (stageNum == 5) {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.star);
-            RectF rectF = new RectF(pivotX[4] - 60, pivotY[4] - 80, pivotX[4] + 60, pivotY[4] + 40);
+            RectF rectF = new RectF(pivotX[4] - 60, pivotY[4] - 60, pivotX[4] + 60, pivotY[4] + 60);
             canvas.drawBitmap(bitmap, null, rectF, paintBitmap);
         }
     }

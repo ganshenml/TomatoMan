@@ -55,7 +55,7 @@ public class TomatoCompleteAct extends BaseActivity {
     private static final int RESULTCODE_TO_MAIN = 101;
     private Toolbar tbToolbar_public;//公用toolbar
     private TextView leftTv, tvTitle_public;//公用toolbar标题
-    private TextView tomatoTimeTv, taskTimeTv, tomatoNumTv, efficientTimeTv, tomatoNoteTv;
+    private TextView tomatoTimeTv, taskTimeTv, tomatoNumTv, efficientTimeTv, tomatoNoteTv, hintTv;
     private RatingBar evaluateLeverRb;
     private LinearLayout tomatoCompleteLl, toolBarLeftLl, stampLl;
     private FrameLayout tomatoCompleteFl;
@@ -120,6 +120,7 @@ public class TomatoCompleteAct extends BaseActivity {
         tomatoNumTv = (TextView) findViewById(R.id.tomatoNumTv);
         efficientTimeTv = (TextView) findViewById(R.id.efficientTimeTv);
         tomatoNoteTv = (TextView) findViewById(R.id.tomatoNoteTv);
+        hintTv = (TextView) findViewById(R.id.hintTv);
         completeStateIv = (ImageView) findViewById(R.id.completeStateIv);
         hintLogoIv = (ImageView) findViewById(R.id.hintLogoIv);
         toolBarLeftLl.setVisibility(View.VISIBLE);
@@ -186,9 +187,6 @@ public class TomatoCompleteAct extends BaseActivity {
             stampLl.setBackgroundResource(R.drawable.tomato_completed_layout_custom);
             completeStateIv.setImageResource(R.mipmap.completed);
 
-            Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.hint_logo_completed);
-            hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
-
             tomatoNumTv.setText("本次收获了" + tomatoRecordTTemp.getTomatoNum().toString() + "个番茄");
 
             String htmlString1 = "<font>努力耕耘了 </font><font color=\"#52A5FF\">" + tomatoRecordTTemp.getTomatoTime() + "</font><font> 分钟</font>";
@@ -200,7 +198,30 @@ public class TomatoCompleteAct extends BaseActivity {
             efficientTimeTv.setText(Html.fromHtml(htmlString2));
 
             tomatoNoteTv.setText(tomatoRecordTTemp.getTomatoNote());
-            evaluateLeverRb.setRating(tomatoRecordTTemp.getEvaluateLever());
+            Bitmap bitmapTemp = null;
+            int ratingNumTemp = tomatoRecordTTemp.getEvaluateLever();
+            if (ratingNumTemp == 0) {
+                hintTv.setText("啊， 0分，是地震了吗！！！");
+                bitmapTemp = BitmapFactory.decodeResource(getResources(), R.mipmap.earthquake);
+            } else if (ratingNumTemp == 1) {
+                hintTv.setText("一分就好像冬天里嘴里的一块冰，冰霜冷侧的滋味我懂！");
+                bitmapTemp = BitmapFactory.decodeResource(getResources(), R.mipmap.ice);
+            } else if (ratingNumTemp == 2) {
+                hintTv.setText("两分是爱，但爱得有点微妙");
+                bitmapTemp = BitmapFactory.decodeResource(getResources(), R.mipmap.love);
+            } else if (ratingNumTemp == 3) {
+                hintTv.setText("要知道并不是每个人都可以及格，因此我需要一个棒棒糖！");
+                bitmapTemp = BitmapFactory.decodeResource(getResources(), R.mipmap.candy);
+            } else if (ratingNumTemp == 4) {
+                hintTv.setText("四分就好像看到了美丽的朝阳却在此时不得不上厕所");
+                bitmapTemp = BitmapFactory.decodeResource(getResources(), R.mipmap.sun);
+            } else if (ratingNumTemp == 5) {
+                hintTv.setText("简直无与伦比、无懈可击、无坚不摧、无所不能、无法无天....");
+                bitmapTemp = BitmapFactory.decodeResource(getResources(), R.mipmap.cow);
+            }
+            hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
+            evaluateLeverRb.setRating(ratingNumTemp);
+
             evaluateLeverRb.setIsIndicator(true);
             btnTomatoComplete.setVisibility(View.GONE);
 
@@ -237,6 +258,7 @@ public class TomatoCompleteAct extends BaseActivity {
                 String htmlString2 = "<font>变身超人时间共 </font><font color=\"#52A5FF\">" + tomatoEfficiencyTimeTemp + "</font><font> 分钟</font>";
                 efficientTimeTv.setText(Html.fromHtml(htmlString2));
 
+                hintTv.setText("你这么棒，给自己打个分吧！");
                 btnTomatoComplete.setText("载入史册");
             }
 

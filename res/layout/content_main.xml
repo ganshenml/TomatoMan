@@ -15,45 +15,69 @@
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
         <ImageView
+            android:id="@+id/hamburgerMenuIv"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/hamburger_menu"
-            android:id="@+id/hamburgerMenuIv"/>
+            android:src="@drawable/hamburger_menu" />
+
         <ImageView
+            android:id="@+id/tomatoSettingIv"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="right"
-            android:src="@mipmap/setting"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:id="@+id/tomatoSettingIv"/>
+            android:src="@mipmap/setting" />
     </android.support.v7.widget.Toolbar>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.example.ganshenml.tomatoman.view.ClearEditTextView
-            android:id="@+id/etTaskName"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:drawablePadding="7dp"
-            android:hint="任务名称..."
-            android:maxLength="15"
-            android:textAlignment="center"
-            android:textColor="@color/text_color_homefragment"
-            android:textColorHint="@color/hint_color_homefragment"
-            android:textCursorDrawable="@drawable/text_cursor" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <com.example.ganshenml.tomatoman.view.StartCountTimeCircleView
-            android:id="@+id/startViewId"
-            android:layout_width="280px"
-            android:layout_height="280px"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/activity_vertical_margin" />
-    </LinearLayout>
+            <com.example.ganshenml.tomatoman.view.ClearEditTextView
+                android:id="@+id/etTaskName"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:drawablePadding="7dp"
+                android:hint="任务名称..."
+                android:maxLength="15"
+                android:textAlignment="center"
+                android:textColor="@color/text_color_homefragment"
+                android:textColorHint="@color/hint_color_homefragment"
+                android:textCursorDrawable="@drawable/text_cursor" />
+
+            <com.example.ganshenml.tomatoman.view.StartCountTimeCircleView
+                android:id="@+id/startViewId"
+                android:layout_width="280px"
+                android:layout_height="280px"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/activity_vertical_margin" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:gravity="center"
+            android:background="@drawable/push_text_background"
+            android:drawableLeft="@mipmap/notification_icon"
+            android:drawablePadding="8dp"
+            android:text="哈哈哈都什么水电费爽肤水"
+            android:alpha="200"
+            android:maxLength="14"
+            android:ellipsize="end"
+            android:textColor="@drawable/text_selector"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="100px"
+            android:autoLink="all"
+            android:id="@+id/pushMessageTv"
+            android:visibility="gone"/>
+    </FrameLayout>
 </LinearLayout>

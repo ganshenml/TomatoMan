@@ -19,6 +19,7 @@ import com.example.ganshenml.tomatoman.tool.ContextManager;
 import com.example.ganshenml.tomatoman.tool.DbTool;
 import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
+import com.example.ganshenml.tomatoman.tool.SpTool;
 import com.example.ganshenml.tomatoman.tool.ToActivityPage;
 import com.example.ganshenml.tomatoman.view.WebProgress;
 
@@ -122,6 +123,7 @@ public class SettingAct extends BaseActivity {
                     public void onComplete(Object data) {
                         BmobUser.logOut();
                         DbTool.clearDb();
+                        SpTool.clearAllData();
                         ContextManager.finishAndRemoveAllContext();
                         ToActivityPage.turnToSimpleAct(SettingAct.this, LoginAct.class);
                         finish();

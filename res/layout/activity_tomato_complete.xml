@@ -154,6 +154,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/logo_circle_style"
+            android:scaleType="centerInside"
             android:src="@drawable/logo_person" />
 
         <TextView
@@ -164,7 +165,8 @@
             android:background="@drawable/chat_background"
             android:maxLines="3"
             android:text="为了维护世界的美好，历史将不会记住这次完（che）美（dan）的任务"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:id="@+id/hintTv"/>
 
     </LinearLayout>
 

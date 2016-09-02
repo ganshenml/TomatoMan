@@ -25,6 +25,7 @@ import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.bean.Person;
 import com.example.ganshenml.tomatoman.callback.HttpCallback;
 import com.example.ganshenml.tomatoman.tool.CommonUtils;
+import com.example.ganshenml.tomatoman.tool.FileTool;
 import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
 import com.example.ganshenml.tomatoman.tool.StringTool;
@@ -340,7 +341,8 @@ public class UserHomePageAct extends BaseActivity {
         progressDialog.setMessage("当前进度： " + 0 + " %");
         progressDialog.show();
 
-        final BmobFile bmobFile = new BmobFile(new File(imagePath));
+//        final BmobFile bmobFile = new BmobFile(new File(imagePath));
+        final BmobFile bmobFile = new BmobFile(FileTool.returnCompressedPic(Uri.parse(imagePath)));
         LogTool.log(LogTool.Aaron, TAG + " imagePath: " + imagePath);
 
         bmobFile.uploadblock(new UploadFileListener() {

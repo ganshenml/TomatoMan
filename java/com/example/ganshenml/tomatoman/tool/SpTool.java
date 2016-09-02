@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * Created by cyan on 15/9/21.
  * <p/>
  * 保存所有的sharePreferences 信息,并且建议key 可保存在当前的类中。
  * key直接定义在当前的界面
@@ -30,6 +29,7 @@ public class SpTool {
      * 也保留上一次用户选择公司的companyId（方便下次进入时直接获取显示）_Aaron_6.22
      */
     public static void clearAllData() {
+        config.edit().clear().commit();
     }
 
 

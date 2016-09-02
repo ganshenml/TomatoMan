@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity
     private NavigationMenuItemView nav_home, nav_MyTomato, nav_friends, nav_rank, nav_share, nav_setting;
     private SimpleDraweeView user_log;
     private long exitTime = 0;//设定回退事件
-    private TextView usernameTv, tvUserIntroduction;
+    private TextView usernameTv, tvUserIntroduction, pushMessageTv;
     private ImageView hamburgerMenuIv, tomatoSettingIv;
 
     private GBlurPic mGBlurPic;
@@ -84,6 +84,7 @@ public class MainActivity extends BaseActivity
     private Bitmap mBitmapIn;
     private Bitmap mBitmapOut;
 
+    private PushMessage pushMessageData;
     private String latestCreatedAtStr;//最新消息的创建时间
 
     @Override
@@ -125,18 +126,22 @@ public class MainActivity extends BaseActivity
                     super.onSuccess(data);
                     if (StringTool.hasData(data)) {
                         PushMessage pushMessageTemp = data.get(0);
-                        LogTool.log(LogTool.Aaron,"请求消息通知结果内容为： "+pushMessageTemp.getContent());
+                        pushMessageData = data.get(0);
+                        LogTool.log(LogTool.Aaron, "请求消息通知结果内容为： " + pushMessageTemp.getContent() + " " + pushMessageTemp.getUsing() + " CreatedAt: "
+                                + pushMessageTemp.getCreatedAt() + " deadlineTime: " + pushMessageTemp.getDeadlineTime() + " pushTime: " + pushMessageTemp.getPushTime()
+                                + " 当前时间： " + CommonUtils.getCurrentDataAndTime());
 
                         latestCreatedAtStr = pushMessageTemp.getCreatedAt();
                         if (pushMessageTemp.getUsing() && (StringTool.isEmpty(latestCreatedAtStr) ||
                                 (latestCreatedAtStr.compareToIgnoreCase(timeStr) > 0
-                                        && latestCreatedAtStr.compareToIgnoreCase(CommonUtils.getCurrentDataAndTime()) > 0))) {//如果当前消息状态为正常，截止时间为空或者不为空时大于当前时间和本地保存的上一次已查看消息对应的创建时间
-                            if (CommonUtils.getCurrentDataAndTime().compareToIgnoreCase(pushMessageTemp.getPushTime()) >= 0)//如果当前事件等于或超过发布时间
-//                            SpTool.putString(StaticData.SPPUSHMESSAGE,latestCreatedAtStr);
-                                showPutMessage(data.get(0));
+                                        && (pushMessageTemp.getDeadlineTime() == null || (pushMessageTemp.getDeadlineTime().compareToIgnoreCase(CommonUtils.getCurrentDataAndTime()) > 0))))) {//如果当前消息状态为正常，截止时间为空或者不为空时大于当前时间和本地保存的上一次已查看消息对应的创建时间
+                            if (pushMessageTemp.getPushTime() == null || CommonUtils.getCurrentDataAndTime().compareToIgnoreCase(pushMessageTemp.getPushTime()) >= 0) {//如果当前时间等于或超过发布时间
+                                LogTool.log(LogTool.Aaron, "pushMessage条件符合，显示样式");
+                                showPushMessage(pushMessageTemp);
+                            }
                         }
-                    }else {
-                        LogTool.log(LogTool.Aaron,"请求消息通知结果为空");
+                    } else {
+                        LogTool.log(LogTool.Aaron, "请求消息通知结果为空");
                     }
                 }
             });
@@ -264,6 +269,9 @@ public class MainActivity extends BaseActivity
 
         View headView = navigationView.getHeaderView(0);
 
+        //首页push消息样式
+        pushMessageTv = (TextView) findViewById(R.id.pushMessageTv);
+
         //初始化个人信息
         usernameTv = (TextView) headView.findViewById(R.id.usernameTv);
         tvUserIntroduction = (TextView) headView.findViewById(R.id.tvUserIntroduction);
@@ -298,6 +306,20 @@ public class MainActivity extends BaseActivity
     }
 
     private void initListeners() {
+        //点击push消息
+        pushMessageTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MessageAct.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("content", pushMessageData.getContent() != null ? pushMessageData.getContent() : "");
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+                SpTool.putString(StaticData.SPPUSHMESSAGE, latestCreatedAtStr);
+                pushMessageTv.setVisibility(View.GONE);
+            }
+        });
 
         //事件监听
         user_log.setOnClickListener(new View.OnClickListener() {
@@ -403,17 +425,15 @@ public class MainActivity extends BaseActivity
      *
      * @param pushMessage
      */
-    private void showPutMessage(PushMessage pushMessage) {
-        TextView textView = new TextView(this);
-        textView.setText(pushMessage.getContent());
-        textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        textView.setBackgroundColor(getResources().getColor(R.color.custom_blue));
-        textView.setTextColor(Color.WHITE);
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) textView.getLayoutParams();
-        lp.setMargins(0, 0, 0, 150);
-        textView.setLayoutParams(lp);
+    private void showPushMessage(PushMessage pushMessage) {
 
-        llHomeFragment.addView(textView);
+        if (pushMessageTv == null) {
+            return;
+        }
+        LogTool.log(LogTool.Aaron, "showPushMessage()执行了");
+
+        pushMessageTv.setVisibility(View.VISIBLE);
+        pushMessageTv.setText(pushMessage.getContent());
 
         AnimationSet animationSet = new AnimationSet(true);
         ScaleAnimation scaleAnimation = new ScaleAnimation(0.6f, 1.0f, 0.6f, 1.0f);
@@ -421,18 +441,18 @@ public class MainActivity extends BaseActivity
         scaleAnimation.setInterpolator(new LinearInterpolator());
         animationSet.addAnimation(scaleAnimation);
 
-        TranslateAnimation translateAnimation = new TranslateAnimation(0,0,300,0);
+        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, -100, 0);
         translateAnimation.setDuration(1500);
         translateAnimation.setInterpolator(new LinearInterpolator());
         animationSet.addAnimation(translateAnimation);
 
-        textView.startAnimation(animationSet);
+        pushMessageTv.startAnimation(animationSet);
     }
 
     /**
      * 展示用户头像、名称、简介等信息
      */
-    private void showPersonInfoView(){
+    private void showPersonInfoView() {
         //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
         Person person = BmobUser.getCurrentUser(Person.class);
         if (person == null) {

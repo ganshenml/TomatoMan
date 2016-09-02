@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.ganshenml.tomatoman.R;
 import com.example.ganshenml.tomatoman.tool.CommonUtils;
 import com.example.ganshenml.tomatoman.tool.LogTool;
+import com.example.ganshenml.tomatoman.tool.StringTool;
 import com.example.ganshenml.tomatoman.tool.VerifyUtils;
 import com.example.ganshenml.tomatoman.view.ClearEditTextView;
 import com.example.ganshenml.tomatoman.view.WebProgress;
@@ -70,6 +71,10 @@ public class UpdatePassAct extends AppCompatActivity {
                 String passOld = ctPasswordOld.getText().toString();
                 String passNew = ctPasswordNew.getText().toString();
                 String passVerify = ctVerifyPasswordAgain.getText().toString();
+                if(StringTool.isEmpty(passOld)||StringTool.isEmpty(passNew)||StringTool.isEmpty(passVerify)){
+                    Toast.makeText(UpdatePassAct.this, "密码不能为空", Toast.LENGTH_LONG).show();
+                }
+
                 String verifyResults = VerifyUtils.verifyPassword(passNew);
                 if (verifyResults.length() > 0) {
                     Toast.makeText(UpdatePassAct.this, "密码" + verifyResults, Toast.LENGTH_LONG).show();

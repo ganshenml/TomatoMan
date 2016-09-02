@@ -20,6 +20,7 @@
 
     <!--custom text size -->
     <dimen name="common_text_size">18sp</dimen>
+    <dimen name="ordinary_text_size">16sp</dimen>
     <dimen name="bigger_text_size">24sp</dimen>
     <dimen name="little_text_size">14sp</dimen>
     <dimen name="smallest_text_size">10sp</dimen>

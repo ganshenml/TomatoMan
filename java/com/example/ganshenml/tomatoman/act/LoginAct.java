@@ -79,7 +79,7 @@ public class LoginAct extends BaseActivity {
                 Person person = new Person();
                 String userNameStr = ctUsername.getText().toString().trim();
                 String userPassStr = ctPassword.getText().toString().trim();
-                LogTool.log(LogTool.Aaron, TAG + " 点击了登录按钮 参数为：" + userNameStr + " " + userPassStr);
+//                LogTool.log(LogTool.Aaron, TAG + " 点击了登录按钮 参数为：" + userNameStr + " " + userPassStr);
 
                 person.setUsername(userNameStr);
                 person.setPassword(userPassStr);
