@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -18,12 +19,12 @@ import com.example.ganshenml.tomatoman.tool.LogTool;
 public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     SurfaceHolder surfaceHolder;
     public CountThread countThread;
-    private float endAngle = 0;//计算一次要画的角度大小
+    private float endAngle = 1;//计算一次要画的角度大小
     private float divisionNum;//计算每秒走多少度
     private boolean isThreadStarted = false;//作为线程是否启动的标识
     private String paintColor, paintArcBackgroundColor, paintCircleBackgroundColor, paintTextColor;
 
-//    private boolean isFirstShown = false;//作为一开始计时时快速走过一圈的动画（仅一次展示）
+    private boolean isFirstShown = true;//作为一开始计时时快速走过一圈的动画（仅一次展示）
 
 
     public TomatoCountSurfaceView(Context context) {
@@ -113,6 +114,7 @@ public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder
             RectF rectF = new RectF(pivotX - 300, pivotX - 300, pivotX + 300, pivotX + 300);
             int count = 0;//计时（当前跑了多久）
 
+
             while (!isStop) {
                 try {
                     canvas = surfaceHolder.lockCanvas();
@@ -121,11 +123,9 @@ public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder
                     //画一个背景圆和一个大背景圆
                     canvas.drawArc(rectFB, -90, 360, false, paintCircleBackground);
                     canvas.drawArc(rectF, -90, 360, false, paintArcBackground);
-
                     endAngle = endAngle + 1;
                     canvas.drawArc(rectF, -90, endAngle * divisionNum, false, paint);//-90在这里不等于270，所以要想从最上方开始画弧，就得用 - 90
                     canvas.drawText(countTime((int) endAngle), pivotX, pivotX, paintText);//显示计算的时间
-
                     Thread.sleep(1000);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -167,6 +167,7 @@ public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder
 
     public void setDivisionNum(float divisionNum) {
         this.divisionNum = divisionNum;
+        LogTool.log(LogTool.Aaron, "divisionNum 每次画圆的度数是： " + divisionNum);
     }
 
     public void setColor(String paintColor, String paintCircleBackgroundColor, String paintArcBackgroundColor, String paintTextColor) {
@@ -175,4 +176,19 @@ public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder
         this.paintCircleBackgroundColor = paintCircleBackgroundColor;
         this.paintTextColor = paintTextColor;
     }
+
+    private void showOneShot(Canvas canvas, RectF rectF, Paint paint) {
+        int count = 0;
+        if (isFirstShown) {
+            while (count < 360) {
+                count++;
+                LogTool.log(LogTool.Aaron, "showOneShot执行了 count的值是：" + count);
+                canvas.drawArc(rectF, -90, count * 3, false, paint);//-90在这里不等于270，所以要想从最上方开始画弧，就得用 - 90
+                SystemClock.sleep(3);
+            }
+            isFirstShown = false;
+
+        }
+    }
+
 }

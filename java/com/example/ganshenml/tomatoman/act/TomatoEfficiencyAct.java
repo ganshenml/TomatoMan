@@ -71,7 +71,7 @@ public class TomatoEfficiencyAct extends BaseActivity {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 myBinder = (CountTimeNumService.MyBinder) service;
                 //myBinder.getService().setCountTimeGoal(countTimeGoal * 60);//将从sharedPreference中获取的设定时间传给service
-                myBinder.getService().setCountTimeGoal((24 * 60 * 60));//高效领域可以先将时间设定为24小时
+//                myBinder.getService().setCountTimeGoal((24 * 60 * 60));//高效领域可以先将时间设定为24小时
             }
 
             @Override
@@ -191,9 +191,9 @@ public class TomatoEfficiencyAct extends BaseActivity {
         customDlv.invalidate();
 
         //实例化binder对象
-        countTimeNumService = new CountTimeNumService();
+//        countTimeNumService = new CountTimeNumService();
 //        countTimeNumService.setCountTimeGoal(countTimeGoal * 60);
-        countTimeNumService.setCountTimeGoal((24 * 60 * 60));//高效领域可以先把时间设定为24小时
+//        countTimeNumService.setCountTimeGoal((24 * 60 * 60));//高效领域可以先把时间设定为24小时
     }
 
     private void initListeners() {
@@ -201,25 +201,25 @@ public class TomatoEfficiencyAct extends BaseActivity {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 int secondsTime = CommonUtils.parseChronometerToSeconds(chronometer);
-                if (secondsTime == (2)) {//当前时间为一分钟
+                if (secondsTime == (30 * 60)) {//当前时间为一分钟
                     customDlv.setStageNum(2);//设置第二阶段
                     customDlv.invalidate();
                     Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.hint_logo_completed);
                     hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
                     hintTv.setText(getResources().getString(R.string.stage_two));
-                } else if (secondsTime == (4)) {
+                } else if (secondsTime == (60 * 60)) {
                     customDlv.setStageNum(3);//设置第三阶段
                     customDlv.invalidate();
                     Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.stage_three);
                     hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
                     hintTv.setText(getResources().getString(R.string.stage_three));
-                } else if (secondsTime == (6)) {
+                } else if (secondsTime == (2 * 60 * 60)) {
                     customDlv.setStageNum(4);//设置第四阶段
                     customDlv.invalidate();
                     Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.stage_four);
                     hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
                     hintTv.setText(getResources().getString(R.string.stage_four));
-                } else if (secondsTime == (8)) {
+                } else if (secondsTime == (3 * 60 * 60)) {
                     customDlv.setStageNum(5);//设置第五阶段
                     customDlv.invalidate();
                     Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.logo_person);

@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -62,8 +61,10 @@ public class TomatoRestAct extends BaseActivity {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 myBinder = (CountTimeNumService.MyBinder) service;
-                // myBinder.getService().setCountTimeGoal(countTimeGoal * 60);//将从sharedPreference中获取的设定时间传给service
-                myBinder.getService().setCountTimeGoal((int) (0.1 * 60));//先将数据设定为0.1分钟方便测试
+//                 myBinder.getService().setCountTimeGoal(countTimeGoal * 60);//将从sharedPreference中获取的设定时间传给service
+                LogTool.log(LogTool.Aaron,"countTimeGoal的值是：  "+countTimeGoal);
+
+//                myBinder.getService().setCountTimeGoal((int) (0.1 * 60));//先将数据设定为0.1分钟方便测试
             }
 
             @Override
@@ -172,16 +173,16 @@ public class TomatoRestAct extends BaseActivity {
 
     private void initData() {
 
-        sharedPreferences = getSharedPreferences("TomaotSetting", MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        countTimeGoal = sharedPreferences.getInt("shorRestTime", 5);//如果是还未创建sharedPreference，则默认值为25
+//        sharedPreferences = getSharedPreferences("TomaotSetting", MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+        countTimeGoal = SpTool.getInt(StaticData.SPSHORTRESTTIME, 5);//如果是还未创建sharedPreference，则默认值为25
 
         //设置surfaceView的颜色
         tomatoCountSurfaceView.setColor("#009900", "#99FF99", "#E4E4E4", "#99FF99");
 
         //为SurfaceView设置每秒画多少度
-//        tomatoCountSurfaceView.setDivisionNum((float) (360 / (countTimeGoal * 60)));
-        tomatoCountSurfaceView.setDivisionNum((float) (360 / (0.1 * 60)));//测试期间先默认为0.1分钟
+        tomatoCountSurfaceView.setDivisionNum((float) (360 / (countTimeGoal * 60.0)));
+//        tomatoCountSurfaceView.setDivisionNum((float) (360 / (0.1 * 60)));//测试期间先默认为0.1分钟
 
         //实例化binder对象
 //        countTimeNumService = new CountTimeNumService();

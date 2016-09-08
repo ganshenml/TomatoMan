@@ -102,13 +102,13 @@ public class TomatoSettingAct extends BaseActivity {
 
     private void initDataViews(){
         //初始化标题栏
-        String htmlString = "<font>工作时间：</font><font color=\"#1E90FF\">" + String.valueOf(SpTool.getInt("workTime", 25)) + "</font><font> 分钟</font>";
+        String htmlString = "<font>工作时间：</font><font color=\"#1E90FF\">" + String.valueOf(SpTool.getInt(StaticData.SPWORKTIME, 25)) + "</font><font> 分钟</font>";
         tvWorkTime.setText(Html.fromHtml(htmlString));
 
-        String htmlString2 = "<font>短休息：</font><font color=\"#1E90FF\">" + String.valueOf(SpTool.getInt("shortRestTime", 5)) + "</font><font> 分钟</font>";
+        String htmlString2 = "<font>短休息：</font><font color=\"#1E90FF\">" + String.valueOf(SpTool.getInt(StaticData.SPSHORTRESTTIME, 5)) + "</font><font> 分钟</font>";
         tvShortRest.setText(Html.fromHtml(htmlString2));
 
-        String htmlString3 = "<font>长休息：</font><font color=\"#1E90FF\">" + String.valueOf(SpTool.getInt("longRestTime", 20)) + "</font><font> 分钟</font>";
+        String htmlString3 = "<font>长休息：</font><font color=\"#1E90FF\">" + String.valueOf(SpTool.getInt(StaticData.SPLONGRESTTIME, 20)) + "</font><font> 分钟</font>";
         tvLongRest.setText(Html.fromHtml(htmlString3));
 
         //初始化进度条

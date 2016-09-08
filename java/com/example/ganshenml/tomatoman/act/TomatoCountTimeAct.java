@@ -3,7 +3,6 @@ package com.example.ganshenml.tomatoman.act;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.ganshenml.tomatoman.R;
+import com.example.ganshenml.tomatoman.bean.data.StaticData;
 import com.example.ganshenml.tomatoman.service.CountTimeNumService;
 import com.example.ganshenml.tomatoman.tool.ConstantCode;
 import com.example.ganshenml.tomatoman.tool.ContextManager;
@@ -31,8 +31,6 @@ public class TomatoCountTimeAct extends BaseActivity {
     private int countTimeNum = 0;
     private Toolbar tbToolbar_public;
     private TextView tvTitle_public;
-    //    private SharedPreferences sharedPreferences;
-//    private SharedPreferences.Editor editor;
     private int countTimeGoal = 0;//目标计时时间,从sharedPreference中获取
 
     @Override
@@ -55,7 +53,7 @@ public class TomatoCountTimeAct extends BaseActivity {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 myBinder = (CountTimeNumService.MyBinder) service;
 //                myBinder.getService().setCountTimeGoal(countTimeGoal * 60);//将从sharedPreference中获取的设定时间传给service
-                myBinder.getService().setCountTimeGoal((int) (0.1 * 60));//先将数据设定为0.1分钟方便测试
+//                myBinder.getService().setCountTimeGoal((int) (1.0));//先将数据设定为0.1分钟方便测试
             }
 
             @Override
@@ -151,11 +149,12 @@ public class TomatoCountTimeAct extends BaseActivity {
     private void initData() {
 //        sharedPreferences = getSharedPreferences("TomaotSetting", MODE_PRIVATE);
 //        editor = sharedPreferences.edit();
-        countTimeGoal = SpTool.getInt("workTime", 25);//如果是还未创建sharedPreference，则默认值为25
+        countTimeGoal = SpTool.getInt(StaticData.SPWORKTIME, 25);//如果是还未创建sharedPreference，则默认值为25
+        LogTool.log(LogTool.Aaron,"initData SPWORKTIME : "+countTimeGoal);
 
         //为SurfaceView设置每秒画多少度
-//        tomatoCountSurfaceView.setDivisionNum((float) (360 / (countTimeGoal * 60)));
-        tomatoCountSurfaceView.setDivisionNum((float) (360 / (0.1 * 60)));//测试期间先默认为0.1分钟
+        tomatoCountSurfaceView.setDivisionNum((float) (360 / (countTimeGoal * 60.0)));
+//        tomatoCountSurfaceView.setDivisionNum((float) (360 / (1)));//测试期间先默认为0.1分钟
 
         //实例化binder对象
 //        countTimeNumService = new CountTimeNumService();

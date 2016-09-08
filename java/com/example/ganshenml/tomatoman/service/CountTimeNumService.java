@@ -37,7 +37,7 @@ public class CountTimeNumService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        countTimeGoal = intent.getIntExtra("countTimeGoal", 0);
+        countTimeGoal = intent.getIntExtra("countTimeGoal", 0)*60;//以秒为单位
         countTimeNumThread = new CountTimeNumThread();
         LogTool.log(LogTool.Aaron,"计时的服务线程启动了");
         countTimeNumThread.start();
@@ -59,6 +59,7 @@ public class CountTimeNumService extends Service {
 
             while (!stopFlag) {
                 try {
+                    LogTool.log(LogTool.Aaron,"countTimeNum的值和countTimeGoal的值： "+countTimeNum+"   "+countTimeGoal);
                     if (countTimeNum < countTimeGoal) {//未到目标时间继续计时
                         countTimeNum = countTimeNum + 1;
                         Thread.sleep(1000);
@@ -98,9 +99,10 @@ public class CountTimeNumService extends Service {
         this.activity = activity;
     }
 
-    public void setCountTimeGoal(int countTimeGoal) {
-        this.countTimeGoal = countTimeGoal;
-    }
+//    public void setCountTimeGoal(int countTimeGoal) {
+//        this.countTimeGoal = countTimeGoal;
+//        LogTool.log(LogTool.Aaron,"countTimeGoalService 要计时的时间是： "+countTimeGoal);
+//    }
 
 
     public void setCountTimeNumThread(CountTimeNumThread countTimeNumThread) {
