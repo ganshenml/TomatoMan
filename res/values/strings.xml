@@ -101,4 +101,6 @@
     <string name="stage_four">“一当凌绝顶，一览纵山小”，说得就是你</string>
     <string name="stage_five">“我反穿了内裤，任凭时间的雨打风吹，只留下天边的一抹红。我已无与伦比！！！”</string>
 
+    <!-- MyTomatoAct-->
+    <string name="empty_hint">完成的番茄会在这里留下历史的痕迹</string>
 </resources>

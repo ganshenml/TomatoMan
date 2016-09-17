@@ -90,14 +90,22 @@ public class TomatoCountTimeAct extends BaseActivity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+       tomatoCountSurfaceView.getCountThread().setPause(true);
+    }
 
     //通过onRestart方法获取后台Service计算的时间值，并传递给自定义的SurfaceView（这里是TestView）
     @Override
     protected void onRestart() {
         super.onRestart();
+        LogTool.log(LogTool.Aaron," TomatoCountTimeAct onRestart执行了");
         countTimeNum = (int) myBinder.getService().getCountTimeNum();
         tomatoCountSurfaceView.setEndAngle(countTimeNum);
+        tomatoCountSurfaceView.getCountThread().setPause(false);
     }
+
 
     @Override
     protected void onDestroy() {

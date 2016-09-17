@@ -11,7 +11,7 @@ import android.util.Log;
 public class LogTool {
 
     // log输出开关，发布的时候设成false
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     public static final String Aaron = "aaron";
 
 

@@ -275,6 +275,7 @@ public class CommonUtils {
 
         ExtraT extraTTemp = DbTool.findLocalExtraData();//返回本地存储的Extra数据
         if (extraTTemp != null) {
+            LogTool.log(LogTool.Aaron,"本地版本与服务器版本对比： "+appVersionStr+"  "+extraTTemp.getAppVersion());
             if (extraTTemp.getAppVersion().compareToIgnoreCase(appVersionStr) > 0) {
                 return true;
             }

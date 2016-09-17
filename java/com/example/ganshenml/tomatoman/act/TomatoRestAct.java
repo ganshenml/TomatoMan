@@ -62,7 +62,7 @@ public class TomatoRestAct extends BaseActivity {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 myBinder = (CountTimeNumService.MyBinder) service;
 //                 myBinder.getService().setCountTimeGoal(countTimeGoal * 60);//将从sharedPreference中获取的设定时间传给service
-                LogTool.log(LogTool.Aaron,"countTimeGoal的值是：  "+countTimeGoal);
+                LogTool.log(LogTool.Aaron, "countTimeGoal的值是：  " + countTimeGoal);
 
 //                myBinder.getService().setCountTimeGoal((int) (0.1 * 60));//先将数据设定为0.1分钟方便测试
             }
@@ -84,37 +84,37 @@ public class TomatoRestAct extends BaseActivity {
         ContextManager.addContext(this);
     }
 
+    public void completeTask(View view){
 
-    //按钮点击：1.停止计时；2.退出当前Activity（隐含退出了服务）；3.跳转至“番茄任务完成页”（并传递数据）
-    public void completeTask(View view) {
-        //1.停止计时
-        tomatoCountSurfaceView.countThread.isStop = true;//别忘了以后这里要做线程的回收之类的工作
-
-        //2.退出当前Activity
-        finish();
-
-        //3.跳转至“番茄计时完成页”
         Intent intent = new Intent(TomatoRestAct.this, TomatoCompleteAct.class);
-        //传递数据。。。。。。。。。。。。。。。。。。。。。。。。
         startActivity(intent);
+        finish();
     }
-
 
     //按钮点击：1.停止计时；2.退出当前Activity（隐含退出了服务）；3.发送“番茄工作”的通知；4.跳转至“番茄计时页面”（并传递数据，开启下一个番茄任务）
     public void continueTask(View view) {
         //1.停止计时
         tomatoCountSurfaceView.countThread.isStop = true;//别忘了以后这里要做线程的回收之类的工作
 
-        //2.退出当前Activity
-        finish();
-
-        //3.发送“番茄工作”的通知
+        //2.发送“番茄工作”的通知
         Intent intent = new Intent(TomatoRestAct.this, TomatoCountTimeAct.class);
         NotificationUtls.sendNotification(this, ConstantCode.HOMEFRAGMETN_REQUEST_CODE, intent, R.layout.notification_layout);//调用自定义工具类方法发送notification
+
+        stopMyService();
 
         //3.跳转至“番茄工作页”
         //传递数据。。。。。。。。。。。。。。。。。。。。。。。。
         startActivity(intent);
+
+
+        //4.退出当前Activity
+        finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        tomatoCountSurfaceView.getCountThread().setPause(true);
     }
 
     //通过onRestart方法获取后台Service计算的时间值，并传递给自定义的SurfaceView（这里是TestView）
@@ -123,11 +123,13 @@ public class TomatoRestAct extends BaseActivity {
         super.onRestart();
         countTimeNum = (int) myBinder.getService().getCountTimeNum();
         tomatoCountSurfaceView.setEndAngle(countTimeNum);
+        tomatoCountSurfaceView.getCountThread().setPause(false);
     }
+
 
     @Override
     protected void onDestroy() {
-        LogTool.log(LogTool.Aaron,"TomatoRestAct onDestroy 执行了");
+        LogTool.log(LogTool.Aaron, "TomatoRestAct onDestroy 执行了");
         //停止Service
         stopMyService();
 
@@ -142,12 +144,11 @@ public class TomatoRestAct extends BaseActivity {
 
         //将该activity从ContextManager的List中进行移除
         ContextManager.removeContext(this);
-
         super.onDestroy();
     }
 
 
-    //对回退事件处理：回退给出弹窗——>是否终止任务（是：进入“番茄计时完成页“）。
+    //对回退事件处理：回退给出弹窗——>是否终止任务（是：进入“番茄计时完成页“）
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {//如果点击了回退
@@ -172,10 +173,14 @@ public class TomatoRestAct extends BaseActivity {
     }
 
     private void initData() {
-
 //        sharedPreferences = getSharedPreferences("TomaotSetting", MODE_PRIVATE);
 //        editor = sharedPreferences.edit();
-        countTimeGoal = SpTool.getInt(StaticData.SPSHORTRESTTIME, 5);//如果是还未创建sharedPreference，则默认值为25
+        int tomatoCompletedNumTemp = SpTool.getInt(StaticData.SPTOMATOCOMPLETENUM, -1);
+        if (tomatoCompletedNumTemp % 4 == 0) {//以4为周期，休息LongRest
+            countTimeGoal = SpTool.getInt(StaticData.SPLONGRESTTIME, 20);//如果是还未创建sharedPreference，则默认值为20
+        } else {
+            countTimeGoal = SpTool.getInt(StaticData.SPSHORTRESTTIME, 5);//如果是还未创建sharedPreference，则默认值为5
+        }
 
         //设置surfaceView的颜色
         tomatoCountSurfaceView.setColor("#009900", "#99FF99", "#E4E4E4", "#99FF99");
@@ -192,12 +197,13 @@ public class TomatoRestAct extends BaseActivity {
 
     //停止运行Service
     private void stopMyService() {
-        if (serviceConnection != null) {
+        if (serviceConnection != null && myBinder != null) {
             myBinder.getService().setStopFlag(true);
             myBinder.getService().setCountTimeNumThread(null);
             unbindService(serviceConnection);
             stopService(myIntent);
-            LogTool.log(LogTool.Aaron,"TomatoRestAct service 停止操作执行了");
+            myBinder = null;
+            LogTool.log(LogTool.Aaron, "TomatoRestAct service 停止操作执行了");
         }
     }
 

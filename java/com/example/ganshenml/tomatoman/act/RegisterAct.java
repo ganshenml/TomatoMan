@@ -104,7 +104,7 @@ public class RegisterAct extends BaseActivity {
                             });
 
                         } else {
-                            Toast.makeText(RegisterAct.this, "注册失败:" + e.toString(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterAct.this, "注册失败，请稍后再试", Toast.LENGTH_LONG).show();
                             LogTool.log(LogTool.Aaron, TAG + " 注册失败：" + e.toString());
                         }
                     }

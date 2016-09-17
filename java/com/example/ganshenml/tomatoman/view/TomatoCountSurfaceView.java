@@ -19,9 +19,10 @@ import com.example.ganshenml.tomatoman.tool.LogTool;
 public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     SurfaceHolder surfaceHolder;
     public CountThread countThread;
-    private float endAngle = 1;//计算一次要画的角度大小
+    private float endAngle = 0;//计算一次要画的角度大小
     private float divisionNum;//计算每秒走多少度
     private boolean isThreadStarted = false;//作为线程是否启动的标识
+    private boolean drawOk = false;//判断surface是否没被释放从而可以使用
     private String paintColor, paintArcBackgroundColor, paintCircleBackgroundColor, paintTextColor;
 
     private boolean isFirstShown = true;//作为一开始计时时快速走过一圈的动画（仅一次展示）
@@ -47,7 +48,9 @@ public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder
             countThread.start();//SurfaceView创建时开启线程
             isThreadStarted = true;
         }
+        drawOk = true;
     }
+
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -56,11 +59,13 @@ public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        drawOk = false;
     }
 
     public class CountThread extends Thread {
         SurfaceHolder surfaceHolder;
         public boolean isStop = false;
+        public boolean isPause = false;
         private boolean flagOnce = false;
         Paint paint, paintArcBackground, paintCircleBackground, paintText;
 
@@ -116,6 +121,9 @@ public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder
 
 
             while (!isStop) {
+                if (isPause) {
+                    continue;
+                }
                 try {
                     canvas = surfaceHolder.lockCanvas();
                     canvas.drawColor(Color.WHITE);//设置画布背景为白色
@@ -131,7 +139,9 @@ public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder
                     e.printStackTrace();
                 } finally {
                     if (canvas != null) {//需要对canvas进行非空判断
-                        surfaceHolder.unlockCanvasAndPost(canvas);
+                        if(drawOk){
+                            surfaceHolder.unlockCanvasAndPost(canvas);
+                        }
                     }
                 }
             }
@@ -158,6 +168,14 @@ public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder
                 }
             }
             return timeStr;
+        }
+
+        public void setStop(boolean stop) {
+            isStop = stop;
+        }
+
+        public void setPause(boolean pause) {
+            isPause = pause;
         }
     }
 
@@ -189,6 +207,10 @@ public class TomatoCountSurfaceView extends SurfaceView implements SurfaceHolder
             isFirstShown = false;
 
         }
+    }
+
+    public CountThread getCountThread() {
+        return countThread;
     }
 
 }

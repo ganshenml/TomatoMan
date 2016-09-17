@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Chronometer;
@@ -23,6 +24,7 @@ import com.example.ganshenml.tomatoman.tool.CommonUtils;
 import com.example.ganshenml.tomatoman.tool.ConstantCode;
 import com.example.ganshenml.tomatoman.tool.ContextManager;
 import com.example.ganshenml.tomatoman.tool.ImageViewUtils;
+import com.example.ganshenml.tomatoman.tool.LogTool;
 import com.example.ganshenml.tomatoman.tool.NotificationUtls;
 import com.example.ganshenml.tomatoman.tool.ShowDialogUtils;
 import com.example.ganshenml.tomatoman.tool.SpTool;
@@ -50,6 +52,7 @@ public class TomatoEfficiencyAct extends BaseActivity {
     private ImageView hintLogoIv;
     private boolean isStop = false;//是否停止计时的标志位
     private Chronometer timer;
+    private int stagePreviousFlag = 1;//表示上一次已经画过的DistractLineView的级别
 
     private DistractLineView customDlv;
 
@@ -101,12 +104,13 @@ public class TomatoEfficiencyAct extends BaseActivity {
 
         //3.跳转至“番茄计时完成页”
         Intent intent = new Intent(TomatoEfficiencyAct.this, TomatoTemporaryAct.class);
-        intent.putExtra("isFromTomatoEfficiencyAct",true);
+        intent.putExtra("isFromTomatoEfficiencyAct", true);
 
         //保存时间数据并进入下一页面
         int minutesTemp = CommonUtils.parseChronometerToSeconds(timer) / 60;
         int efficiencyTimeNow = SpTool.getInt(StaticData.SPTOMATOCOMPLETEEFFICIENTTIME, 0) + minutesTemp;
-        SpTool.putInt(StaticData.SPTOMATOCOMPLETEEFFICIENTTIME,efficiencyTimeNow);
+        LogTool.log(LogTool.Aaron, "TomatoEfficiencyAct 超人时间为： " + minutesTemp);
+        SpTool.putInt(StaticData.SPTOMATOCOMPLETEEFFICIENTTIME, efficiencyTimeNow);
 
         startActivity(intent);
     }
@@ -115,7 +119,15 @@ public class TomatoEfficiencyAct extends BaseActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        countTimeNum = (int) myBinder.getService().getCountTimeNum();
+        ThreadTool.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int timeInt = CommonUtils.parseChronometerToSeconds(timer);
+                LogTool.log(LogTool.Aaron, " TomatoEfficiencyAct onRestart 当前计时器的值： " + timeInt);
+                showDistractLineViewOnce(timeInt);
+            }
+        }, 1200);
+//        countTimeNum = (int) myBinder.getService().getCountTimeNum();
 //        tomatoCountSurfaceView.setEndAngle(countTimeNum);
     }
 
@@ -171,9 +183,9 @@ public class TomatoEfficiencyAct extends BaseActivity {
 
 
     private void initDataViews() {
-        sharedPreferences = getSharedPreferences("TomaotSetting", MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        countTimeGoal = sharedPreferences.getInt("longRestTime", 20);//如果是还未创建sharedPreference，则默认值为25
+//        sharedPreferences = getSharedPreferences("TomaotSetting", MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+//        countTimeGoal = sharedPreferences.getInt("longRestTime", 20);//如果是还未创建sharedPreference，则默认值为25
 
         Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.stage_one);
         hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
@@ -197,52 +209,76 @@ public class TomatoEfficiencyAct extends BaseActivity {
     }
 
     private void initListeners() {
+
         timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 int secondsTime = CommonUtils.parseChronometerToSeconds(chronometer);
-                if (secondsTime == (30 * 60)) {//当前时间为一分钟
-                    customDlv.setStageNum(2);//设置第二阶段
-                    customDlv.invalidate();
-                    Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.hint_logo_completed);
-                    hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
-                    hintTv.setText(getResources().getString(R.string.stage_two));
-                } else if (secondsTime == (60 * 60)) {
-                    customDlv.setStageNum(3);//设置第三阶段
-                    customDlv.invalidate();
-                    Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.stage_three);
-                    hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
-                    hintTv.setText(getResources().getString(R.string.stage_three));
-                } else if (secondsTime == (2 * 60 * 60)) {
-                    customDlv.setStageNum(4);//设置第四阶段
-                    customDlv.invalidate();
-                    Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.stage_four);
-                    hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
-                    hintTv.setText(getResources().getString(R.string.stage_four));
-                } else if (secondsTime == (3 * 60 * 60)) {
-                    customDlv.setStageNum(5);//设置第五阶段
-                    customDlv.invalidate();
-                    Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.logo_person);
-                    hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
-                    hintTv.setText(getResources().getString(R.string.stage_five));
-                }
-//                 if (secondsTime == (30 * 60)) {//当前时间为一分钟
-//                    customDlv.setStageNum(2);//设置第二阶段
-//                    customDlv.invalidate();
-//                } else if (secondsTime == (60 * 60)) {
-//                    customDlv.setStageNum(3);//设置第三阶段
-//                    customDlv.invalidate();
-//                } else if (secondsTime == (2 * 60 * 60)) {
-//                    customDlv.setStageNum(4);//设置第四阶段
-//                    customDlv.invalidate();
-//                } else if (secondsTime == (3 * 60 * 60)) {
-//                    customDlv.setStageNum(5);//设置第五阶段
-//                    customDlv.invalidate();
-//                }
-//
+                LogTool.log(LogTool.Aaron, "TomatoEfficiencyAct 计时器的数值变化： " + secondsTime);
+                showDistractLineView(secondsTime);
+
             }
         });
     }
+
+    private void showDistractLineView(int countTimeNum) {
+        if (countTimeNum == (30 * 30)) {//当前时间为一分钟
+            customDlv.setStageNum(2);//设置第二阶段
+            customDlv.invalidate();
+            Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.hint_logo_completed);
+            hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
+            hintTv.setText(getResources().getString(R.string.stage_two));
+        } else if (countTimeNum == (60 * 60)) {
+            customDlv.setStageNum(3);//设置第三阶段
+            customDlv.invalidate();
+            Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.stage_three);
+            hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
+            hintTv.setText(getResources().getString(R.string.stage_three));
+        } else if (countTimeNum == (7200)) {
+            customDlv.setStageNum(4);//设置第四阶段
+            customDlv.invalidate();
+            Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.stage_four);
+            hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
+            hintTv.setText(getResources().getString(R.string.stage_four));
+        } else if (countTimeNum == (10800)) {
+            customDlv.setStageNum(5);//设置第五阶段
+            customDlv.invalidate();
+            Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.logo_person);
+            hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
+            hintTv.setText(getResources().getString(R.string.stage_five));
+        }
+    }
+
+    private void showDistractLineViewOnce(int countTimeNum) {
+        if (countTimeNum < 30 * 60) {
+            //默认状态
+        } else if (countTimeNum < (60 * 60)) {//当前时间为一分钟
+            customDlv.setStageNum(2);//设置第二阶段
+            customDlv.invalidate();
+            Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.hint_logo_completed);
+            hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
+            hintTv.setText(getResources().getString(R.string.stage_two));
+        } else if (countTimeNum < (7200)) {
+            customDlv.setStageNum(3);//设置第三阶段
+            customDlv.invalidate();
+            Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.stage_three);
+            hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
+            hintTv.setText(getResources().getString(R.string.stage_three));
+        } else if (countTimeNum < (10800)) {
+            customDlv.setStageNum(4);//设置第四阶段
+            customDlv.invalidate();
+            Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.stage_four);
+            hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
+            hintTv.setText(getResources().getString(R.string.stage_four));
+        } else {
+            customDlv.setStageNum(5);//设置第五阶段
+            customDlv.invalidate();
+            Bitmap bitmapTemp = BitmapFactory.decodeResource(getResources(), R.drawable.logo_person);
+            hintLogoIv.setImageBitmap(ImageViewUtils.getRoundedCornerBitmap(bitmapTemp, 150));
+            hintTv.setText(getResources().getString(R.string.stage_five));
+        }
+    }
+
 
     //停止运行Service
     private void stopMyService() {

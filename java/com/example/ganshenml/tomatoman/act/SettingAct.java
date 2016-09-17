@@ -75,6 +75,8 @@ public class SettingAct extends BaseActivity {
             }
         }
 
+        LogTool.log(LogTool.Aaron,"SettingAct 本地版本和服务器版本： "+appVersionStr+"   "+extraTTemp.getAppVersion());
+
 //        if(Person.getCurrentUser()==null){
 //            logoutLl.setVisibility(View.GONE);
 //        }

@@ -255,6 +255,8 @@ public class TomatoCompleteAct extends BaseActivity {
                 taskTimeTv.setText("-------  " + CommonUtils.getCurrentDataAndTime() + "  -------");
 
                 int tomatoEfficiencyTimeTemp = SpTool.getInt(StaticData.SPTOMATOCOMPLETEEFFICIENTTIME, 0);
+                LogTool.log(LogTool.Aaron,"TomatoCompleteAct 超人时间为： "+tomatoEfficiencyTimeTemp);
+
                 String htmlString2 = "<font>变身超人时间共 </font><font color=\"#52A5FF\">" + tomatoEfficiencyTimeTemp + "</font><font> 分钟</font>";
                 efficientTimeTv.setText(Html.fromHtml(htmlString2));
 

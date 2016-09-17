@@ -33,17 +33,19 @@ public class CountTimeNumService extends Service {
             return CountTimeNumService.this;
         }
 
+        public float getCountedTime (){
+            return countTimeNum;
+        }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        countTimeGoal = intent.getIntExtra("countTimeGoal", 0)*60;//以秒为单位
+        countTimeGoal = intent.getIntExtra("countTimeGoal", 0) * 60;//以秒为单位
         countTimeNumThread = new CountTimeNumThread();
-        LogTool.log(LogTool.Aaron,"计时的服务线程启动了");
+        LogTool.log(LogTool.Aaron, "计时的服务线程启动了");
         countTimeNumThread.start();
         return myBinder;
     }
-
 
 
     //新开线程开始计算时间
@@ -52,21 +54,21 @@ public class CountTimeNumService extends Service {
         public void run() {
             super.run();
             if (countTimeGoal == 0) {
-                Log.e("countTimeGoal","就是0");
+                Log.e("countTimeGoal", "就是0");
                 return;
             }
 //            float divisionNum = 360 / countTimeGoal;//计算每秒走多少度
 
             while (!stopFlag) {
                 try {
-                    LogTool.log(LogTool.Aaron,"countTimeNum的值和countTimeGoal的值： "+countTimeNum+"   "+countTimeGoal);
+                    LogTool.log(LogTool.Aaron, "countTimeNum的值和countTimeGoal的值： " + countTimeNum + "   " + countTimeGoal);
                     if (countTimeNum < countTimeGoal) {//未到目标时间继续计时
                         countTimeNum = countTimeNum + 1;
                         Thread.sleep(1000);
                     } else {//到达目标计时时间则停止计时，并发送计时完成的广播给broadcastReceiver
                         stopFlag = true;
                         Intent intent = new Intent(CountTimeNumService.this, TimeArriveReceiver.class);
-                        LogTool.log(LogTool.Aaron,"计时完成了");
+                        LogTool.log(LogTool.Aaron, "计时完成了");
                         intent.putExtra("completeTime", countTimeNum);
                         sendBroadcast(intent);
                     }

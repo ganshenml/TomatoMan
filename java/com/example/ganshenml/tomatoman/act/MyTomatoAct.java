@@ -35,6 +35,8 @@ import com.example.ganshenml.tomatoman.tool.StringTool;
 import com.example.ganshenml.tomatoman.tool.ThreadTool;
 import com.example.ganshenml.tomatoman.view.SimpleListView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +50,7 @@ public class MyTomatoAct extends BaseActivity {
     private List<TomatoRecordT> tomatoRecordArrayList;
     private boolean isFirstLoad = true;//是否是第一次分页加载数据
     private ScrollView myTomatoSv;
+    private TextView emptyHintTv;
     private TextView myTomatoNumTv, myTomatoTimeTv, efficiencyStrTv;
 
     @Override
@@ -67,6 +70,7 @@ public class MyTomatoAct extends BaseActivity {
 
         myTomatoNumTv = (TextView) findViewById(R.id.myTomatoNumTv);
         myTomatoTimeTv = (TextView) findViewById(R.id.myTomatoTimeTv);
+        emptyHintTv = (TextView) findViewById(R.id.emptyHintTv);
         efficiencyStrTv = (TextView) findViewById(R.id.efficiencyStrTv);
         backIv = (ImageView) findViewById(R.id.backIv);
         ivMyTomato = (ImageView) findViewById(R.id.ivMyTomato);
@@ -325,9 +329,13 @@ public class MyTomatoAct extends BaseActivity {
      */
     private void showLocalTomatoRecordTDataView() {
         if (StringTool.hasData(tomatoRecordArrayList)) {
+            emptyHintTv.setVisibility(View.GONE);
+            myTomatoRecordLv.setVisibility(View.VISIBLE);
             List<TomatoRecordT> tomatoRecordTListTemp = DbTool.returnLatestTomatoRecordTListDataByPage(Person.getCurrentUser(Person.class), tomatoRecordArrayList.size());
             tomatoRecordArrayList.addAll(tomatoRecordTListTemp);
             tomatoRecordAdapter.notifyDataSetChanged();
+        }else {
+            showEmptyView();//显示空页面
         }
     }
 
@@ -344,6 +352,8 @@ public class MyTomatoAct extends BaseActivity {
                         tomatoRecordArrayList.clear();
                         isFirstLoad = false;
                     }
+                    emptyHintTv.setVisibility(View.GONE);
+                    myTomatoRecordLv.setVisibility(View.VISIBLE);
                     List<TomatoRecordT> tomatoRecordTList = CommonUtils.toTomatoRecordTList(data);
                     tomatoRecordArrayList.addAll(tomatoRecordTList);
                     tomatoRecordAdapter.notifyDataSetChanged();
@@ -362,5 +372,10 @@ public class MyTomatoAct extends BaseActivity {
                 showLocalTomatoRecordTDataView();
             }
         });
+    }
+
+    private void showEmptyView(){
+        myTomatoRecordLv.setVisibility(View.GONE);
+        emptyHintTv.setVisibility(View.VISIBLE);
     }
 }
